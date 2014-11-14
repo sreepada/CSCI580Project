@@ -73,12 +73,12 @@ DEFAULT_CAMERA_TRANSFORMATION = {
         256
     ],
 //     default camera postions
-    "FOV": 35,
+    "FOV": 50,
     "camera": {
         "position": [
-            -10,
-            5,
-            -10
+            15,
+            15,
+            18
         ],
         "lookAt": [
             0,
@@ -93,20 +93,61 @@ DEFAULT_CAMERA_TRANSFORMATION = {
     },
     "translation": [
         0,
-        -3.25,
-        3.5
+        0,
+        0
     ],
     "scaling": [
-        3.25,
-        3.25,
-        3.25
+        2,
+        2,
+        2
     ],
     "rotation": [
-        -45,
-        -30,
+        0,
+        0,
         0
     ]
 };
+
+//DEFAULT_CAMERA_TRANSFORMATION = {
+//    "sp": [
+//        256,
+//        256
+//    ],
+////     default camera postions
+//    "FOV": 35,
+//    "camera": {
+//        "position": [
+//            -10,
+//            5,
+//            -10
+//        ],
+//        "lookAt": [
+//            0,
+//            0,
+//            0
+//        ],
+//        "worldUp": [
+//            0,
+//            1,
+//            0
+//        ]
+//    },
+//    "translation": [
+//        0,
+//        -3.25,
+//        3.5
+//    ],
+//    "scaling": [
+//        3.25,
+//        3.25,
+//        3.25
+//    ],
+//    "rotation": [
+//        -45,
+//        -30,
+//        0
+//    ]
+//};
 
 HW5_CAMERA_TRANSFORMATION = {
     "sp": [

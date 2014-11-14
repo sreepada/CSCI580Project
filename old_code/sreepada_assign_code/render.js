@@ -11,7 +11,8 @@ function setup() {
                 for (var arrayPointer = 0; arrayPointer <= 256; arrayPointer++) {
                     CONTEXT_LIST[contextIterator][3 + aaIterator][arrayPointer] = new Array(256);
                     for (var arrayPointer2 = 0; arrayPointer2 <= 256; arrayPointer2++) {
-                        CONTEXT_LIST[contextIterator][3 + aaIterator][arrayPointer][arrayPointer2] = [128, 112, 96, 0];
+//                        CONTEXT_LIST[contextIterator][3 + aaIterator][arrayPointer][arrayPointer2] = [128, 112, 96, 0];
+                        CONTEXT_LIST[contextIterator][3 + aaIterator][arrayPointer][arrayPointer2] = [255, 255, 255, 0];
                     }
                 }
             }
@@ -21,7 +22,8 @@ function setup() {
             for (var arrayPointer = 0; arrayPointer <= 256; arrayPointer++) {
                 CONTEXT_LIST[contextIterator][3][arrayPointer] = new Array(256);
                 for (var arrayPointer2 = 0; arrayPointer2 <= 256; arrayPointer2++) {
-                    CONTEXT_LIST[contextIterator][3][arrayPointer][arrayPointer2] = [128, 112, 96, 0];
+//                    CONTEXT_LIST[contextIterator][3][arrayPointer][arrayPointer2] = [128, 112, 96, 0];
+                    CONTEXT_LIST[contextIterator][3][arrayPointer][arrayPointer2] = [255, 255, 255, 0];
                 }
             }
         }
@@ -78,11 +80,13 @@ function plotProcTex() {
 function readAndPlotTexture(splitArray) {
     TEXTURE_FILE_DATA = splitArray.slice(0, 4);
     TEXTURE_FILE_DATA.push(splitArray.slice(4).join("\n"));
-    pixelDetails = new Array(TEXTURE_FILE_DATA[3]);
+    var pixelDetails = new Array(TEXTURE_FILE_DATA[3]);
+    CONTEXT_LIST[0][0].width = TEXTURE_FILE_DATA[1];
+    CONTEXT_LIST[0][0].height = TEXTURE_FILE_DATA[2];
     var k = 0;
     for (var i = 0; i < TEXTURE_FILE_DATA[2]; i++) {
         pixelDetails[i] = new Array(TEXTURE_FILE_DATA[2]);
-        for (j = 0; j < TEXTURE_FILE_DATA[1]; j++) {
+        for (var j = 0; j < TEXTURE_FILE_DATA[1]; j++) {
             var d = CONTEXT_LIST[0][2].data;
             var r = TEXTURE_FILE_DATA[4].charCodeAt(k++);
             var g = TEXTURE_FILE_DATA[4].charCodeAt(k++);
@@ -95,9 +99,11 @@ function readAndPlotTexture(splitArray) {
             pixelDetails[i][j] = {"r": r / 255,
                 "g": g / 255,
                 "b": b / 255};
+//            console.log(d, pixelDetails[i][j]);
         }
     }
     TEXTURE_FILE_DATA[4] = pixelDetails;
+    console.log(pixelDetails);
 }
 
 function updateTransformationValues() {
@@ -146,14 +152,18 @@ function updateTransformationValues() {
     var cameraRadios = document.getElementById("inputForm").elements["cameraRadio"];
     for (var i = 0; i < cameraRadios.length; i++) {
         if (cameraRadios[i].checked) {
-            switch(radios[i].value) {
-                case "2": DEFAULT_TRANSFORMATION = HW5_CAMERA_TRANSFORMATION;
+            switch (radios[i].value) {
+                case "2":
+                    DEFAULT_TRANSFORMATION = HW5_CAMERA_TRANSFORMATION;
                     break;
-                case "1" : DEFAULT_TRANSFORMATION = HW4_CAMERA_TRANSFORMATION;
+                case "1" :
+                    DEFAULT_TRANSFORMATION = HW4_CAMERA_TRANSFORMATION;
                     break;
-                default : DEFAULT_TRANSFORMATION = DEFAULT_CAMERA_TRANSFORMATION;
+                default :
+                    DEFAULT_TRANSFORMATION = DEFAULT_CAMERA_TRANSFORMATION;
                     break;
-            };
+            }
+            ;
             break;
         }
     }
@@ -172,7 +182,7 @@ function stepByStepRender(choice) {
         alert("Please upload a object file first!!");
         return;
     }
-    
+
     RESULTANT_MATRIX = [[1, 0, 0, 0],
         [0, 1, 0, 0],
         [0, 0, 1, 0],
@@ -263,8 +273,9 @@ function renderStep(choice) {
     }
     updateResultantMatrix(stepString);
 
-    var lineCount = 1;
+    var lineCount = 0;
     while (lineCount < READ_FILE_LINES.length) {
+//        console.log(READ_FILE_LINES[lineCount], READ_FILE_LINES[lineCount + 1], READ_FILE_LINES[lineCount + 2]);
         var firstLineSplit = READ_FILE_LINES[lineCount].split(/[\s]+/);
         var secondLineSplit = READ_FILE_LINES[lineCount + 1].split(/[\s]+/);
         var thirdLineSplit = READ_FILE_LINES[lineCount + 2].split(/[\s]+/);
@@ -292,6 +303,7 @@ function renderStep(choice) {
         normal1 = normalizeW(normal1);
         normal2 = normalizeW(normal2);
 
+//        console.log(uvList0, uvList1, uvList2);
         for (var aaIterator = 0; aaIterator <= AAKERNEL_SIZE; aaIterator++) {
 
             var loopVertex0 = Vertex0;
@@ -310,7 +322,7 @@ function renderStep(choice) {
             Vertex2 = loopVertex2;
         }
         FLAG++;
-        lineCount = lineCount + 4;
+        lineCount = lineCount + 3;
     }
     writeToCanvas();
     if (renderList[INTERVAL_COUNT] !== "rotateStep" || arraysEqual(ROTATE_STEP.rotate, DEFAULT_TRANSFORMATION.rotation))
