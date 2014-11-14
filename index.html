@@ -6,13 +6,29 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>Uncanny Valley    </title>
+        <title>Uncanny Valley</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0px;
+                overflow: hidden;
+            }
+        </style>
     </head>
-    <body>
-        <canvas id="width" width="100" height="100">
-                    Your Browser does not support the HTML5 canvas tag.
+    <body onresize="resizeCanvas()">
+        <canvas id="mainCanvas">
+            Your Browser does not support the HTML5 canvas tag.
         </canvas>
+        <script>
+            function resizeCanvas() {
+                var mainCanvas = document.getElementById("mainCanvas");
+                console.log(document.body.offsetWidth, document.body.offsetHeight);
+                mainCanvas.width = document.body.offsetWidth;
+                mainCanvas.height = document.body.offsetHeight;
+            }
+        </script>
     </body>
 </html>
