@@ -271,7 +271,7 @@ function renderStep(choice) {
     }
     updateResultantMatrix(stepString);
 
-    var lineCount = 0;
+    var lineCount = 1;
     while (lineCount < READ_FILE_LINES.length) {
         var firstLineSplit = READ_FILE_LINES[lineCount].split(/[\s]+/);
         var secondLineSplit = READ_FILE_LINES[lineCount + 1].split(/[\s]+/);
@@ -318,7 +318,7 @@ function renderStep(choice) {
             Vertex2 = loopVertex2;
         }
         FLAG++;
-        lineCount = lineCount + 3;
+        lineCount = lineCount + 4;
     }
     writeToCanvas();
     if (renderList[INTERVAL_COUNT] !== "rotateStep" || arraysEqual(ROTATE_STEP.rotate, DEFAULT_TRANSFORMATION.rotation))

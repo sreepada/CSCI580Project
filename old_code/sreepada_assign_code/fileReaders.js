@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-function readInputFile_org(evt, contents) {
+function readInputFile(evt, contents) {
     //Retrieve the File from the FileList object
     var f = evt.target.files[0];
     console.log(evt.target.files);
@@ -23,7 +23,7 @@ function readInputFile_org(evt, contents) {
     }
 }
 
-function readInputFile(evt, contents) {
+function readInputFile_new(evt, contents) {
     //Retrieve the File from the FileList object
     var f = evt.target.files[0];
     console.log(evt.target.files);

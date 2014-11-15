@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<HTML>
+    <head>
+        <meta charset="UTF-8">
+        <TITLE>
+            CSCI 580 HW 6
+        </TITLE>
+        <STYLE>
+            input{
+                text-align: right;
+            }
+            table{
+                width: 100%;
+                border-spacing: 10px;
+            }
+            div{
+                padding: 0.5%;
+            }
+        </STYLE>
+        <script src="arrayAndMatrixFunctions.js" ></script>
+        <script src="coloringAndShading.js" ></script>
+        <script src="transformations.js" ></script>
+        <script src="render.js"></script>
+        <script src="fileReaders.js"></script>
+        <script src="noise.js"></script>
+    </head>
+    <BODY>
+        <div style="text-align: center">
+            <font size="4">
+            <b>CSCI 580 HW 6</b><br />
+            </font>
+            Sreepada Rao Singeetham
+        </div>
+        <div>
+            <b>Please select input file</b>
+            <input type="file" id="fileinput" style="padding: 0.5%;"/>
+            <br />
+            <b>Select texture file (has to be *.ppm)</b>
+            <input type="file" id="textureInput" />
+            <input type="button" id="rendererAll" value="Render" onclick="stepByStepRender('all')" />
+            <input type="button" id="renderer" disabled value="Render step by step" onclick="stepByStepRender('notall')" />
+            <br /><br />
+            <span style="color: red"><b>Warning:</b> The canvas does not clear properly in between multiple renders. For best results: 
+                <b>reload</b> the page, add transformation values and then click <b>Render</b></span>
+        </div>
+        <div style="border: 1px solid; overflow: auto">
+            <div style="float: left; width: 15%; text-align: right;">
+                Uploaded texture<br />
+                <br />
+                <canvas id="texture" width="98" height="109" style="border:1px solid #d3d3d3;">
+                    Your Browser does not support the HTML5 canvas tag.
+                </canvas>
+            </div>
+            <div style="float: left; width: 19%; text-align: center">
+                Aliased output<br />
+                <canvas id="aliased" width="256" height="256" style="border:1px solid #d3d3d3;">
+                    Your Browser does not support the HTML5 canvas tag.
+                </canvas>
+            </div>
+            <div style="float: left; width: 19%; text-align: center">
+                Anti Aliased output<br/>
+                <canvas id="antialiased" width="256" height="256" style="border:1px solid #d3d3d3;">
+                    Your Browser does not support the HTML5 canvas tag.
+                </canvas>
+            </div>
+            <div style="float: left; width: 15%; text-align: right;">
+                Procedural texture <br/>+ Perlin noise<br />
+                <canvas id="procTextureMap" width="100" height="100" style="border:1px solid #d3d3d3;">
+                    Your Browser does not support the HTML5 canvas tag.
+                </canvas>
+            </div>
+            <div style="float: left; width: 19%; text-align: center">
+                Procedural texture mapping with AA<br />
+                <canvas id="procTexMapping" width="256" height="256" style="border:1px solid #d3d3d3;">
+                    Your Browser does not support the HTML5 canvas tag.
+                </canvas>
+            </div>
+            <br />
+        </div>
+        <div style="width: 57%; float: left;">
+            <form id="inputForm">
+                <table>
+                    <tr>
+                        <td><b>Camera Position</b></td>
+                        <td><input type="radio" name="cameraRadio" id="cameraRadio1" value="2" checked />HW 5</td>
+                        <td><input type="radio" name="cameraRadio" id="cameraRadio2" value="1" />HW 4</td>
+                        <td><input type="radio" name="cameraRadio" id="cameraRadio3" value="0" />Default</td>
+                    </tr>
+                    <tr>
+                        <td style="border-bottom: 1px solid;"><b>Shading Type</b></td>
+                        <td style="border-bottom: 1px solid;"><input type="radio" name="radio" id="radio1" value="2" checked />Phong</td>
+                        <td style="border-bottom: 1px solid;"><input type="radio" name="radio" id="radio2" value="1" />Gouraud</td>
+                        <td style="border-bottom: 1px solid;"><input type="radio" name="radio" id="radio3" value="0" />Flat</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="text-align: center">x-axis</td>
+                        <td style="text-align: center">y-axis</td>
+                        <td style="text-align: center">z-axis</td>
+                    </tr>
+                    <tr>
+                        <td><b>Translation</b></td>
+                        <td><input type="text" id="Tx" placeholder="Translation value for x-axis"/></td>
+                        <td><input type="text" id="Ty" placeholder="Translation value for y-axis"/></td>
+                        <td><input type="text" id="Tz" placeholder="Translation value for z-axis"/></td>
+                    </tr>
+                    <tr>
+                        <td><b>Scaling</b> <i>(should not be 0)</i></td>
+                        <td><input type="text" id="Sx" placeholder="Scaling value for x-axis" /></td>
+                        <td><input type="text" id="Sy" placeholder="Scaling value for y-axis" /></td>
+                        <td><input type="text" id="Sz" placeholder="Scaling value for z-axis" /></td>
+                    </tr>
+                    <tr>
+                        <td><b>Rotation</b></td>
+                        <td><input type="text" id="Rx" placeholder="Rotation value for x-axis" /></td>
+                        <td><input type="text" id="Ry" placeholder="Rotation value for y-axis" /></td>
+                        <td><input type="text" id="Rz" placeholder="Rotation value for z-axis" /></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div id="consoleOnHtml" style="float: right; width: 40%">
+            <h3>HELP</h3>
+            Please upload a file, and then choose the type of render. 	<br/>
+            Render : renders all at once and displays the end result.	<br/>
+            Render step by step:  renders each matrix one by one, with a time delay of 1 second. <br/>
+            Also select which type of camera position and shading type is required.
+        </div>
+        <script src="constants.js"></script>
+        <script type="text/javascript">
+                document.getElementById('fileinput').addEventListener('change', readInputFile, false);
+                document.getElementById('textureInput').addEventListener('change', readTextureFile, false);
+                plotProcTex();
+        </script>
+    </BODY>
+</HTML>
