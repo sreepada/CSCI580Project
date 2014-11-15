@@ -99,11 +99,9 @@ function readAndPlotTexture(splitArray) {
             pixelDetails[i][j] = {"r": r / 255,
                 "g": g / 255,
                 "b": b / 255};
-//            console.log(d, pixelDetails[i][j]);
         }
     }
     TEXTURE_FILE_DATA[4] = pixelDetails;
-    console.log(pixelDetails);
 }
 
 function updateTransformationValues() {
@@ -275,7 +273,6 @@ function renderStep(choice) {
 
     var lineCount = 0;
     while (lineCount < READ_FILE_LINES.length) {
-//        console.log(READ_FILE_LINES[lineCount], READ_FILE_LINES[lineCount + 1], READ_FILE_LINES[lineCount + 2]);
         var firstLineSplit = READ_FILE_LINES[lineCount].split(/[\s]+/);
         var secondLineSplit = READ_FILE_LINES[lineCount + 1].split(/[\s]+/);
         var thirdLineSplit = READ_FILE_LINES[lineCount + 2].split(/[\s]+/);
@@ -303,7 +300,6 @@ function renderStep(choice) {
         normal1 = normalizeW(normal1);
         normal2 = normalizeW(normal2);
 
-//        console.log(uvList0, uvList1, uvList2);
         for (var aaIterator = 0; aaIterator <= AAKERNEL_SIZE; aaIterator++) {
 
             var loopVertex0 = Vertex0;

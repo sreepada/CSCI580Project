@@ -42,7 +42,6 @@ function readInputFile(evt, contents) {
                 }
                 if (READ_FILE_LINES[i].indexOf("vt ") > -1) {
                     vtArray.push(READ_FILE_LINES[i].substring(3));
-//                    console.log(READ_FILE_LINES[i], vtArray[vtC]);
                 }
                 if (READ_FILE_LINES[i].indexOf("vn ") > -1) {
                     vnArray.push(READ_FILE_LINES[i].substring(3));
@@ -51,7 +50,6 @@ function readInputFile(evt, contents) {
                     fArray.push(READ_FILE_LINES[i].substring(2));
                 }
             }
-            console.log(vArray.length, vtArray.length, vnArray.length);
             READ_FILE_LINES = [];
             var lineCount = 0;
             for (var i = 0; i < fArray.length; i++) {
@@ -62,26 +60,20 @@ function readInputFile(evt, contents) {
                     var vertex3 = ((j + 2) === polygonVertices.length) ?
                             polygonVertices[0].split("/") :
                             polygonVertices[j + 2].split("/");
-//                    console.log(vertex1, vertex2, vertex3);
                     READ_FILE_LINES[lineCount] = vArray[parseInt(vertex1[0]) - 1] + " "
                             + vtArray[parseInt(vertex1[1]) - 1] + " "
                             + vnArray[parseInt(vertex1[2]) - 1];
-                    console.log(lineCount + " contains " + READ_FILE_LINES[lineCount], " read from ", vertex1);
                     lineCount += 1;
                     READ_FILE_LINES[lineCount] = vArray[parseInt(vertex2[0]) - 1] + " "
                             + vtArray[parseInt(vertex2[1]) - 1] + " "
                             + vnArray[parseInt(vertex2[2]) - 1];
-                    console.log(READ_FILE_LINES[lineCount], vertex2);
                     lineCount += 1;
                     READ_FILE_LINES[lineCount] = vArray[parseInt(vertex3[0]) - 1] + " "
                             + vtArray[parseInt(vertex3[1]) - 1] + " "
                             + vnArray[parseInt(vertex3[2]) - 1];
-                    console.log(READ_FILE_LINES[lineCount], vertex3);
                     lineCount += 1;
                 }
             }
-
-            console.log(READ_FILE_LINES[0]);
         };
         r.readAsText(f);
     } else {

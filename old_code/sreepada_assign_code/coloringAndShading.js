@@ -92,7 +92,7 @@ function warp(value, point) {
     var sz = point / (Z_MAX - point);
     for (var i = 0; i < 2; i++) {
         if (value[i] < 0)
-            value[i] = value * -1;
+            value[i] = value[i] * -1;
         else if (value[i] > 1)
             value[i] = 1;
         value[i] = value[i] / (sz + 1);
@@ -165,7 +165,6 @@ function getColorFromProcTex(u, v) {
 }
 
 function getTextureColorCoeff(point, mappingType, vertex0, vertex1, vertex2, isItProcedural) {
-//    if (mappingType === 2) {
     vertex0[1] = warp([vertex0[1][0], vertex0[1][1]], vertex0[2]);
     vertex1[1] = warp([vertex1[1][0], vertex1[1][1]], vertex1[2]);
     vertex2[1] = warp([vertex2[1][0], vertex2[1][1]], vertex2[2]);
@@ -175,17 +174,7 @@ function getTextureColorCoeff(point, mappingType, vertex0, vertex1, vertex2, isI
     var pY = unwarp(smallU, point[2]) * (parseInt(TEXTURE_FILE_DATA[2]) - 1);
     pX = pX < 0 ? pX * -1 : pX;
     pY = pY < 0 ? pY * -1 : pY;
-    if (FLAG === 0) {
-        console.log(smallU, smallV, pY, pX, vertex0, vertex1, vertex2, point);
-        FLAG++;
-    }
-//    }
-//    else {
-//        var smallU = vertex0[0] * vertex0[1][0] + vertex1[0] * vertex1[1][0] + vertex2[0] * vertex2[1][0];
-//        var smallV = vertex0[0] * vertex0[1][1] + vertex1[0] * vertex1[1][1] + vertex2[0] * vertex2[1][1];
-//        var pY = smallU * (97);
-//        var pX = smallV * (108);
-//    }
+    
     var floorBigU = Math.min(parseInt(TEXTURE_FILE_DATA[1]) - 1, Math.floor(pY));
     var floorBigV = Math.min(parseInt(TEXTURE_FILE_DATA[2]) - 1, Math.floor(pX));
     var ceilBigU = Math.min(parseInt(TEXTURE_FILE_DATA[1]) - 1, Math.ceil(pY));
@@ -194,10 +183,8 @@ function getTextureColorCoeff(point, mappingType, vertex0, vertex1, vertex2, isI
     var s = pX - floorBigV;
     var coeff = new Array(3);
 
-//    console.log(floorBigU, floorBigV);
     if (isItProcedural === 3) {
         coeff = getColorFromProcTex(pY / (CONTEXT_LIST[4][0].width - 1), pX / (CONTEXT_LIST[4][0].height - 1));
-//        coeff = [-1, -1, -1];
     }
     else {
         coeff[0] = (s * t * TEXTURE_FILE_DATA[4][ceilBigV][ceilBigU].r) +
@@ -212,7 +199,6 @@ function getTextureColorCoeff(point, mappingType, vertex0, vertex1, vertex2, isI
                 ((1 - s) * t * TEXTURE_FILE_DATA[4][floorBigV][ceilBigU].b) +
                 (s * (1 - t) * TEXTURE_FILE_DATA[4][ceilBigV][floorBigU].b) +
                 ((1 - s) * (1 - t) * TEXTURE_FILE_DATA[4][floorBigV][floorBigU].b);
-//        console.log(coeff, s, t, TEXTURE_FILE_DATA[4][floorBigU][floorBigV]);
     }
     return coeff;
 }
@@ -253,9 +239,6 @@ function shadingInterpolation(point, vertex0, vertex1, vertex2, shadingType, map
         return colorsForCurrPoint;
     }
     else if (shadingType === 2) {
-        if (FLAG === 2) {
-            console.log("inside the shader", vertex0, vertex1, vertex2);
-        }
         var areaOfTriangle = vertex0[0] * (vertex2[1] - vertex1[1]) + vertex1[0] * (vertex0[1] - vertex2[1]) + vertex2[0] * (vertex1[1] - vertex0[1]);
         if (areaOfTriangle === 0)
             return getColorForNormal(vertex0[2], -1, shadingType);
@@ -373,9 +356,6 @@ function colorMeATriangle(aaIterator, Vector0, Vector1, Vector2, normal0, normal
             }
             if (Boolean(render)) {
                 z = (-(vectorC[0] * ic) - (vectorC[1] * jc) - D) / vectorC[2];
-                if (FLAG === 1) {
-                    console.log("inside the fun", uvList0, uvList1, uvList2);
-                }
                 if (aaIterator === 6) {
                     if (!isNaN(z) && (CONTEXT_LIST[1][3][ic][jc][3] === 0 || CONTEXT_LIST[1][3][ic][jc][3] > z)) {
                         var mappingType = 1;
