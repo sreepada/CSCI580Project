@@ -165,20 +165,28 @@ function getColorFromProcTex(u, v) {
 }
 
 function getTextureColorCoeff(point, mappingType, vertex0, vertex1, vertex2, isItProcedural) {
+    if (TEXTURE_FILE_DATA === "") {
+        var width = 98;
+        var height = 109;
+    }
+    else {
+        var width = parseInt(TEXTURE_FILE_DATA[1]);
+        var height = parseInt(TEXTURE_FILE_DATA[2]);
+    }
     vertex0[1] = warp([vertex0[1][0], vertex0[1][1]], vertex0[2]);
     vertex1[1] = warp([vertex1[1][0], vertex1[1][1]], vertex1[2]);
     vertex2[1] = warp([vertex2[1][0], vertex2[1][1]], vertex2[2]);
     var smallU = vertex0[0] * vertex0[1][0] + vertex1[0] * vertex1[1][0] + vertex2[0] * vertex2[1][0];
     var smallV = vertex0[0] * vertex0[1][1] + vertex1[0] * vertex1[1][1] + vertex2[0] * vertex2[1][1];
-    var pX = unwarp(smallV, point[2]) * (parseInt(TEXTURE_FILE_DATA[1]) - 1);
-    var pY = unwarp(smallU, point[2]) * (parseInt(TEXTURE_FILE_DATA[2]) - 1);
+    var pX = unwarp(smallV, point[2]) * (width - 1);
+    var pY = unwarp(smallU, point[2]) * (height - 1);
     pX = pX < 0 ? pX * -1 : pX;
     pY = pY < 0 ? pY * -1 : pY;
     
-    var floorBigU = Math.min(parseInt(TEXTURE_FILE_DATA[1]) - 1, Math.floor(pY));
-    var floorBigV = Math.min(parseInt(TEXTURE_FILE_DATA[2]) - 1, Math.floor(pX));
-    var ceilBigU = Math.min(parseInt(TEXTURE_FILE_DATA[1]) - 1, Math.ceil(pY));
-    var ceilBigV = Math.min(parseInt(TEXTURE_FILE_DATA[2]) - 1, Math.ceil(pX));
+    var floorBigU = Math.min(width, Math.floor(pY));
+    var floorBigV = Math.min(height, Math.floor(pX));
+    var ceilBigU = Math.min(width, Math.ceil(pY));
+    var ceilBigV = Math.min(height, Math.ceil(pX));
     var t = pY - floorBigU;
     var s = pX - floorBigV;
     var coeff = new Array(3);
