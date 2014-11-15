@@ -180,7 +180,6 @@ function stepByStepRender(choice) {
         alert("Please upload a object file first!!");
         return;
     }
-
     RESULTANT_MATRIX = [[1, 0, 0, 0],
         [0, 1, 0, 0],
         [0, 0, 1, 0],

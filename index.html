@@ -16,19 +16,49 @@ and open the template in the editor.
                 margin: 0px;
                 overflow: hidden;
             }
+            #container {
+                position: relative;
+                text-align: left;
+            }
+            #hoverOverCanvas {
+                top: 0;
+                position: absolute;
+                width: 100%;
+            }
         </style>
     </head>
-    <body onresize="resizeCanvas()">
-        <canvas id="mainCanvas">
-            Your Browser does not support the HTML5 canvas tag.
-        </canvas>
+    <body onresize="resizeCanvas()" onload="resizeCanvas()">
+        <div id="container">
+            <div id="hoverOverCanvas">
+                <menu id="fileInputMenu">
+                    <input type="file" id="fileinput" />
+                    <input type="file" id="textureInput" />
+                    <input type="button" id="rendererAll" value="Render" onclick="cleanUp()" />
+                </menu>
+                <canvas id="texture" style="border: 1px solid; width: 100px; height: 100px">
+                    Your Browser does not support the HTML5 canvas tag.
+                </canvas>
+            </div>
+            <canvas id="mainCanvas">
+                Your Browser does not support the HTML5 canvas tag.
+            </canvas>
+        </div>
+        <script src="arrayAndMatrixFunctions.js" ></script>
+        <script src="coloringAndShading.js" ></script>
+        <script src="transformations.js" ></script>
+        <script src="render.js"></script>
+        <script src="fileReaders.js"></script>
+        <script src="noise.js"></script>
+        <script src="constants.js"></script>
         <script>
-            function resizeCanvas() {
-                var mainCanvas = document.getElementById("mainCanvas");
-                console.log(document.body.offsetWidth, document.body.offsetHeight);
-                mainCanvas.width = document.body.offsetWidth;
-                mainCanvas.height = document.body.offsetHeight;
-            }
+                        function resizeCanvas() {
+                            var mainCanvas = document.getElementById("mainCanvas");
+                            console.log(document.body.offsetWidth, document.body.offsetHeight);
+                            mainCanvas.width = document.body.offsetWidth;
+                            mainCanvas.height = document.body.offsetHeight;
+                        }
+                        document.getElementById('fileinput').addEventListener('change', readInputFile, false);
+                        document.getElementById('textureInput').addEventListener('change', readTextureFile, false);
         </script>
     </body>
 </html>
