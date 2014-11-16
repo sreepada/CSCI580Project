@@ -170,6 +170,7 @@ function updateTransformationValues() {
 function cleanUp(choice) {
     for (var contextIterator = 1; contextIterator <= 3; contextIterator++) {
         CONTEXT_LIST[contextIterator][1].clearRect(0, 0, DEFAULT_TRANSFORMATION.sp[0], DEFAULT_TRANSFORMATION.sp[1]);
+        CONTEXT_LIST[contextIterator][1].restore();
     }
     setup();
     renderStep(choice);
