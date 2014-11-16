@@ -67,10 +67,10 @@ function getColorForNormal(colNormal, coeff, shadingType) {
     colors[1] += AMBIENT_LIGHT[1][1] * newKa[1];
     colors[2] += AMBIENT_LIGHT[1][2] * newKa[2];
 
-    colors = getColorfromLight(LIGHT_1, normal, cameraVector, colors, coeff, shadingType);
-    colors = getColorfromLight(LIGHT_2, normal, cameraVector, colors, coeff, shadingType);
-    colors = getColorfromLight(LIGHT_3, normal, cameraVector, colors, coeff, shadingType);
-
+    for (var lightIterator = 0; lightIterator < LIGHT.length; lightIterator++) {
+        colors = getColorfromLight(LIGHT[lightIterator], normal, cameraVector, colors, coeff, shadingType);
+    }
+    
     return [Math.abs(colors[0] * 255), Math.abs(colors[1] * 255), Math.abs(colors[2] * 255)];
 }
 
@@ -367,6 +367,7 @@ function colorMeATriangle(aaIterator, Vector0, Vector1, Vector2, normal0, normal
                     CONTEXT_LIST[mappingType][3 + aaIterator][ic][jc][1] = colors[1];
                     CONTEXT_LIST[mappingType][3 + aaIterator][ic][jc][2] = colors[2];
                     CONTEXT_LIST[mappingType][3 + aaIterator][ic][jc][3] = z;
+                    console.log(colors);
                 }
             }
         }

@@ -58,7 +58,8 @@ function plotProcTex() {
 function readAndPlotTexture(splitArray) {
     TEXTURE_FILE_DATA = splitArray.slice(0, 4);
     TEXTURE_FILE_DATA.push(splitArray.slice(4).join("\n"));
-    var pixelDetails = new Array(TEXTURE_FILE_DATA[3]);
+    var maxRGB = parseInt(TEXTURE_FILE_DATA[3]);
+    var pixelDetails = new Array(TEXTURE_FILE_DATA[1]);
     CONTEXT_LIST[0][0].width = TEXTURE_FILE_DATA[1];
     CONTEXT_LIST[0][0].height = TEXTURE_FILE_DATA[2];
     var k = 0;
@@ -74,12 +75,13 @@ function readAndPlotTexture(splitArray) {
             d[2] = b;
             d[3] = 255;
             CONTEXT_LIST[0][1].putImageData(CONTEXT_LIST[0][2], j, i);
-            pixelDetails[i][j] = {"r": r / 255,
-                "g": g / 255,
-                "b": b / 255};
+            pixelDetails[i][j] = {"r": r / maxRGB,
+                "g": g / maxRGB,
+                "b": b / maxRGB};
         }
     }
     TEXTURE_FILE_DATA[4] = pixelDetails;
+    console.log(TEXTURE_FILE_DATA);
 }
 
 function updateTransformationValues() {
@@ -130,6 +132,8 @@ function cleanUp() {
         [0, 0, 1, 0],
         [0, 0, 0, 1]];
 //    updateTransformationValues();
+//    DEFAULT_TRANSFORMATION.sp[0] = CONTEXT_LIST[1][0].height;
+//    DEFAULT_TRANSFORMATION.sp[1] = CONTEXT_LIST[1][0].width;
     CONTEXT_LIST[1][1].clearRect(0, 0, DEFAULT_TRANSFORMATION.sp[0], DEFAULT_TRANSFORMATION.sp[1]);
     setup();
     renderStep();
