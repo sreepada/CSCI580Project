@@ -57,3 +57,46 @@ function normalizeMatrix(matrix) {
     }
     return matrix;
 }
+function normalize1DMatrix(matrix) {
+    var sum = 0;
+    for (var i = 0; i < matrix.length; i++) {
+        sum += Math.pow(matrix[i], 2);
+    }
+    sum = Math.sqrt(1 / sum);
+    for (var j = 0; j < matrix.length; j++) {
+        matrix[j] *= sum;
+    }
+    return matrix;
+}
+
+function crossProduct1D(vector1, vector2) {
+    var result = new Array(vector1.length);
+    result[0] = vector1[1]*vector2[2] - vector1[2]*vector2[1];
+    result[1] = vector1[0]*vector2[2] - vector1[2]*vector2[0];
+    result[2] = vector1[0]*vector2[1] - vector1[1]*vector2[0];
+    return result;
+}
+
+function subtractVectors(vector1, vector2) {
+    var result = new Array(vector1.length);
+    for (var i = 0; i < vector1.length; i++) {
+        result[i] = vector1[i] - vector2[i];
+    }
+    return result;
+}
+
+function addVectors(vector1, vector2) {
+    var result = new Array(vector1.length);
+    for (var i = 0; i < vector1.length; i++) {
+        result[i] = vector1[i] + vector2[i];
+    }
+    return result;
+}
+
+function scalarMultiple(matrix, scalar) {
+    var result = new Array(matrix.length);
+    for (var i = 0; i < matrix.length; i++) {
+        result[i] = matrix[i] * scalar;
+    }
+    return result;
+}

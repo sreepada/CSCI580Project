@@ -11,6 +11,20 @@ function getDotProduct(vector1, vector2, choice) {
     return dotProduct;
 }
 
+function checkIfInsideTriangle(point, vertex0, vertex1, vertex2) {
+    var areaOfTriangle = vertex0[0] * (vertex2[1] - vertex1[1]) + vertex1[0] * (vertex0[1] - vertex2[1]) + vertex2[0] * (vertex1[1] - vertex0[1]);
+    var areaWithoutV0 = point[0] * (vertex2[1] - vertex1[1]) + vertex1[0] * (point[1] - vertex2[1]) + vertex2[0] * (vertex1[1] - point[1]);
+    var areaWithoutV1 = vertex0[0] * (vertex2[1] - point[1]) + point[0] * (vertex0[1] - vertex2[1]) + vertex2[0] * (point[1] - vertex0[1]);
+    var areaWithtouV2 = vertex0[0] * (point[1] - vertex1[1]) + vertex1[0] * (vertex0[1] - point[1]) + point[0] * (vertex1[1] - vertex0[1]);
+    var w0 = areaWithoutV0 / areaOfTriangle;
+    var w1 = areaWithoutV1 / areaOfTriangle;
+    var w2 = areaWithtouV2 / areaOfTriangle;
+    if (w0 + w1 + w2 === 1)
+        return 1;
+    else
+        return 0;
+}
+
 function getUnitVector(vector) {
     var magVector = Math.sqrt(
             Math.pow(vector[0], 2) +
@@ -70,7 +84,7 @@ function getColorForNormal(colNormal, coeff, shadingType) {
     for (var lightIterator = 0; lightIterator < LIGHT.length; lightIterator++) {
         colors = getColorfromLight(LIGHT[lightIterator], normal, cameraVector, colors, coeff, shadingType);
     }
-    
+
     return [Math.abs(colors[0] * 255), Math.abs(colors[1] * 255), Math.abs(colors[2] * 255)];
 }
 
@@ -367,9 +381,123 @@ function colorMeATriangle(aaIterator, Vector0, Vector1, Vector2, normal0, normal
                     CONTEXT_LIST[mappingType][3 + aaIterator][ic][jc][1] = colors[1];
                     CONTEXT_LIST[mappingType][3 + aaIterator][ic][jc][2] = colors[2];
                     CONTEXT_LIST[mappingType][3 + aaIterator][ic][jc][3] = z;
-                    console.log(colors);
                 }
             }
         }
     }
+}
+
+function rayTraceTriangle(triangleVectors) {
+    var camN = normalize1DMatrix(
+            subtractVectors(DEFAULT_TRANSFORMATION.camera.position,
+                    DEFAULT_TRANSFORMATION.camera.lookAt));
+    var camU = normalize1DMatrix(
+            crossProduct1D(DEFAULT_TRANSFORMATION.camera.worldUp, camN));
+    var camV = crossProduct1D(camN, camU);
+
+    var imgPlaneHeight = 256;
+    var imgPlaneWidth = 256;
+    var imgPlaneD = imgPlaneHeight /
+            (2 * Math.tan(DEFAULT_TRANSFORMATION.FOV * DEGREE2RADIANS / 2));
+    var imgPlaneC = subtractVectors(DEFAULT_TRANSFORMATION.camera.position,
+            scalarMultiple(camN, imgPlaneD));
+    var imgPlaneL = subtractVectors(
+            subtractVectors(
+                    imgPlaneC,
+                    scalarMultiple(camU, imgPlaneWidth / 2)),
+            scalarMultiple(camV, imgPlaneHeight / 2));
+
+    for (var ic = 0; ic < 256; ic++) {
+        for (var jc = 0; jc < 256; jc++) {
+            var ObjectValues = new Array(3);
+            for (var j = 0; j < ObjectValues.length; j++)
+                ObjectValues[j] = new Array(3);
+            var imagePlaneS = addVectors(
+                    addVectors(
+                            imgPlaneL,
+                            scalarMultiple(
+                                    camU,
+                                    ic)),
+                    scalarMultiple(
+                            camV,
+                            jc)
+                    );
+            var triangleIterator = 0;
+            var tmin = Z_MAX;
+//            console.log(imagePlaneS);
+            while (triangleIterator < triangleVectors.length) {
+                var Vector0 = triangleVectors[triangleIterator];
+                var Vector1 = triangleVectors[triangleIterator + 1];
+                var Vector2 = triangleVectors[triangleIterator + 2];
+                triangleIterator += 3;
+                var pointNormal = crossProduct1D(
+                        subtractVectors(Vector1, Vector0),
+                        subtractVectors(Vector2, Vector0));
+                var traingleD = getDotProduct(Vector0, pointNormal);
+
+                var ndotP = getDotProduct(camN,
+                        DEFAULT_TRANSFORMATION.camera.position, "notNormalized");
+
+//                console.log(imagePlaneS, imagePlaneS.length);
+//                debugger;
+                var ndotD = getDotProduct(
+                        camN,
+                        subtractVectors(imagePlaneS,
+                                DEFAULT_TRANSFORMATION.camera.position),
+                        "notN");
+                var t = -(ndotP + traingleD) / ndotD;
+//                console.log(t);
+                if (tmin > t) {
+                    tmin = t;
+                    ObjectValues = [Vector0, Vector1, Vector2];
+//                    console.log("intersetct");
+//                    console.log(tmin, ObjectValues);
+                }
+            }
+            if (tmin > 0 && tmin !== Z_MAX) {
+                var pointInObject = addVectors(
+                        DEFAULT_TRANSFORMATION.camera.position,
+                        scalarMultiple(
+                                subtractVectors(
+                                        imagePlaneS,
+                                        DEFAULT_TRANSFORMATION.camera.position),
+                                tmin
+                                )
+                        );
+//                var z = (-(pointNormal[0] * ic) - (pointNormal[1] * jc) - traingleD) / pointNormal[2];
+//                var pointInObject = [ic, jc, z];
+//                var OVector0 = normalizeW(multiplyMatrices(RESULTANT_MATRIX,
+//                        [
+//                            [ObjectValues[0][0]],
+//                            [ObjectValues[0][1]],
+//                            [ObjectValues[0][2]],
+//                            [1]
+//                        ]));
+//                var OVector1 = normalizeW(multiplyMatrices(RESULTANT_MATRIX,
+//                        [
+//                            [ObjectValues[1][0]],
+//                            [ObjectValues[1][1]],
+//                            [ObjectValues[1][2]],
+//                            [1]
+//                        ]));
+//                var OVector2 = normalizeW(multiplyMatrices(RESULTANT_MATRIX,
+//                        [
+//                            [ObjectValues[2][0]],
+//                            [ObjectValues[2][1]],
+//                            [ObjectValues[2][2]],
+//                            [1]
+//                        ]));
+//                ObjectValues[0] = [OVector0[0][0], OVector0[1][0], OVector0[2][0]];
+//                ObjectValues[1] = [OVector1[0][0], OVector1[1][0], OVector1[2][0]];
+//                ObjectValues[2] = [OVector2[0][0], OVector2[1][0], OVector2[2][0]];
+
+                if (checkIfInsideTriangle(pointInObject, ObjectValues[0], ObjectValues[1], ObjectValues[2]) === 1)
+                {
+//                    console.log(pointInObject, "yes inside");
+                    CONTEXT_LIST[1][3][ic][jc] = [12, 123, 23, 0];
+                }
+            }
+        }
+    }
+    console.log(camN, camU, camV, imgPlaneD, imgPlaneHeight, imgPlaneWidth, imgPlaneC, imgPlaneL, pointNormal);
 }
