@@ -51,14 +51,14 @@ and open the template in the editor.
         <script src="noise.js"></script>
         <script src="constants.js"></script>
         <script>
-                        function resizeCanvas() {
-                            var mainCanvas = document.getElementById("mainCanvas");
-                            console.log(document.body.offsetWidth, document.body.offsetHeight);
-                            mainCanvas.width = document.body.offsetWidth;
-                            mainCanvas.height = document.body.offsetHeight;
-                        }
-                        document.getElementById('fileinput').addEventListener('change', readInputFile, false);
-                        document.getElementById('textureInput').addEventListener('change', readTextureFile, false);
+            function resizeCanvas() {
+                var mainCanvas = document.getElementById("mainCanvas");
+                console.log(document.body.offsetWidth, document.body.offsetHeight);
+                mainCanvas.width = document.body.offsetWidth;
+                mainCanvas.height = document.body.offsetHeight;
+            }
+            document.getElementById('fileinput').addEventListener('change', readInputFile, false);
+            document.getElementById('textureInput').addEventListener('change', readTextureFile, false);
         </script>
     </body>
 </html>

@@ -12,15 +12,17 @@ function getDotProduct(vector1, vector2, choice) {
 }
 
 function checkIfInsideTriangle(point, vertex0, vertex1, vertex2) {
-    var areaOfTriangle = vertex0[0] * (vertex2[1] - vertex1[1]) + vertex1[0] * (vertex0[1] - vertex2[1]) + vertex2[0] * (vertex1[1] - vertex0[1]);
-    var areaWithoutV0 = point[0] * (vertex2[1] - vertex1[1]) + vertex1[0] * (point[1] - vertex2[1]) + vertex2[0] * (vertex1[1] - point[1]);
-    var areaWithoutV1 = vertex0[0] * (vertex2[1] - point[1]) + point[0] * (vertex0[1] - vertex2[1]) + vertex2[0] * (point[1] - vertex0[1]);
-    var areaWithtouV2 = vertex0[0] * (point[1] - vertex1[1]) + vertex1[0] * (vertex0[1] - point[1]) + point[0] * (vertex1[1] - vertex0[1]);
+    var areaOfTriangle = Math.abs(vertex0[0] * (vertex2[1] - vertex1[1]) + vertex1[0] * (vertex0[1] - vertex2[1]) + vertex2[0] * (vertex1[1] - vertex0[1]));
+    var areaWithoutV0 = Math.abs(point[0] * (vertex2[1] - vertex1[1]) + vertex1[0] * (point[1] - vertex2[1]) + vertex2[0] * (vertex1[1] - point[1]));
+    var areaWithoutV1 = Math.abs(vertex0[0] * (vertex2[1] - point[1]) + point[0] * (vertex0[1] - vertex2[1]) + vertex2[0] * (point[1] - vertex0[1]));
+    var areaWithtouV2 = Math.abs(vertex0[0] * (point[1] - vertex1[1]) + vertex1[0] * (vertex0[1] - point[1]) + point[0] * (vertex1[1] - vertex0[1]));
     var w0 = areaWithoutV0 / areaOfTriangle;
     var w1 = areaWithoutV1 / areaOfTriangle;
     var w2 = areaWithtouV2 / areaOfTriangle;
-    if (w0 + w1 + w2 === 1)
+    if (Math.round(w0 + w1 + w2) === 1) {
+        console.log(w0, w1, w2);
         return 1;
+    }
     else
         return 0;
 }
@@ -448,54 +450,25 @@ function rayTraceTriangle(triangleVectors) {
                 var t = -(ndotP + traingleD) / ndotD;
 //                console.log(t);
                 if (tmin > t) {
-                    tmin = t;
-                    ObjectValues = [Vector0, Vector1, Vector2];
-//                    console.log("intersetct");
-//                    console.log(tmin, ObjectValues);
+                    var pointInObject = addVectors(
+                            DEFAULT_TRANSFORMATION.camera.position,
+                            scalarMultiple(
+                                    subtractVectors(
+                                            imagePlaneS,
+                                            DEFAULT_TRANSFORMATION.camera.position),
+                                    t
+                                    )
+                            );
+                    if (checkIfInsideTriangle(pointInObject, Vector0, Vector1, Vector2) === 1) {
+                        tmin = t;
+                        ObjectValues = [Vector0, Vector1, Vector2];
+                    }
                 }
             }
             if (tmin > 0 && tmin !== Z_MAX) {
-                var pointInObject = addVectors(
-                        DEFAULT_TRANSFORMATION.camera.position,
-                        scalarMultiple(
-                                subtractVectors(
-                                        imagePlaneS,
-                                        DEFAULT_TRANSFORMATION.camera.position),
-                                tmin
-                                )
-                        );
-//                var z = (-(pointNormal[0] * ic) - (pointNormal[1] * jc) - traingleD) / pointNormal[2];
-//                var pointInObject = [ic, jc, z];
-//                var OVector0 = normalizeW(multiplyMatrices(RESULTANT_MATRIX,
-//                        [
-//                            [ObjectValues[0][0]],
-//                            [ObjectValues[0][1]],
-//                            [ObjectValues[0][2]],
-//                            [1]
-//                        ]));
-//                var OVector1 = normalizeW(multiplyMatrices(RESULTANT_MATRIX,
-//                        [
-//                            [ObjectValues[1][0]],
-//                            [ObjectValues[1][1]],
-//                            [ObjectValues[1][2]],
-//                            [1]
-//                        ]));
-//                var OVector2 = normalizeW(multiplyMatrices(RESULTANT_MATRIX,
-//                        [
-//                            [ObjectValues[2][0]],
-//                            [ObjectValues[2][1]],
-//                            [ObjectValues[2][2]],
-//                            [1]
-//                        ]));
-//                ObjectValues[0] = [OVector0[0][0], OVector0[1][0], OVector0[2][0]];
-//                ObjectValues[1] = [OVector1[0][0], OVector1[1][0], OVector1[2][0]];
-//                ObjectValues[2] = [OVector2[0][0], OVector2[1][0], OVector2[2][0]];
-
-                if (checkIfInsideTriangle(pointInObject, ObjectValues[0], ObjectValues[1], ObjectValues[2]) === 1)
-                {
-//                    console.log(pointInObject, "yes inside");
-                    CONTEXT_LIST[1][3][ic][jc] = [12, 123, 23, 0];
-                }
+//                    console.log(t, pointInObject);
+//                console.log(pointInObject, "yes inside");
+                CONTEXT_LIST[1][3][ic][jc] = [12, 123, 23, 0];
             }
         }
     }

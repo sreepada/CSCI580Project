@@ -214,9 +214,6 @@ function renderStep() {
             parseFloat(firstLineSplit[2])
         ];
         lineCount = lineCount + 1;
-        if (lineCount === 3) {
-            break;
-        }
     }
     console.log(triangleVector, triangleVector.length);
     rayTraceTriangle(triangleVector);
