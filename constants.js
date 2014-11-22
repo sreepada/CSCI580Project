@@ -34,10 +34,10 @@ var AMBIENT_COEFF = [0.1, 0.1, 0.1];
 var SPECULAR_COEFF = [0.3, 0.3, 0.3];
 var DIFFUSE_COEFF = [0.7, 0.7, 0.7];
 var SPEC_POWER = 32;
-//var LIGHT = [[[-0.7071, 0.7071, 0], [0.5, 0.5, 0.9]],
-//    [[0, -0.7071, -0.7071], [0.9, 0.2, 0.3]],
-//    [[0.7071, 0.0, -0.7071], [0.2, 0.7, 0.3]]];
-var LIGHT = [[[-0.7071, 0.7071, 0], [1, 1, 1]]];
+var LIGHT = [[[-0.7071, 0.7071, 0], [0.5, 0.5, 0.9]],
+    [[0, -0.7071, -0.7071], [0.9, 0.2, 0.3]],
+    [[0.7071, 0.0, -0.7071], [0.2, 0.7, 0.3]]];
+//var LIGHT = [[[0.7071, 0.7071, 0.7071], [1, 1, 1]]];
 var COLOR_THRESHOLD = 0;
 var SHADING_TYPE = 2;
 var ROTATE_STEP = {"rotate": [0, 0, 0]};
@@ -222,4 +222,4 @@ var HW4_CAMERA_TRANSFORMATION = {
         0
     ]
 };
-var DEFAULT_TRANSFORMATION = DEFAULT_CAMERA_TRANSFORMATION;
+var DEFAULT_TRANSFORMATION = HW4_CAMERA_TRANSFORMATION;

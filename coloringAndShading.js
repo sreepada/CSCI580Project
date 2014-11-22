@@ -20,7 +20,7 @@ function checkIfInsideTriangle(point, vertex0, vertex1, vertex2) {
     var w1 = areaWithoutV1 / areaOfTriangle;
     var w2 = areaWithtouV2 / areaOfTriangle;
     if (Math.round(w0 + w1 + w2) === 1) {
-        console.log(w0, w1, w2);
+//        console.log(w0, w1, w2);
         return 1;
     }
     else
@@ -47,12 +47,14 @@ function getColorfromLight(light, normal, cameraVector, colors, coeff, shadingTy
         for (var i = 0; i < 3; i++)
             normal[i] *= -1;
     else if (getDotProduct(getUnitVector(normal), getUnitVector(light[0]), "notNormalized") < 0
-            && getDotProduct(normal, cameraVector, "notNormalized") > 0)
+            && getDotProduct(normal, cameraVector, "notNormalized") > 0) {
         return colors;
+    }
     else if (getDotProduct(getUnitVector(normal), getUnitVector(light[0]), "notNormalized") > 0
-            && getDotProduct(normal, cameraVector, "notNormalized") < 0)
+            && getDotProduct(normal, cameraVector, "notNormalized") < 0) {
         //if the signs are negative then the light does not contribute to that color, so, skip it.
-        return colors;
+         return colors;
+    }
 
     var lDk = getDotProduct(getUnitVector(light[0]), getUnitVector(normal), "notNormalized");
     //get specular color coefficients
@@ -61,20 +63,21 @@ function getColorfromLight(light, normal, cameraVector, colors, coeff, shadingTy
 
     var newKs = (shadingType === 1 && coeff !== -1) ? coeff : SPECULAR_COEFF;
     var newKd = (coeff !== -1) ? coeff : DIFFUSE_COEFF;
-
+    
     colors[0] += light[1][0] * (newKd[0] * lDk + newKs[0] * lSk);
     colors[1] += light[1][1] * (newKd[1] * lDk + newKs[1] * lSk);
     colors[2] += light[1][2] * (newKd[2] * lDk + newKs[2] * lSk);
+
     return colors;
 }
 
 function getColorForNormal(colNormal, coeff, shadingType) {
     var normal = [colNormal[0][0], colNormal[1][0], colNormal[2][0]];
     var colors = [0, 0, 0];
-//              var cameraVector = [-(DEFAULT_TRANSFORMATION.camera.lookAt[0] - DEFAULT_TRANSFORMATION.camera.position[0]),
-//                    -(DEFAULT_TRANSFORMATION.camera.lookAt[1] - DEFAULT_TRANSFORMATION.camera.position[1]),
-//                    -(DEFAULT_TRANSFORMATION.camera.lookAt[2] - DEFAULT_TRANSFORMATION.camera.position[2])];
-    var cameraVector = [0, 0, -1];
+    var cameraVector = [-(DEFAULT_TRANSFORMATION.camera.lookAt[0] - DEFAULT_TRANSFORMATION.camera.position[0]),
+        -(DEFAULT_TRANSFORMATION.camera.lookAt[1] - DEFAULT_TRANSFORMATION.camera.position[1]),
+        -(DEFAULT_TRANSFORMATION.camera.lookAt[2] - DEFAULT_TRANSFORMATION.camera.position[2])];
+//    var cameraVector = [0, 0, -1];
 
     var newKa = (coeff !== -1) ? coeff : AMBIENT_COEFF;
 
@@ -86,7 +89,7 @@ function getColorForNormal(colNormal, coeff, shadingType) {
     for (var lightIterator = 0; lightIterator < LIGHT.length; lightIterator++) {
         colors = getColorfromLight(LIGHT[lightIterator], normal, cameraVector, colors, coeff, shadingType);
     }
-
+    FLAG++;
     return [Math.abs(colors[0] * 255), Math.abs(colors[1] * 255), Math.abs(colors[2] * 255)];
 }
 
@@ -271,6 +274,9 @@ function shadingInterpolation(point, vertex0, vertex1, vertex2, shadingType, map
         }
         normalForCurrPoint[3] = new Array(1);
         normalForCurrPoint[3][0] = 1;
+        if (FLAG === 1) {
+            console.log(normalForCurrPoint);
+        }
         var colorsCoeff = (TEXTURE_FILE_DATA === "" && mappingType !== 3) ? -1 : getTextureColorCoeff(point,
                 mappingType,
                 [w0, vertex0[3], vertex0[4]],
@@ -412,9 +418,13 @@ function rayTraceTriangle(triangleVectors) {
 
     for (var ic = 0; ic < 256; ic++) {
         for (var jc = 0; jc < 256; jc++) {
-            var ObjectValues = new Array(3);
-            for (var j = 0; j < ObjectValues.length; j++)
-                ObjectValues[j] = new Array(3);
+            var ObjectValues = new Array(10);
+            for (var j = 1; j < ObjectValues.length; j++) {
+                if (j < 7)
+                    ObjectValues[j] = new Array(3);
+                else
+                    ObjectValues[j] = new Array(2);
+            }
             var imagePlaneS = addVectors(
                     addVectors(
                             imgPlaneL,
@@ -429,9 +439,16 @@ function rayTraceTriangle(triangleVectors) {
             var tmin = Z_MAX;
 //            console.log(imagePlaneS);
             while (triangleIterator < triangleVectors.length) {
-                var Vector0 = triangleVectors[triangleIterator];
-                var Vector1 = triangleVectors[triangleIterator + 1];
-                var Vector2 = triangleVectors[triangleIterator + 2];
+                var Vector0 = triangleVectors[triangleIterator].slice(0, 3);
+                var Vector1 = triangleVectors[triangleIterator + 1].slice(0, 3);
+                var Vector2 = triangleVectors[triangleIterator + 2].slice(0, 3);
+                var normal0 = triangleVectors[triangleIterator].slice(3, 6);
+                var normal1 = triangleVectors[triangleIterator].slice(3, 6);
+                var normal2 = triangleVectors[triangleIterator].slice(3, 6);
+                var uv0 = triangleVectors[triangleIterator].slice(6, 8);
+                var uv1 = triangleVectors[triangleIterator].slice(6, 8);
+                var uv2 = triangleVectors[triangleIterator].slice(6, 8);
+
                 triangleIterator += 3;
                 var pointNormal = crossProduct1D(
                         subtractVectors(Vector1, Vector0),
@@ -460,16 +477,41 @@ function rayTraceTriangle(triangleVectors) {
                                     t
                                     )
                             );
-                    if (checkIfInsideTriangle(pointInObject, Vector0, Vector1, Vector2) === 1) {
+                    if (checkIfInsideTriangle(
+                            pointInObject,
+                            Vector0,
+                            Vector1,
+                            Vector2
+                            ) === 1) {
+                        var z = (
+                                -(pointNormal[0] * ic)
+                                - (pointNormal[1] * jc)
+                                - traingleD
+                                ) / pointNormal[2];
                         tmin = t;
-                        ObjectValues = [Vector0, Vector1, Vector2];
+                        ObjectValues = [z,
+                            Vector0, Vector1, Vector2,
+                            normal0, normal1, normal2,
+                            uv0, uv1, uv2
+                        ];
                     }
                 }
             }
             if (tmin > 0 && tmin !== Z_MAX) {
 //                    console.log(t, pointInObject);
 //                console.log(pointInObject, "yes inside");
-                CONTEXT_LIST[1][3][ic][jc] = [12, 123, 23, 0];
+//                CONTEXT_LIST[1][3][ic][jc] = [12, 123, 23, 0];
+                ObjectValues = transformAll(ObjectValues);
+                var colors = shadingInterpolation([ic, jc, ObjectValues[0]],
+                        [ObjectValues[1][0], ObjectValues[1][1], normal0, uv0, ObjectValues[1][2]],
+                        [ObjectValues[2][0], ObjectValues[2][1], normal1, uv1, ObjectValues[2][2]],
+                        [ObjectValues[3][0], ObjectValues[3][1], normal2, uv2, ObjectValues[3][2]],
+                        SHADING_TYPE,
+                        1);
+                CONTEXT_LIST[1][3][ic][jc][0] = colors[0];
+                CONTEXT_LIST[1][3][ic][jc][1] = colors[1];
+                CONTEXT_LIST[1][3][ic][jc][2] = colors[2];
+                CONTEXT_LIST[1][3][ic][jc][3] = z;
             }
         }
     }
