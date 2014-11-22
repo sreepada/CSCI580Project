@@ -383,10 +383,7 @@ function colorMeATriangle(aaIterator, Vector0, Vector1, Vector2, normal0, normal
                     CONTEXT_LIST[mappingType][3 + aaIterator][ic][jc][1] = colors[1];
                     CONTEXT_LIST[mappingType][3 + aaIterator][ic][jc][2] = colors[2];
                     CONTEXT_LIST[mappingType][3 + aaIterator][ic][jc][3] = z;
-<<<<<<< Updated upstream
-=======
                     //console.log(colors);
->>>>>>> Stashed changes
                 }
             }
         }
