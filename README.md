@@ -7,3 +7,5 @@ reference experiment: http://oos.moxiecode.com/js_webgl/autumn/
 
 
 js fiddle of raytracing example 1: http://jsfiddle.net/vz5aZ/2/
+
+###Someone's ray tracing code: https://github.com/marczych/RayTracer
