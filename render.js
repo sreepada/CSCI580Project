@@ -306,7 +306,7 @@ function transformAllPoint(ObjectValues) {
 
 
 function renderStep() {
-    updateResultantMatrix();
+//     updateResultantMatrix();
 
     var lineCount = 0;
     var triangleVector = new Array(3);
@@ -375,6 +375,7 @@ function renderStep() {
     }
 
     console.log(triangleVector, triangleVector.length);
+
     var tmin = Z_MAX;
     var ObjectValues = new Array(10);
     for (var j = 1; j < ObjectValues.length; j++) {
@@ -396,7 +397,16 @@ function renderStep() {
     var camV = normalize1DMatrix(
             crossProduct1D(DEFAULT_TRANSFORMATION.camera.lookAt, DEFAULT_TRANSFORMATION.camera.worldUp));
     var rayEtoO = [[0, 0, 0], [0, 0, 0]];
+
     var rayPtoL = [[0, 0, 0], [0, 0, 0]];
     rayTraceTriangle(triangleVector,camN,camPos,camU,camV,rayEtoO, rayPtoL);
+
+    //Saurabh
+    var noOfLeaves = 1;
+    var leafCount = 0;
+    while(leafCount < noOfLeaves){
+    	rayTraceTriangle(triangleVector, leafCount);
+    	leafCount += 1;
+    }
     writeToCanvas();
 }
