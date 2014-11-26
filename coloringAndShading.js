@@ -432,6 +432,7 @@ function shadowRay(pointInObject, light, triangleVectors, normal, ic, jc) {
     var triangleIterator = 0;
     var temptmin = Z_MAX;
 
+function rayTraceTriangle(triangleVectors, leafNo) {
     var camN = normalize1DMatrix(
             subtractVectors(light, pointInObject));
 
@@ -714,6 +715,40 @@ function rayTraceTriangle(triangleVectors, camN, camPos, camU, camV, rayEtoO) {
                     Vector1 = Vector2;
                     Vector2 = temp;
                 }
+                var uv1 = triangleVectors[triangleIterator].slice(6, 8);
+                var uv2 = triangleVectors[triangleIterator].slice(6, 8);
+
+				//Saurabh
+				if(leafNo == 1){
+					var vertex = [[0,0,0],[0,0,0],[0,0,0],[1,1,1]];
+					var TransformedVector = [[0,0,0],[0,0,0],[0,0,0],[0,0,0]];
+					for(var i = 0; i < 3; i++){
+						for(var j = 0; j < 3; j++){
+							if(i == 0)
+								vertex[j][i] = Vector0[j];
+							if(i==1)
+								vertex[j][i] = Vector1[j];
+							if(i==2)
+								vertex[j][i] = Vector2[j];
+						}
+					}
+					debugger
+					TransformedVector = getTransformedVects(vertex);
+					vertex = [[0,0,0],[0,0,0],[0,0,0],[0,0,0]];
+					vertex = getDeTransformedVects(TransformedVector);
+					
+					for(var i = 0; i < 3; i++){
+						for(var j = 0; j < 3; j++){
+							if(i == 0)
+								Vector0[j] = parseFloat(vertex[j][i]);
+							if(i==1)
+								Vector1[j] = parseFloat(vertex[j][i]);
+							if(i==2)
+								Vector2[j] = parseFloat(vertex[j][i]);
+						}
+					}
+				}
+				
                 triangleIterator += 3;
                 var triangleNormal = normalize1DMatrix(crossProduct1D(subtractVectors(Vector1, Vector0), subtractVectors(Vector2, Vector0)));
                 var traingleD = getDotProduct(Vector0, triangleNormal);
@@ -799,3 +834,116 @@ function rayTraceTriangle(triangleVectors, camN, camPos, camU, camV, rayEtoO) {
 //console.log(camN, camU, camV, imgPlaneD, imgPlaneHeight, imgPlaneWidth, imgPlaneC, imgPlaneL, pointNormal);
     }
 }
+
+//Saurabh
+function getTransformedVects(vertex) {
+	var TransformedVector = [[0,0,0],[0,0,0],[0,0,0],[0,0,0]];
+//    RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, spTransfrom(DEFAULT_TRANSFORMATION.sp, DEFAULT_TRANSFORMATION.FOV));
+    RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, piTransfrom(DEFAULT_TRANSFORMATION.FOV));
+    RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, iwTransfrom(DEFAULT_TRANSFORMATION.camera.position,
+            DEFAULT_TRANSFORMATION.camera.lookAt,
+            DEFAULT_TRANSFORMATION.camera.worldUp));
+            
+    var newTranslation = [10,0,0];
+    RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(newTranslation));
+    TransformedVector = multiplyMatrices(RESULTANT_MATRIX,vertex);
+   	normalizeVectsByW(TransformedVector,1);
+    // RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, scaleVector(DEFAULT_TRANSFORMATION.scaling));
+//     RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, rotateVector(DEFAULT_TRANSFORMATION.rotation));
+//     RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, NEW_TRANSFROM);
+
+    // NORMALS_RESULTANT = multiplyMatrices(NORMALS_RESULTANT, iwNTransfrom(DEFAULT_TRANSFORMATION.camera.position,
+//             DEFAULT_TRANSFORMATION.camera.lookAt,
+//             DEFAULT_TRANSFORMATION.camera.worldUp));
+//     NORMALS_RESULTANT = multiplyMatrices(NORMALS_RESULTANT, rotateVector(DEFAULT_TRANSFORMATION.rotation));
+//     NORMALS_RESULTANT = multiplyMatrices(NORMALS_RESULTANT, NEW_N_TRANSFROM);
+//     NORMALS_RESULTANT = normalizeMatrix(NORMALS_RESULTANT);
+
+	return TransformedVector;
+}
+
+function getDeTransformedVects(TransformedVector) {
+	var vertex = [[0,0,0],[0,0,0],[0,0,0],[0,0,0]];
+	var invRESULTANT_MATRIX = [[0,0,0],[0,0,0],[0,0,0],[0,0,0]];
+	invRESULTANT_MATRIX = invert4DMat(RESULTANT_MATRIX);
+	
+	vertex = multiplyMatrices(invRESULTANT_MATRIX,TransformedVector);
+	normalizeVectsByW(vertex,2);
+	
+//    RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, spTransfrom(DEFAULT_TRANSFORMATION.sp, DEFAULT_TRANSFORMATION.FOV));
+
+//     RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, piTransfrom(DEFAULT_TRANSFORMATION.FOV));
+//     RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, iwTransfrom(DEFAULT_TRANSFORMATION.camera.position,
+//             DEFAULT_TRANSFORMATION.camera.lookAt,
+//             DEFAULT_TRANSFORMATION.camera.worldUp));
+//     RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(DEFAULT_TRANSFORMATION.translation));
+
+//     RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, scaleVector(DEFAULT_TRANSFORMATION.scaling));
+//     RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, rotateVector(DEFAULT_TRANSFORMATION.rotation));
+//     RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, NEW_TRANSFROM);
+
+//     NORMALS_RESULTANT = multiplyMatrices(NORMALS_RESULTANT, iwNTransfrom(DEFAULT_TRANSFORMATION.camera.position,
+//             DEFAULT_TRANSFORMATION.camera.lookAt,
+//             DEFAULT_TRANSFORMATION.camera.worldUp));
+//     NORMALS_RESULTANT = multiplyMatrices(NORMALS_RESULTANT, rotateVector(DEFAULT_TRANSFORMATION.rotation));
+//     NORMALS_RESULTANT = multiplyMatrices(NORMALS_RESULTANT, NEW_N_TRANSFROM);
+//     NORMALS_RESULTANT = normalizeMatrix(NORMALS_RESULTANT);
+	return vertex;
+}
+
+function normalizeVectsByW(vertex, Selection){
+//Transformation
+	if(Selection == 1){
+		for(var i = 0; i < 3; i++){
+			for(var j = 0; j < 4; j++){
+				vertex[j][i] = vertex[j][i] / vertex[3][i]
+			}
+		}
+	}
+//De-Transformation
+	if(Selection == 2){
+			for(var i = 0; i < 3; i++){
+			for(var j = 0; j < 4; j++){
+				vertex[j][i] = vertex[j][i] / vertex[3][i]
+			}
+		}
+	}
+}
+
+function invert4DMat(mat) {
+
+   var invMat = [[0,0,0],[0,0,0],[0,0,0],[0,0,0]];
+   var det = (1/determinant(mat));
+
+   invMat[0][0] = (mat[1][2]*mat[2][3]*mat[3][1] - mat[1][3]*mat[2][2]*mat[3][1] + mat[1][3]*mat[2][1]*mat[3][2] - mat[1][1]*mat[2][3]*mat[3][2] - mat[1][2]*mat[2][1]*mat[3][3] + mat[1][1]*mat[2][2]*mat[3][3])*det;
+   invMat[0][1] = (mat[0][3]*mat[2][2]*mat[3][1] - mat[0][2]*mat[2][3]*mat[3][1] - mat[0][3]*mat[2][1]*mat[3][2] + mat[0][1]*mat[2][3]*mat[3][2] + mat[0][2]*mat[2][1]*mat[3][3] - mat[0][1]*mat[2][2]*mat[3][3])*det;
+   invMat[0][2] = (mat[0][2]*mat[1][3]*mat[3][1] - mat[0][3]*mat[1][2]*mat[3][1] + mat[0][3]*mat[1][1]*mat[3][2] - mat[0][1]*mat[1][3]*mat[3][2] - mat[0][2]*mat[1][1]*mat[3][3] + mat[0][1]*mat[1][2]*mat[3][3])*det;
+   invMat[0][3] = (mat[0][3]*mat[1][2]*mat[2][1] - mat[0][2]*mat[1][3]*mat[2][1] - mat[0][3]*mat[1][1]*mat[2][2] + mat[0][1]*mat[1][3]*mat[2][2] + mat[0][2]*mat[1][1]*mat[2][3] - mat[0][1]*mat[1][2]*mat[2][3])*det;
+   invMat[1][0] = (mat[1][3]*mat[2][2]*mat[3][0] - mat[1][2]*mat[2][3]*mat[3][0] - mat[1][3]*mat[2][0]*mat[3][2] + mat[1][0]*mat[2][3]*mat[3][2] + mat[1][2]*mat[2][0]*mat[3][3] - mat[1][0]*mat[2][2]*mat[3][3])*det;
+   invMat[1][1] = (mat[0][2]*mat[2][3]*mat[3][0] - mat[0][3]*mat[2][2]*mat[3][0] + mat[0][3]*mat[2][0]*mat[3][2] - mat[0][0]*mat[2][3]*mat[3][2] - mat[0][2]*mat[2][0]*mat[3][3] + mat[0][0]*mat[2][2]*mat[3][3])*det;
+   invMat[1][2] = (mat[0][3]*mat[1][2]*mat[3][0] - mat[0][2]*mat[1][3]*mat[3][0] - mat[0][3]*mat[1][0]*mat[3][2] + mat[0][0]*mat[1][3]*mat[3][2] + mat[0][2]*mat[1][0]*mat[3][3] - mat[0][0]*mat[1][2]*mat[3][3])*det;
+   invMat[1][3] = (mat[0][2]*mat[1][3]*mat[2][0] - mat[0][3]*mat[1][2]*mat[2][0] + mat[0][3]*mat[1][0]*mat[2][2] - mat[0][0]*mat[1][3]*mat[2][2] - mat[0][2]*mat[1][0]*mat[2][3] + mat[0][0]*mat[1][2]*mat[2][3])*det;
+   invMat[2][0] = (mat[1][1]*mat[2][3]*mat[3][0] - mat[1][3]*mat[2][1]*mat[3][0] + mat[1][3]*mat[2][0]*mat[3][1] - mat[1][0]*mat[2][3]*mat[3][1] - mat[1][1]*mat[2][0]*mat[3][3] + mat[1][0]*mat[2][1]*mat[3][3])*det;
+   invMat[2][1] = (mat[0][3]*mat[2][1]*mat[3][0] - mat[0][1]*mat[2][3]*mat[3][0] - mat[0][3]*mat[2][0]*mat[3][1] + mat[0][0]*mat[2][3]*mat[3][1] + mat[0][1]*mat[2][0]*mat[3][3] - mat[0][0]*mat[2][1]*mat[3][3])*det;
+   invMat[2][2] = (mat[0][1]*mat[1][3]*mat[3][0] - mat[0][3]*mat[1][1]*mat[3][0] + mat[0][3]*mat[1][0]*mat[3][1] - mat[0][0]*mat[1][3]*mat[3][1] - mat[0][1]*mat[1][0]*mat[3][3] + mat[0][0]*mat[1][1]*mat[3][3])*det;
+   invMat[2][3] = (mat[0][3]*mat[1][1]*mat[2][0] - mat[0][1]*mat[1][3]*mat[2][0] - mat[0][3]*mat[1][0]*mat[2][1] + mat[0][0]*mat[1][3]*mat[2][1] + mat[0][1]*mat[1][0]*mat[2][3] - mat[0][0]*mat[1][1]*mat[2][3])*det;
+   invMat[3][0] = (mat[1][2]*mat[2][1]*mat[3][0] - mat[1][1]*mat[2][2]*mat[3][0] - mat[1][2]*mat[2][0]*mat[3][1] + mat[1][0]*mat[2][2]*mat[3][1] + mat[1][1]*mat[2][0]*mat[3][2] - mat[1][0]*mat[2][1]*mat[3][2])*det;
+   invMat[3][1] = (mat[0][1]*mat[2][2]*mat[3][0] - mat[0][2]*mat[2][1]*mat[3][0] + mat[0][2]*mat[2][0]*mat[3][1] - mat[0][0]*mat[2][2]*mat[3][1] - mat[0][1]*mat[2][0]*mat[3][2] + mat[0][0]*mat[2][1]*mat[3][2])*det;
+   invMat[3][2] = (mat[0][2]*mat[1][1]*mat[3][0] - mat[0][1]*mat[1][2]*mat[3][0] - mat[0][2]*mat[1][0]*mat[3][1] + mat[0][0]*mat[1][2]*mat[3][1] + mat[0][1]*mat[1][0]*mat[3][2] - mat[0][0]*mat[1][1]*mat[3][2])*det;
+   invMat[3][3] = (mat[0][1]*mat[1][2]*mat[2][0] - mat[0][2]*mat[1][1]*mat[2][0] + mat[0][2]*mat[1][0]*mat[2][1] - mat[0][0]*mat[1][2]*mat[2][1] - mat[0][1]*mat[1][0]*mat[2][2] + mat[0][0]*mat[1][1]*mat[2][2])*det;
+
+return invMat;
+}
+
+function determinant(mat) {
+   var value;
+   value =
+   mat[0][3]*mat[1][2]*mat[2][1]*mat[3][0] - mat[0][2]*mat[1][3]*mat[2][1]*mat[3][0] - mat[0][3]*mat[1][1]*mat[2][2]*mat[3][0] + mat[0][1]*mat[1][3]*mat[2][2]*mat[3][0]+
+   mat[0][2]*mat[1][1]*mat[2][3]*mat[3][0] - mat[0][1]*mat[1][2]*mat[2][3]*mat[3][0] - mat[0][3]*mat[1][2]*mat[2][0]*mat[3][1] + mat[0][2]*mat[1][3]*mat[2][0]*mat[3][1]+
+   mat[0][3]*mat[1][0]*mat[2][2]*mat[3][1] - mat[0][0]*mat[1][3]*mat[2][2]*mat[3][1] - mat[0][2]*mat[1][0]*mat[2][3]*mat[3][1] + mat[0][0]*mat[1][2]*mat[2][3]*mat[3][1]+
+   mat[0][3]*mat[1][1]*mat[2][0]*mat[3][2] - mat[0][1]*mat[1][3]*mat[2][0]*mat[3][2] - mat[0][3]*mat[1][0]*mat[2][1]*mat[3][2] + mat[0][0]*mat[1][3]*mat[2][1]*mat[3][2]+
+   mat[0][1]*mat[1][0]*mat[2][3]*mat[3][2] - mat[0][0]*mat[1][1]*mat[2][3]*mat[3][2] - mat[0][2]*mat[1][1]*mat[2][0]*mat[3][3] + mat[0][1]*mat[1][2]*mat[2][0]*mat[3][3]+
+   mat[0][2]*mat[1][0]*mat[2][1]*mat[3][3] - mat[0][0]*mat[1][2]*mat[2][1]*mat[3][3] - mat[0][1]*mat[1][0]*mat[2][2]*mat[3][3] + mat[0][0]*mat[1][1]*mat[2][2]*mat[3][3];
+
+   return value;
+   } 
