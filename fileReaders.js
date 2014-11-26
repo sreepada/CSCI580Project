@@ -50,6 +50,9 @@ function readInputFile(evt, contents) {
                     fArray.push(READ_FILE_LINES[i].substring(2));
                 }
             }
+            var output;
+            var firstLineSplit;
+            output ="var Triangles = [\r\n";
             READ_FILE_LINES = [];
             var lineCount = 0;
             for (var i = 0; i < fArray.length; i++) {
@@ -61,19 +64,31 @@ function readInputFile(evt, contents) {
                             polygonVertices[0].split("/") :
                             polygonVertices[j + 2].split("/");
                     READ_FILE_LINES[lineCount] = vArray[parseInt(vertex1[0]) - 1] + " "
-                            + vnArray[parseInt(vertex1[2]) - 1] + " "
-                            + vtArray[parseInt(vertex1[1]) - 1];
+                            + vtArray[parseInt(vertex1[1]) - 1] + " "
+                            + vnArray[parseInt(vertex1[2]) - 1];
+                    
+                    firstLineSplit = READ_FILE_LINES[lineCount].split(/[\s]+/);
+                    output += "{'V1':{'X':'" + parseFloat(firstLineSplit[0]) + "','Y':'" + parseFloat(firstLineSplit[1]) + "','Z':'" + parseFloat(firstLineSplit[2]) + "','normal': {'x':'" + parseFloat(firstLineSplit[5]) + "','y':'" + parseFloat(firstLineSplit[6]) + "','z':'" + parseFloat(firstLineSplit[7]) + "'}, 's': '" + parseFloat(firstLineSplit[3]) + "','t': '" + parseFloat(firstLineSplit[4]) + "'},";
                     lineCount += 1;
                     READ_FILE_LINES[lineCount] = vArray[parseInt(vertex2[0]) - 1] + " "
-                            + vnArray[parseInt(vertex2[2]) - 1] + " "
-                            + vtArray[parseInt(vertex2[1]) - 1];
+                            + vtArray[parseInt(vertex2[1]) - 1] + " "
+                            + vnArray[parseInt(vertex2[2]) - 1];
+                    firstLineSplit = READ_FILE_LINES[lineCount].split(/[\s]+/);
+                    output += "'V2':{'X':'" + parseFloat(firstLineSplit[0]) + "','Y':'" + parseFloat(firstLineSplit[1]) + "','Z':'" + parseFloat(firstLineSplit[2]) + "','normal': {'x':'" + parseFloat(firstLineSplit[5]) + "','y':'" + parseFloat(firstLineSplit[6]) + "','z':'" + parseFloat(firstLineSplit[7]) + "'}, 's': '" + parseFloat(firstLineSplit[3]) + "','t': '" + parseFloat(firstLineSplit[4]) + "'},";
+
                     lineCount += 1;
                     READ_FILE_LINES[lineCount] = vArray[parseInt(vertex3[0]) - 1] + " "
-                            + vnArray[parseInt(vertex3[2]) - 1] + " "
-                            + vtArray[parseInt(vertex3[1]) - 1];
+                            + vtArray[parseInt(vertex3[1]) - 1] + " "
+                            + vnArray[parseInt(vertex3[2]) - 1];
+                    firstLineSplit = READ_FILE_LINES[lineCount].split(/[\s]+/);
+                    output += "'V3':{'X':'" + parseFloat(firstLineSplit[0]) + "','Y':'" + parseFloat(firstLineSplit[1]) + "','Z':'" + parseFloat(firstLineSplit[2]) + "','normal': {'x':'" + parseFloat(firstLineSplit[5]) + "','y':'" + parseFloat(firstLineSplit[6]) + "','z':'" + parseFloat(firstLineSplit[7]) + "'}, 's': '" + parseFloat(firstLineSplit[3]) + "','t': '" + parseFloat(firstLineSplit[4]) + "'}";
+                    output += "},\r\n";
                     lineCount += 1;
                 }
             }
+            output += "]";
+            //outputjson file
+            //window.open().document.write(output);
         };
         r.readAsText(f);
     } else {

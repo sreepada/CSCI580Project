@@ -230,6 +230,81 @@ function transformAll(ObjectValues) {
     return ObjectValues;
 }
 
+//transform point
+function transformAllPoint(ObjectValues) {
+    var Vertex0 = [
+        [ObjectValues[0]],
+        [ObjectValues[1]],
+        [ObjectValues[2]],
+        [1]
+    ];
+    //var Vertex1 = [
+    //    [ObjectValues[2][0]],
+    //    [ObjectValues[2][1]],
+    //    [ObjectValues[2][2]],
+    //    [1]
+    //];
+    //var Vertex2 = [
+    //    [ObjectValues[3][0]],
+    //    [ObjectValues[3][1]],
+    //    [ObjectValues[3][2]],
+    //    [1]
+    //];
+    //var normal0 = [
+    //    [ObjectValues[4][0]],
+    //    [ObjectValues[4][1]],
+    //    [ObjectValues[4][2]],
+    //    [1]
+    //];
+    //var normal1 = [
+    //    [ObjectValues[5][0]],
+    //    [ObjectValues[5][1]],
+    //    [ObjectValues[5][2]],
+    //    [1]
+    //];
+    //var normal2 = [
+    //    [ObjectValues[6][0]],
+    //    [ObjectValues[6][1]],
+    //    [ObjectValues[6][2]],
+    //    [1]
+    //];
+    //if (FLAG === 0) {
+    //    console.log(normal0);
+    //}
+    Vertex0 = multiplyMatrices(RESULTANT_MATRIX, Vertex0);
+    //Vertex1 = multiplyMatrices(RESULTANT_MATRIX, Vertex1);
+    //Vertex2 = multiplyMatrices(RESULTANT_MATRIX, Vertex2);
+    //normal0 = multiplyMatrices(NORMALS_RESULTANT, normal0);
+    //normal1 = multiplyMatrices(NORMALS_RESULTANT, normal1);
+    //normal2 = multiplyMatrices(NORMALS_RESULTANT, normal2);
+
+    Vertex0 = normalizeW(Vertex0);
+    //Vertex1 = normalizeW(Vertex1);
+    //Vertex2 = normalizeW(Vertex2);
+    //normal0 = normalizeW(normal0);
+    //normal1 = normalizeW(normal1);
+    //normal2 = normalizeW(normal2);
+    //if (FLAG === 0) {
+    //    console.log(normal0);
+    //}
+
+    //ObjectValues[1] = [Vertex0[0][0],
+    //    Vertex0[1][0],
+    //    Vertex0[2][0]];
+    //ObjectValues[2] = [Vertex1[0][0],
+    //    Vertex1[1][0],
+    //    Vertex2[2][0]];
+    //ObjectValues[3] = [Vertex2[0][0],
+    //    Vertex2[1][0],
+    //    Vertex2[2][0]];
+    //ObjectValues[4] = normal0;
+    //ObjectValues[5] = normal1;
+    //ObjectValues[6] = normal2;
+    return Vertex0;
+}
+
+
+
 function renderStep() {
     updateResultantMatrix();
 
@@ -298,9 +373,30 @@ function renderStep() {
 //            break;
 //        }
     }
-    for (var i = 0; i < triangleVector.length; i++) {
-        console.log(triangleVector[i]);
-    }
-    rayTraceTriangle(triangleVector);
+
+    console.log(triangleVector, triangleVector.length);
+    var tmin = Z_MAX;
+    var ObjectValues = new Array(10);
+    for (var j = 1; j < ObjectValues.length; j++) {
+        if (j < 7)
+            ObjectValues[j] = new Array(3);
+        else
+            ObjectValues[j] = new Array(2);
+
+    };
+    var z;
+
+    //screen = position + lookat
+    var camPos = DEFAULT_TRANSFORMATION.camera.position;
+    var camN = normalize1DMatrix(
+            addVectors(DEFAULT_TRANSFORMATION.camera.position,
+                    DEFAULT_TRANSFORMATION.camera.lookAt));
+    var camU = DEFAULT_TRANSFORMATION.camera.worldUp;
+    //v cross product of up and look at 
+    var camV = normalize1DMatrix(
+            crossProduct1D(DEFAULT_TRANSFORMATION.camera.worldUp, DEFAULT_TRANSFORMATION.camera.lookAt));
+    var rayEtoO = [[0, 0, 0], [0, 0, 0]];
+    rayTraceTriangle(triangleVector,camN,camPos,camU,camV,rayEtoO);
+
     writeToCanvas();
 }

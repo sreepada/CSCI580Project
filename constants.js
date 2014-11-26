@@ -29,15 +29,20 @@ var NEW_TRANSFROM = IDENTITY_MATRIX;
 var NEW_N_TRANSFROM = IDENTITY_MATRIX;
 var INTERVAL_COUNT = 0;
 var RENDER_TIMER;
-var AMBIENT_LIGHT = [[0, 0, 0], [0.3, 0.3, 0.3]];
-var AMBIENT_COEFF = [0.8, 0.8, 0.8];
+
+var AMBIENT_LIGHT = [[0, 0, 0], [0.7, 0.7, 0.7]];
+var AMBIENT_COEFF = [0.1, 0.1, 0.1];
+
 var SPECULAR_COEFF = [0.3, 0.3, 0.3];
 var DIFFUSE_COEFF = [0.7, 0.7, 0.7];
 var SPEC_POWER = 32;
-var LIGHT = [[[-0.7071, 0.7071, 0], [0.5, 0.5, 0.9]],
-    [[0, -0.7071, -0.7071], [0.9, 0.2, 0.3]],
-    [[0.7071, 0.0, -0.7071], [0.2, 0.7, 0.3]]];
+//-1 0.333 -1
+var LIGHT = [[[-0.7071, 0.7071, 0], [0.9, 0.2, 0.9]],
+[[0, -0.7071, -0.7071], [0.9, 0.2, 0.3]],
+[[0.7071, 0.0, -0.7071], [0.2, 0.7, 0.3]]
+];
 //var LIGHT = [[[0.7071, 0.7071, 0.7071], [1, 1, 1]]];
+
 var COLOR_THRESHOLD = 0;
 var SHADING_TYPE = 2;
 var ROTATE_STEP = {"rotate": [0, 0, 0]};
@@ -108,6 +113,11 @@ DEFAULT_CAMERA_TRANSFORMATION = {
 //     default camera postions
     "FOV": 60,
     "camera": {
+        "position": [
+            0,
+            0,
+            5
+        ],
         "lookAt": [
             1,
             -1,
@@ -116,7 +126,7 @@ DEFAULT_CAMERA_TRANSFORMATION = {
         "position": [
             0,
             0,
-            0
+            1
         ],
         "worldUp": [
             0,
