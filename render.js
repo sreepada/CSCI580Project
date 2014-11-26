@@ -375,40 +375,38 @@ function renderStep() {
     }
 
     console.log(triangleVector, triangleVector.length);
-    
-        //Saurabh
+
+    //Saurabh
     var noOfLeaves = 2;
     var leafCount = 0;
-    while(leafCount < noOfLeaves){
+    while (leafCount < noOfLeaves) {
+        var tmin = Z_MAX;
+        var ObjectValues = new Array(10);
+        for (var j = 1; j < ObjectValues.length; j++) {
+            if (j < 7)
+                ObjectValues[j] = new Array(3);
+            else
+                ObjectValues[j] = new Array(2);
 
+        }
 
-    var tmin = Z_MAX;
-    var ObjectValues = new Array(10);
-    for (var j = 1; j < ObjectValues.length; j++) {
-        if (j < 7)
-            ObjectValues[j] = new Array(3);
-        else
-            ObjectValues[j] = new Array(2);
+        //screen = position + lookat
+        var camPos = DEFAULT_TRANSFORMATION.camera.position;
+        var camN = //normalize1DMatrix(
+                addVectors(DEFAULT_TRANSFORMATION.camera.position,
+                        DEFAULT_TRANSFORMATION.camera.lookAt);//);
+        var camU = DEFAULT_TRANSFORMATION.camera.worldUp;
+        //v cross product of up and look at 
+        var camV = normalize1DMatrix(
+                crossProduct1D(DEFAULT_TRANSFORMATION.camera.lookAt, DEFAULT_TRANSFORMATION.camera.worldUp));
+        var rayEtoO = [[0, 0, 0], [0, 0, 0]];
 
-    };
-    var z;
-
-    //screen = position + lookat
-    var camPos = DEFAULT_TRANSFORMATION.camera.position;
-    var camN = //normalize1DMatrix(
-            addVectors(DEFAULT_TRANSFORMATION.camera.position,
-                    DEFAULT_TRANSFORMATION.camera.lookAt);//);
-    var camU = DEFAULT_TRANSFORMATION.camera.worldUp;
-    //v cross product of up and look at 
-    var camV = normalize1DMatrix(
-            crossProduct1D(DEFAULT_TRANSFORMATION.camera.lookAt, DEFAULT_TRANSFORMATION.camera.worldUp));
-    var rayEtoO = [[0, 0, 0], [0, 0, 0]];
-
-    var rayPtoL = [[0, 0, 0], [0, 0, 0]];
-    rayTraceTriangle(triangleVector,camN,camPos,camU,camV,rayEtoO, rayPtoL, leafCount);
+        var rayPtoL = [[0, 0, 0], [0, 0, 0]];
+        rayTraceTriangle(triangleVector, camN, camPos, camU, camV, rayEtoO, rayPtoL, leafCount);
 
 //     	rayTraceTriangle(triangleVector, leafCount);
-    	leafCount += 1;
+        leafCount += 1;
+//        break;
     }
     writeToCanvas();
 }

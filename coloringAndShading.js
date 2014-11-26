@@ -746,8 +746,8 @@ function rayTraceTriangle(triangleVectors, camN, camPos, camU, camV, rayEtoO, ra
                         }
                     }
                 }
-                if (ic === 0 && jc === 0)
-                    console.log(leafNo, Vector0, Vector1, Vector2);
+//                if (ic === 0 && jc === 0)
+//                    console.log(leafNo, Vector0, Vector1, Vector2);
                 triangleIterator += 3;
                 var triangleNormal = normalize1DMatrix(crossProduct1D(subtractVectors(Vector1, Vector0), subtractVectors(Vector2, Vector0)));
                 var traingleD = getDotProduct(Vector0, triangleNormal);
@@ -764,9 +764,6 @@ function rayTraceTriangle(triangleVectors, camN, camPos, camU, camV, rayEtoO, ra
                         "notN");
                 if (ndotD !== 0) {
                     var t = -(ndotP + traingleD) / ndotD;
-
-
-                    //                console.log(t);
                     if (tmin > t) {
                         //any point that intersect with triangle plane
                         var pointInObject = addVectors(
@@ -776,7 +773,7 @@ function rayTraceTriangle(triangleVectors, camN, camPos, camU, camV, rayEtoO, ra
                                         )
                                 );
                         //see if point lies in shadow?
-                        colorShadow = shadowRay(pointNormal, rayPtoL, ic, jc, triangleVectors, camN);
+//                        colorShadow = shadowRay(pointNormal, rayPtoL, ic, jc, triangleVectors, camN);
                         // debugger;
                         if (checkIfInsideTriangle(
                                 // transformedPoint,transformVector0,transformVector1,transformVector2
@@ -816,13 +813,10 @@ function rayTraceTriangle(triangleVectors, camN, camPos, camU, camV, rayEtoO, ra
                     CONTEXT_LIST[1][3][ic][jc][1] += Math.abs(colors[1]);
                     CONTEXT_LIST[1][3][ic][jc][2] += Math.abs(colors[2]);
                     CONTEXT_LIST[1][3][ic][jc][3] = z;
-                    //}
-//                    console.log(CONTEXT_LIST[1][3][ic][jc][0]);
                 }
             }
         }
     }
-    //console.log(camN, camU, camV, imgPlaneD, imgPlaneHeight, imgPlaneWidth, imgPlaneC, imgPlaneL, pointNormal);
 }
 
 function shadowRay(pointNormal, rayPtoL, ic, jc, triangleVectors, camN)
