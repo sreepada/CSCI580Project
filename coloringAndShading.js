@@ -686,8 +686,10 @@ function rayTraceTriangle(triangleVectors, camN, camPos, camU, camV, rayEtoO) {
         for (var jc = 0; jc < 256; jc++) {
             console.log(ic);
             //screen to world ic = height js = width
-            var xp = jc * 1 / imgPlaneWidth * 2 - 1;
-            var yp = ic * 1 / imgPlaneHeight * 2 - 1;
+
+            var xp = jc*(1/imgPlaneWidth)*2-1;
+            var yp = ic*(1/imgPlaneWidth)*2-1;
+
             //get ray's position and direction;
             getRay(xp, yp, camN, camPos, camU, camV, rayEtoO);
             // var colorShadow = [0, 0, 0, 0];
@@ -716,51 +718,17 @@ function rayTraceTriangle(triangleVectors, camN, camPos, camU, camV, rayEtoO) {
                 var triangleNormal = normalize1DMatrix(crossProduct1D(subtractVectors(Vector1, Vector0), subtractVectors(Vector2, Vector0)));
                 var traingleD = getDotProduct(Vector0, triangleNormal);
                 var ndotP = getDotProduct(
-////                        camN,
-//                        triangleNormal,
-//                        DEFAULT_TRANSFORMATION.camera.position, "notNormalized");
-//
-//                var ndotD = getDotProduct(
-////                        camN,
-//                        triangleNormal,
-//                        subtractVectors(imagePlaneS,
-//                                DEFAULT_TRANSFORMATION.camera.position),
-//                        "notN");
-//                var t = -(ndotP + traingleD) / ndotD;
-////                var t = -1 * getDotProduct(
-////                        subtractVectors(
-////                                DEFAULT_TRANSFORMATION.camera.position,
-////                                Vector0),
-////                        triangleNormal,
-////                        "notN") / getDotProduct(camN, triangleNormal, "notN");
-////                if (tmin > t) {
-//                    var pointInObject = addVectors(
-//                            DEFAULT_TRANSFORMATION.camera.position,
-//                            scalarMultiple(
-//                                    subtractVectors(
-//                                            imagePlaneS,
-//                                            DEFAULT_TRANSFORMATION.camera.position),
-////                                    camN,
-//                                    t
-//                                    )
-//                            );
-////                    debugger;
-//                    var z = (
-//                            -(triangleNormal[0] * ic)
-//                            - (triangleNormal[1] * jc)
-//                            - traingleD
-//                            ) / triangleNormal[2];
-//
 
-                        pointNormal,
-                        // camN,
+                        //pointNormal,
+                    camN,
                         rayEtoO[0], "notNormalized");
                 //                console.log(imagePlaneS, imagePlaneS.length);
                 //                debugger;
                 var ndotD = getDotProduct(
-                        pointNormal,
-                        //camN,
-                        rayEtoO[1],
+
+                        //pointNormal,
+                    camN,
+                       rayEtoO[1],
                         "notN");
                 var t = -(ndotP + traingleD) / ndotD;
                 //                console.log(t);
