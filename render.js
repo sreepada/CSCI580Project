@@ -388,15 +388,15 @@ function renderStep() {
 
     //screen = position + lookat
     var camPos = DEFAULT_TRANSFORMATION.camera.position;
-    var camN = normalize1DMatrix(
+    var camN = //normalize1DMatrix(
             addVectors(DEFAULT_TRANSFORMATION.camera.position,
-                    DEFAULT_TRANSFORMATION.camera.lookAt));
+                    DEFAULT_TRANSFORMATION.camera.lookAt);//);
     var camU = DEFAULT_TRANSFORMATION.camera.worldUp;
     //v cross product of up and look at 
     var camV = normalize1DMatrix(
-            crossProduct1D(DEFAULT_TRANSFORMATION.camera.worldUp, DEFAULT_TRANSFORMATION.camera.lookAt));
+            crossProduct1D(DEFAULT_TRANSFORMATION.camera.lookAt, DEFAULT_TRANSFORMATION.camera.worldUp));
     var rayEtoO = [[0, 0, 0], [0, 0, 0]];
-    rayTraceTriangle(triangleVector,camN,camPos,camU,camV,rayEtoO);
-
+    var rayPtoL = [[0, 0, 0], [0, 0, 0]];
+    rayTraceTriangle(triangleVector,camN,camPos,camU,camV,rayEtoO, rayPtoL);
     writeToCanvas();
 }

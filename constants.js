@@ -116,17 +116,12 @@ DEFAULT_CAMERA_TRANSFORMATION = {
         "position": [
             0,
             0,
-            -25
+            -35
         ],
         "lookAt": [
-            1,
-            -1,
-            1
-        ],
-        "position": [
+            -0.2,
             0,
-            0,
-            1
+            5
         ],
         "worldUp": [
             0,
@@ -232,4 +227,4 @@ var HW4_CAMERA_TRANSFORMATION = {
         0
     ]
 };
-var DEFAULT_TRANSFORMATION = HW4_CAMERA_TRANSFORMATION;
+var DEFAULT_TRANSFORMATION = DEFAULT_CAMERA_TRANSFORMATION;//HW4_CAMERA_TRANSFORMATION;
