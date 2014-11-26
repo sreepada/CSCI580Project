@@ -691,8 +691,8 @@ function rayTraceTriangle(triangleVectors, camN, camPos, camU, camV, rayEtoO) {
         for (var jc = 0; jc < 256; jc++) {
             console.log(ic);
             //screen to world ic = height js = width
-            var xp = jc*1/imgPlaneWidth*2-1;
-            var yp = ic*1/imgPlaneHeight*2-1;
+            var xp = jc*(1/imgPlaneWidth)*2-1;
+            var yp = ic*(1/imgPlaneWidth)*2-1;
             //get ray's position and direction;
             getRay(xp, yp, camN, camPos, camU, camV, rayEtoO);
 
@@ -719,15 +719,15 @@ function rayTraceTriangle(triangleVectors, camN, camPos, camU, camV, rayEtoO) {
                 var traingleD = getDotProduct(Vector0, pointNormal);
 
                 var ndotP = getDotProduct(
-                    pointNormal,
-                   // camN,
+                    //pointNormal,
+                    camN,
                         rayEtoO[0], "notNormalized");
 
                 //                console.log(imagePlaneS, imagePlaneS.length);
                 //                debugger;
                 var ndotD = getDotProduct(
-                    pointNormal,
-                    //camN,
+                    //pointNormal,
+                    camN,
                        rayEtoO[1],
                         "notN");
                 var t = -(ndotP + traingleD) / ndotD;
