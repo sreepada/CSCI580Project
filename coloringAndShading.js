@@ -11,16 +11,30 @@ function getDotProduct(vector1, vector2, choice) {
     return dotProduct;
 }
 
-function checkIfInsideTriangle(point, vertex0, vertex1, vertex2) {
-    var areaOfTriangle = Math.abs(vertex0[0] * (vertex2[1] - vertex1[1]) + vertex1[0] * (vertex0[1] - vertex2[1]) + vertex2[0] * (vertex1[1] - vertex0[1]));
-    var areaWithoutV0 = Math.abs(point[0] * (vertex2[1] - vertex1[1]) + vertex1[0] * (point[1] - vertex2[1]) + vertex2[0] * (vertex1[1] - point[1]));
-    var areaWithoutV1 = Math.abs(vertex0[0] * (vertex2[1] - point[1]) + point[0] * (vertex0[1] - vertex2[1]) + vertex2[0] * (point[1] - vertex0[1]));
-    var areaWithtouV2 = Math.abs(vertex0[0] * (point[1] - vertex1[1]) + vertex1[0] * (vertex0[1] - point[1]) + point[0] * (vertex1[1] - vertex0[1]));
-    var w0 = areaWithoutV0 / areaOfTriangle;
-    var w1 = areaWithoutV1 / areaOfTriangle;
-    var w2 = areaWithtouV2 / areaOfTriangle;
-    if (Math.round(w0 + w1 + w2) === 1) {
+function checkIfInsideTriangle(point, z, vertex0, vertex1, vertex2) {
+//    point[2] = z;
+    var n = crossProduct1D(subtractVectors(vertex1, vertex0), subtractVectors(vertex2, vertex0));
+    var nA = crossProduct1D(subtractVectors(vertex2, vertex1), subtractVectors(point, vertex1));
+    var nB = crossProduct1D(subtractVectors(vertex0, vertex2), subtractVectors(point, vertex2));
+    var nC = crossProduct1D(subtractVectors(vertex1, vertex0), subtractVectors(point, vertex0));
+    var nMod = n[0] * n[0] + n[1] * n[1] + n[2] * n[2];
+    var alpha = Math.abs(getDotProduct(n, nA, "notNormal") / nMod);
+    var beta = Math.abs(getDotProduct(n, nB, "notNormal") / nMod);
+    var gamma = Math.abs(getDotProduct(n, nC, "notNormal") / nMod);
+
+//    debugger;
+//    var areaOfTriangle = Math.abs(vertex0[0] * (vertex2[1] - vertex1[1]) + vertex1[0] * (vertex0[1] - vertex2[1]) + vertex2[0] * (vertex1[1] - vertex0[1]));
+//    var areaWithoutV0 = Math.abs(point[0] * (vertex2[1] - vertex1[1]) + vertex1[0] * (point[1] - vertex2[1]) + vertex2[0] * (vertex1[1] - point[1]));
+//    var areaWithoutV1 = Math.abs(vertex0[0] * (vertex2[1] - point[1]) + point[0] * (vertex0[1] - vertex2[1]) + vertex2[0] * (point[1] - vertex0[1]));
+//    var areaWithtouV2 = Math.abs(vertex0[0] * (point[1] - vertex1[1]) + vertex1[0] * (vertex0[1] - point[1]) + point[0] * (vertex1[1] - vertex0[1]));
+//    var w0 = areaWithoutV0 / areaOfTriangle;
+//    var w1 = areaWithoutV1 / areaOfTriangle;
+//    var w2 = areaWithtouV2 / areaOfTriangle;
+//    if (Math.round(w0 + w1 + w2) === 1) {
 //        console.log(w0, w1, w2);
+    if (alpha >= 0 && alpha <= 1 && beta >= 0 && beta <= 1 && gamma >= 0 && gamma <= 1) {
+//    if (Math.round(alpha + beta + gamma) === 1) {
+//        debugger;
         return 1;
     }
     else
@@ -53,7 +67,7 @@ function getColorfromLight(light, normal, cameraVector, colors, coeff, shadingTy
     else if (getDotProduct(getUnitVector(normal), getUnitVector(light[0]), "notNormalized") > 0
             && getDotProduct(normal, cameraVector, "notNormalized") < 0) {
         //if the signs are negative then the light does not contribute to that color, so, skip it.
-         return colors;
+        return colors;
     }
 
     var lDk = getDotProduct(getUnitVector(light[0]), getUnitVector(normal), "notNormalized");
@@ -63,7 +77,7 @@ function getColorfromLight(light, normal, cameraVector, colors, coeff, shadingTy
 
     var newKs = (shadingType === 1 && coeff !== -1) ? coeff : SPECULAR_COEFF;
     var newKd = (coeff !== -1) ? coeff : DIFFUSE_COEFF;
-    
+
     colors[0] += light[1][0] * (newKd[0] * lDk + newKs[0] * lSk);
     colors[1] += light[1][1] * (newKd[1] * lDk + newKs[1] * lSk);
     colors[2] += light[1][2] * (newKd[2] * lDk + newKs[2] * lSk);
@@ -400,8 +414,9 @@ function rayTraceTriangle(triangleVectors) {
     var camN = normalize1DMatrix(
             subtractVectors(DEFAULT_TRANSFORMATION.camera.position,
                     DEFAULT_TRANSFORMATION.camera.lookAt));
-    var camU = normalize1DMatrix(
-            crossProduct1D(DEFAULT_TRANSFORMATION.camera.worldUp, camN));
+//    var camU = normalize1DMatrix(
+//            crossProduct1D(DEFAULT_TRANSFORMATION.camera.worldUp, camN));
+    var camU = normalize1DMatrix(DEFAULT_TRANSFORMATION.camera.worldUp);
     var camV = crossProduct1D(camN, camU);
 
     var imgPlaneHeight = 256;
@@ -437,65 +452,78 @@ function rayTraceTriangle(triangleVectors) {
                     );
             var triangleIterator = 0;
             var tmin = Z_MAX;
-//            console.log(imagePlaneS);
             while (triangleIterator < triangleVectors.length) {
                 var Vector0 = triangleVectors[triangleIterator].slice(0, 3);
                 var Vector1 = triangleVectors[triangleIterator + 1].slice(0, 3);
                 var Vector2 = triangleVectors[triangleIterator + 2].slice(0, 3);
                 var normal0 = triangleVectors[triangleIterator].slice(3, 6);
-                var normal1 = triangleVectors[triangleIterator].slice(3, 6);
-                var normal2 = triangleVectors[triangleIterator].slice(3, 6);
+                var normal1 = triangleVectors[triangleIterator + 1].slice(3, 6);
+                var normal2 = triangleVectors[triangleIterator + 2].slice(3, 6);
                 var uv0 = triangleVectors[triangleIterator].slice(6, 8);
-                var uv1 = triangleVectors[triangleIterator].slice(6, 8);
-                var uv2 = triangleVectors[triangleIterator].slice(6, 8);
+                var uv1 = triangleVectors[triangleIterator + 1].slice(6, 8);
+                var uv2 = triangleVectors[triangleIterator + 2].slice(6, 8);
 
+                if (checkIfClockwise(Vector0, Vector1, Vector2) === true) {
+                    var temp = Vector1;
+                    Vector1 = Vector2;
+                    Vector2 = temp;
+                }
                 triangleIterator += 3;
-                var pointNormal = crossProduct1D(
-                        subtractVectors(Vector1, Vector0),
-                        subtractVectors(Vector2, Vector0));
-                var traingleD = getDotProduct(Vector0, pointNormal);
+                var triangleNormal = normalize1DMatrix(crossProduct1D(subtractVectors(Vector1, Vector0), subtractVectors(Vector2, Vector0)));
+                var traingleD = getDotProduct(Vector0, triangleNormal);
 
-                var ndotP = getDotProduct(camN,
+                var ndotP = getDotProduct(
+//                        camN,
+                        triangleNormal,
                         DEFAULT_TRANSFORMATION.camera.position, "notNormalized");
 
-//                console.log(imagePlaneS, imagePlaneS.length);
-//                debugger;
                 var ndotD = getDotProduct(
-                        camN,
+//                        camN,
+                        triangleNormal,
                         subtractVectors(imagePlaneS,
                                 DEFAULT_TRANSFORMATION.camera.position),
                         "notN");
                 var t = -(ndotP + traingleD) / ndotD;
-//                console.log(t);
-                if (tmin > t) {
+//                var t = -1 * getDotProduct(
+//                        subtractVectors(
+//                                DEFAULT_TRANSFORMATION.camera.position,
+//                                Vector0),
+//                        triangleNormal,
+//                        "notN") / getDotProduct(camN, triangleNormal, "notN");
+//                if (tmin > t) {
                     var pointInObject = addVectors(
                             DEFAULT_TRANSFORMATION.camera.position,
                             scalarMultiple(
                                     subtractVectors(
                                             imagePlaneS,
                                             DEFAULT_TRANSFORMATION.camera.position),
+//                                    camN,
                                     t
                                     )
                             );
+//                    debugger;
+                    var z = (
+                            -(triangleNormal[0] * ic)
+                            - (triangleNormal[1] * jc)
+                            - traingleD
+                            ) / triangleNormal[2];
+
                     if (checkIfInsideTriangle(
                             pointInObject,
+                            z,
                             Vector0,
                             Vector1,
                             Vector2
                             ) === 1) {
-                        var z = (
-                                -(pointNormal[0] * ic)
-                                - (pointNormal[1] * jc)
-                                - traingleD
-                                ) / pointNormal[2];
+//                        debugger;
                         tmin = t;
-                        ObjectValues = [z,
+                        ObjectValues = [pointInObject[2],
                             Vector0, Vector1, Vector2,
                             normal0, normal1, normal2,
                             uv0, uv1, uv2
                         ];
                     }
-                }
+//                }
             }
             if (tmin > 0 && tmin !== Z_MAX) {
 //                    console.log(t, pointInObject);
@@ -511,9 +539,9 @@ function rayTraceTriangle(triangleVectors) {
                 CONTEXT_LIST[1][3][ic][jc][0] = colors[0];
                 CONTEXT_LIST[1][3][ic][jc][1] = colors[1];
                 CONTEXT_LIST[1][3][ic][jc][2] = colors[2];
-                CONTEXT_LIST[1][3][ic][jc][3] = z;
+                CONTEXT_LIST[1][3][ic][jc][3] = ObjectValues[0];
             }
         }
     }
-    console.log(camN, camU, camV, imgPlaneD, imgPlaneHeight, imgPlaneWidth, imgPlaneC, imgPlaneL, pointNormal);
+    console.log(camN, camU, camV, imgPlaneD, imgPlaneHeight, imgPlaneWidth, imgPlaneC, imgPlaneL, triangleNormal);
 }

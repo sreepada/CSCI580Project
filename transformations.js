@@ -122,3 +122,14 @@ function translateVector(translateValues) {
         [0, 0, 0, 1]];
     return translateMatrix;
 }
+
+function applyScaling(Vector0) {
+    Vector0 = multiplyMatrices(scaleVector([3.25, 3.25, 1]), [
+        [Vector0[0]],
+        [Vector0[1]],
+        [Vector0[2]],
+        [1]
+    ])
+    return [Vector0[0][0], Vector0[1][0], Vector0[2][0]];
+
+}

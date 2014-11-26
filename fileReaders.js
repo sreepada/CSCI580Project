@@ -61,16 +61,16 @@ function readInputFile(evt, contents) {
                             polygonVertices[0].split("/") :
                             polygonVertices[j + 2].split("/");
                     READ_FILE_LINES[lineCount] = vArray[parseInt(vertex1[0]) - 1] + " "
-                            + vtArray[parseInt(vertex1[1]) - 1] + " "
-                            + vnArray[parseInt(vertex1[2]) - 1];
+                            + vnArray[parseInt(vertex1[2]) - 1] + " "
+                            + vtArray[parseInt(vertex1[1]) - 1];
                     lineCount += 1;
                     READ_FILE_LINES[lineCount] = vArray[parseInt(vertex2[0]) - 1] + " "
-                            + vtArray[parseInt(vertex2[1]) - 1] + " "
-                            + vnArray[parseInt(vertex2[2]) - 1];
+                            + vnArray[parseInt(vertex2[2]) - 1] + " "
+                            + vtArray[parseInt(vertex2[1]) - 1];
                     lineCount += 1;
                     READ_FILE_LINES[lineCount] = vArray[parseInt(vertex3[0]) - 1] + " "
-                            + vtArray[parseInt(vertex3[1]) - 1] + " "
-                            + vnArray[parseInt(vertex3[2]) - 1];
+                            + vnArray[parseInt(vertex3[2]) - 1] + " "
+                            + vtArray[parseInt(vertex3[1]) - 1];
                     lineCount += 1;
                 }
             }

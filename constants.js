@@ -30,7 +30,7 @@ var NEW_N_TRANSFROM = IDENTITY_MATRIX;
 var INTERVAL_COUNT = 0;
 var RENDER_TIMER;
 var AMBIENT_LIGHT = [[0, 0, 0], [0.3, 0.3, 0.3]];
-var AMBIENT_COEFF = [0.1, 0.1, 0.1];
+var AMBIENT_COEFF = [0.8, 0.8, 0.8];
 var SPECULAR_COEFF = [0.3, 0.3, 0.3];
 var DIFFUSE_COEFF = [0.7, 0.7, 0.7];
 var SPEC_POWER = 32;
@@ -108,12 +108,12 @@ DEFAULT_CAMERA_TRANSFORMATION = {
 //     default camera postions
     "FOV": 60,
     "camera": {
-        "position": [
-            -10,
-            5,
-            -10
-        ],
         "lookAt": [
+            1,
+            -1,
+            1
+        ],
+        "position": [
             0,
             0,
             0

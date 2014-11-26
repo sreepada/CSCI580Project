@@ -215,15 +215,15 @@ function transformAll(ObjectValues) {
         console.log(normal0);
     }
 
-    ObjectValues[1] = [Vertex0[0][0], 
-        Vertex0[1][0], 
-        Vertex0[2][0]]; 
-    ObjectValues[2] = [Vertex1[0][0], 
-        Vertex1[1][0], 
+    ObjectValues[1] = [Vertex0[0][0],
+        Vertex0[1][0],
+        Vertex0[2][0]];
+    ObjectValues[2] = [Vertex1[0][0],
+        Vertex1[1][0],
         Vertex2[2][0]];
-    ObjectValues[3] = [Vertex2[0][0], 
-        Vertex2[1][0], 
-        Vertex2[2][0]]; 
+    ObjectValues[3] = [Vertex2[0][0],
+        Vertex2[1][0],
+        Vertex2[2][0]];
     ObjectValues[4] = normal0;
     ObjectValues[5] = normal1;
     ObjectValues[6] = normal2;
@@ -237,6 +237,7 @@ function renderStep() {
     var triangleVector = new Array(3);
     while (lineCount < READ_FILE_LINES.length) {
         var firstLineSplit = READ_FILE_LINES[lineCount].split(/[\s]+/);
+        //lee scan part starts
 //        var secondLineSplit = READ_FILE_LINES[lineCount + 1].split(/[\s]+/);
 //        var thirdLineSplit = READ_FILE_LINES[lineCount + 2].split(/[\s]+/);
 //        var Vertex0 = [[parseFloat(firstLineSplit[0])], [parseFloat(firstLineSplit[1])], [parseFloat(firstLineSplit[2])], [1]];
@@ -280,6 +281,8 @@ function renderStep() {
 //            Vertex1 = loopVertex1;
 //            Vertex2 = loopVertex2;
 //        }
+//        lineCount = lineCount + 3;
+        //lee scan part ends
         triangleVector[lineCount] = [
             parseFloat(firstLineSplit[0]),
             parseFloat(firstLineSplit[1]),
@@ -291,11 +294,13 @@ function renderStep() {
             parseFloat(firstLineSplit[7])
         ];
         lineCount = lineCount + 1;
-//        if (lineCount === 3) {
+//        if (lineCount === 12) {
 //            break;
 //        }
     }
-    console.log(triangleVector, triangleVector.length);
+    for (var i = 0; i < triangleVector.length; i++) {
+        console.log(triangleVector[i]);
+    }
     rayTraceTriangle(triangleVector);
     writeToCanvas();
 }
