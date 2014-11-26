@@ -7,11 +7,11 @@ function setup() {
     var contextIterator = 1;
     for (var aaIterator = 0; aaIterator < AAKERNEL_SIZE; aaIterator++) {
         CONTEXT_LIST[contextIterator][3 + aaIterator] = new Array(256);
-        for (var arrayPointer = 0; arrayPointer <= 256; arrayPointer++) {
+        for (var arrayPointer = 0; arrayPointer <= 512; arrayPointer++) {
             CONTEXT_LIST[contextIterator][3 + aaIterator][arrayPointer] = new Array(256);
-            for (var arrayPointer2 = 0; arrayPointer2 <= 256; arrayPointer2++) {
+            for (var arrayPointer2 = 0; arrayPointer2 <= 512; arrayPointer2++) {
 //                        CONTEXT_LIST[contextIterator][3 + aaIterator][arrayPointer][arrayPointer2] = [128, 112, 96, 0];
-                CONTEXT_LIST[contextIterator][3 + aaIterator][arrayPointer][arrayPointer2] = [255, 255, 255, 0];
+                CONTEXT_LIST[contextIterator][3 + aaIterator][arrayPointer][arrayPointer2] = [0, 0, 0, 0];
             }
         }
     }
@@ -19,8 +19,8 @@ function setup() {
 
 function writeToCanvas() {
     var contextIterator = 1;
-    for (var arrayPointer = 0; arrayPointer < 256; arrayPointer++) {
-        for (var arrayPointer2 = 0; arrayPointer2 < 256; arrayPointer2++) {
+    for (var arrayPointer = 0; arrayPointer < 512; arrayPointer++) {
+        for (var arrayPointer2 = 0; arrayPointer2 < 512; arrayPointer2++) {
             var d = CONTEXT_LIST[contextIterator][2].data;
             var r = 0;
             var g = 0;
@@ -195,9 +195,9 @@ function transformAll(ObjectValues) {
         [ObjectValues[6][2]],
         [1]
     ];
-    if (FLAG === 0) {
-        console.log(normal0);
-    }
+//    if (FLAG === 0) {
+//        console.log(normal0);
+//    }
     Vertex0 = multiplyMatrices(RESULTANT_MATRIX, Vertex0);
     Vertex1 = multiplyMatrices(RESULTANT_MATRIX, Vertex1);
     Vertex2 = multiplyMatrices(RESULTANT_MATRIX, Vertex2);
@@ -211,9 +211,9 @@ function transformAll(ObjectValues) {
     normal0 = normalizeW(normal0);
     normal1 = normalizeW(normal1);
     normal2 = normalizeW(normal2);
-    if (FLAG === 0) {
-        console.log(normal0);
-    }
+//    if (FLAG === 0) {
+//        console.log(normal0);
+//    }
 
     ObjectValues[1] = [Vertex0[0][0],
         Vertex0[1][0],

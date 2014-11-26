@@ -64,22 +64,22 @@ function readInputFile(evt, contents) {
                             polygonVertices[0].split("/") :
                             polygonVertices[j + 2].split("/");
                     READ_FILE_LINES[lineCount] = vArray[parseInt(vertex1[0]) - 1] + " "
-                            + vtArray[parseInt(vertex1[1]) - 1] + " "
-                            + vnArray[parseInt(vertex1[2]) - 1];
+                            + vnArray[parseInt(vertex1[2]) - 1] + " "
+                            + vtArray[parseInt(vertex1[1]) - 1];
                     
                     firstLineSplit = READ_FILE_LINES[lineCount].split(/[\s]+/);
                     output += "{'V1':{'X':'" + parseFloat(firstLineSplit[0]) + "','Y':'" + parseFloat(firstLineSplit[1]) + "','Z':'" + parseFloat(firstLineSplit[2]) + "','normal': {'x':'" + parseFloat(firstLineSplit[5]) + "','y':'" + parseFloat(firstLineSplit[6]) + "','z':'" + parseFloat(firstLineSplit[7]) + "'}, 's': '" + parseFloat(firstLineSplit[3]) + "','t': '" + parseFloat(firstLineSplit[4]) + "'},";
                     lineCount += 1;
                     READ_FILE_LINES[lineCount] = vArray[parseInt(vertex2[0]) - 1] + " "
-                            + vtArray[parseInt(vertex2[1]) - 1] + " "
-                            + vnArray[parseInt(vertex2[2]) - 1];
+                            + vnArray[parseInt(vertex2[2]) - 1] + " "
+                            + vtArray[parseInt(vertex2[1]) - 1];
                     firstLineSplit = READ_FILE_LINES[lineCount].split(/[\s]+/);
                     output += "'V2':{'X':'" + parseFloat(firstLineSplit[0]) + "','Y':'" + parseFloat(firstLineSplit[1]) + "','Z':'" + parseFloat(firstLineSplit[2]) + "','normal': {'x':'" + parseFloat(firstLineSplit[5]) + "','y':'" + parseFloat(firstLineSplit[6]) + "','z':'" + parseFloat(firstLineSplit[7]) + "'}, 's': '" + parseFloat(firstLineSplit[3]) + "','t': '" + parseFloat(firstLineSplit[4]) + "'},";
 
                     lineCount += 1;
                     READ_FILE_LINES[lineCount] = vArray[parseInt(vertex3[0]) - 1] + " "
-                            + vtArray[parseInt(vertex3[1]) - 1] + " "
-                            + vnArray[parseInt(vertex3[2]) - 1];
+                            + vnArray[parseInt(vertex3[2]) - 1] + " "
+                            + vtArray[parseInt(vertex3[1]) - 1];
                     firstLineSplit = READ_FILE_LINES[lineCount].split(/[\s]+/);
                     output += "'V3':{'X':'" + parseFloat(firstLineSplit[0]) + "','Y':'" + parseFloat(firstLineSplit[1]) + "','Z':'" + parseFloat(firstLineSplit[2]) + "','normal': {'x':'" + parseFloat(firstLineSplit[5]) + "','y':'" + parseFloat(firstLineSplit[6]) + "','z':'" + parseFloat(firstLineSplit[7]) + "'}, 's': '" + parseFloat(firstLineSplit[3]) + "','t': '" + parseFloat(firstLineSplit[4]) + "'}";
                     output += "},\r\n";
