@@ -375,6 +375,12 @@ function renderStep() {
     }
 
     console.log(triangleVector, triangleVector.length);
+    
+        //Saurabh
+    var noOfLeaves = 2;
+    var leafCount = 0;
+    while(leafCount < noOfLeaves){
+
 
     var tmin = Z_MAX;
     var ObjectValues = new Array(10);
@@ -399,13 +405,9 @@ function renderStep() {
     var rayEtoO = [[0, 0, 0], [0, 0, 0]];
 
     var rayPtoL = [[0, 0, 0], [0, 0, 0]];
-    rayTraceTriangle(triangleVector,camN,camPos,camU,camV,rayEtoO, rayPtoL);
+    rayTraceTriangle(triangleVector,camN,camPos,camU,camV,rayEtoO, rayPtoL, leafCount);
 
-    //Saurabh
-    var noOfLeaves = 1;
-    var leafCount = 0;
-    while(leafCount < noOfLeaves){
-    	rayTraceTriangle(triangleVector, leafCount);
+//     	rayTraceTriangle(triangleVector, leafCount);
     	leafCount += 1;
     }
     writeToCanvas();

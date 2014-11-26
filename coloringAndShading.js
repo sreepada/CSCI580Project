@@ -423,6 +423,33 @@ function colorMeATriangle(aaIterator, Vector0, Vector1, Vector2, normal0, normal
 //            var camN = normalize1DMatrix(
 //                   subtractVectors(light, pointInObject));
 
+//function rayTraceTriangle(triangleVectors) {
+//    var camN = normalize1DMatrix(
+//            subtractVectors(DEFAULT_TRANSFORMATION.camera.position,
+//                    DEFAULT_TRANSFORMATION.camera.lookAt));
+////    var camU = normalize1DMatrix(
+////            crossProduct1D(DEFAULT_TRANSFORMATION.camera.worldUp, camN));
+//    var camU = normalize1DMatrix(DEFAULT_TRANSFORMATION.camera.worldUp);
+//    var camV = crossProduct1D(camN, camU);
+
+function shadowRay(pointInObject, light, triangleVectors, normal, ic, jc) {
+    debugger
+    var tempObjectValues = new Array(10);
+    for (var j = 1; j < tempObjectValues.length; j++) {
+        if (j < 7)
+            tempObjectValues[j] = new Array(3);
+        else
+            tempObjectValues[j] = new Array(2);
+    }
+    var triangleIterator = 0;
+    var temptmin = Z_MAX;
+}
+
+// function rayTraceTriangle(triangleVectors, leafNo) {
+//     var camN = normalize1DMatrix(
+//             subtractVectors(light, pointInObject));
+// 
+
 //                        //console.log(imagePlaneS);
 //            while (triangleIterator < triangleVectors.length) {
 //                var Vector0 = triangleVectors[triangleIterator].slice(0, 3);
@@ -665,7 +692,7 @@ function getRay(xp, yp, camN, camPos, camU, camV, rayEtoO) {
     rayEtoO[1] = subtractVectors(position, camPos);
 }
 
-function rayTraceTriangle(triangleVectors, camN, camPos, camU, camV, rayEtoO, rayPtoL) {
+function rayTraceTriangle(triangleVectors, camN, camPos, camU, camV, rayEtoO, rayPtoL,leafNo) {
 
     //var camV = crossProduct1D(camN, camU);
 
@@ -910,8 +937,8 @@ function getTransformedVects(vertex) {
             DEFAULT_TRANSFORMATION.camera.worldUp));
 
     var newTranslation = [10, 0, 0];
-    RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(newTranslation));
-    TransformedVector = multiplyMatrices(RESULTANT_MATRIX, vertex);
+    SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(newTranslation));
+    TransformedVector = multiplyMatrices(SCENE_RESULTANT_MATRIX, vertex);
     normalizeVectsByW(TransformedVector, 1);
     // RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, scaleVector(DEFAULT_TRANSFORMATION.scaling));
 //     RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, rotateVector(DEFAULT_TRANSFORMATION.rotation));
