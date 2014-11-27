@@ -6,10 +6,10 @@
 function setup() {
     var contextIterator = 1;
     for (var aaIterator = 0; aaIterator < AAKERNEL_SIZE; aaIterator++) {
-        CONTEXT_LIST[contextIterator][3 + aaIterator] = new Array(256);
-        for (var arrayPointer = 0; arrayPointer <= 512; arrayPointer++) {
-            CONTEXT_LIST[contextIterator][3 + aaIterator][arrayPointer] = new Array(256);
-            for (var arrayPointer2 = 0; arrayPointer2 <= 512; arrayPointer2++) {
+        CONTEXT_LIST[contextIterator][3 + aaIterator] = new Array(DEFAULT_TRANSFORMATION.sp[0]);
+        for (var arrayPointer = 0; arrayPointer <= DEFAULT_TRANSFORMATION.sp[0]; arrayPointer++) {
+            CONTEXT_LIST[contextIterator][3 + aaIterator][arrayPointer] = new Array(DEFAULT_TRANSFORMATION.sp[1]);
+            for (var arrayPointer2 = 0; arrayPointer2 <= DEFAULT_TRANSFORMATION.sp[1]; arrayPointer2++) {
 //                        CONTEXT_LIST[contextIterator][3 + aaIterator][arrayPointer][arrayPointer2] = [128, 112, 96, 0];
                 CONTEXT_LIST[contextIterator][3 + aaIterator][arrayPointer][arrayPointer2] = [255, 255, 255, 0];
             }
@@ -19,8 +19,8 @@ function setup() {
 
 function writeToCanvas() {
     var contextIterator = 1;
-    for (var arrayPointer = 0; arrayPointer < 512; arrayPointer++) {
-        for (var arrayPointer2 = 0; arrayPointer2 < 512; arrayPointer2++) {
+    for (var arrayPointer = 0; arrayPointer < DEFAULT_TRANSFORMATION.sp[0]; arrayPointer++) {
+        for (var arrayPointer2 = 0; arrayPointer2 < DEFAULT_TRANSFORMATION.sp[1]; arrayPointer2++) {
             var d = CONTEXT_LIST[contextIterator][2].data;
             var r = 0;
             var g = 0;
@@ -194,9 +194,7 @@ function transformAll(ObjectValues) {
         [ObjectValues[6][2]],
         [1]
     ];
-//    if (FLAG === 0) {
-//        console.log(normal0);
-//    }
+
     Vertex0 = multiplyMatrices(RESULTANT_MATRIX, Vertex0);
     Vertex1 = multiplyMatrices(RESULTANT_MATRIX, Vertex1);
     Vertex2 = multiplyMatrices(RESULTANT_MATRIX, Vertex2);
@@ -209,9 +207,6 @@ function transformAll(ObjectValues) {
     normal0 = normalizeW(normal0);
     normal1 = normalizeW(normal1);
     normal2 = normalizeW(normal2);
-//    if (FLAG === 0) {
-//        console.log(normal0);
-//    }
 
     ObjectValues[1] = [Vertex0[0][0],
         Vertex0[1][0],
@@ -227,81 +222,6 @@ function transformAll(ObjectValues) {
     ObjectValues[6] = normal2;
     return ObjectValues;
 }
-
-//transform point
-function transformAllPoint(ObjectValues) {
-    var Vertex0 = [
-        [ObjectValues[0]],
-        [ObjectValues[1]],
-        [ObjectValues[2]],
-        [1]
-    ];
-    //var Vertex1 = [
-    //    [ObjectValues[2][0]],
-    //    [ObjectValues[2][1]],
-    //    [ObjectValues[2][2]],
-    //    [1]
-    //];
-    //var Vertex2 = [
-    //    [ObjectValues[3][0]],
-    //    [ObjectValues[3][1]],
-    //    [ObjectValues[3][2]],
-    //    [1]
-    //];
-    //var normal0 = [
-    //    [ObjectValues[4][0]],
-    //    [ObjectValues[4][1]],
-    //    [ObjectValues[4][2]],
-    //    [1]
-    //];
-    //var normal1 = [
-    //    [ObjectValues[5][0]],
-    //    [ObjectValues[5][1]],
-    //    [ObjectValues[5][2]],
-    //    [1]
-    //];
-    //var normal2 = [
-    //    [ObjectValues[6][0]],
-    //    [ObjectValues[6][1]],
-    //    [ObjectValues[6][2]],
-    //    [1]
-    //];
-    //if (FLAG === 0) {
-    //    console.log(normal0);
-    //}
-    Vertex0 = multiplyMatrices(RESULTANT_MATRIX, Vertex0);
-    //Vertex1 = multiplyMatrices(RESULTANT_MATRIX, Vertex1);
-    //Vertex2 = multiplyMatrices(RESULTANT_MATRIX, Vertex2);
-    //normal0 = multiplyMatrices(NORMALS_RESULTANT, normal0);
-    //normal1 = multiplyMatrices(NORMALS_RESULTANT, normal1);
-    //normal2 = multiplyMatrices(NORMALS_RESULTANT, normal2);
-
-    Vertex0 = normalizeW(Vertex0);
-    //Vertex1 = normalizeW(Vertex1);
-    //Vertex2 = normalizeW(Vertex2);
-    //normal0 = normalizeW(normal0);
-    //normal1 = normalizeW(normal1);
-    //normal2 = normalizeW(normal2);
-    //if (FLAG === 0) {
-    //    console.log(normal0);
-    //}
-
-    //ObjectValues[1] = [Vertex0[0][0],
-    //    Vertex0[1][0],
-    //    Vertex0[2][0]];
-    //ObjectValues[2] = [Vertex1[0][0],
-    //    Vertex1[1][0],
-    //    Vertex2[2][0]];
-    //ObjectValues[3] = [Vertex2[0][0],
-    //    Vertex2[1][0],
-    //    Vertex2[2][0]];
-    //ObjectValues[4] = normal0;
-    //ObjectValues[5] = normal1;
-    //ObjectValues[6] = normal2;
-    return Vertex0;
-}
-
-
 
 function renderStep() {
 //     updateResultantMatrix();

@@ -341,8 +341,8 @@ function colorMeATriangle(aaIterator, Vector0, Vector1, Vector2, normal0, normal
 
     var lowestX = Math.max(0, lowestX);
     var lowestY = Math.max(0, lowestY);
-    var highestX = Math.min(256, highestX);
-    var highestY = Math.min(256, highestY);
+    var highestX = Math.min(DEFAULT_TRANSFORMATION.sp[0], highestX);
+    var highestY = Math.min(DEFAULT_TRANSFORMATION.sp[1], highestY);
 
     var vectorA = [[x1 - x0],
         [y1 - y0],
@@ -408,270 +408,6 @@ function colorMeATriangle(aaIterator, Vector0, Vector1, Vector2, normal0, normal
     }
 }
 
-//function shadowRay(pointInObject, light, triangleVectors, normal, ic, jc) {
-//    debugger
-//    var tempObjectValues = new Array(10);
-//    for (var j = 1; j < tempObjectValues.length; j++) {
-//        if (j < 7)
-//            tempObjectValues[j] = new Array(3);
-//        else
-//            tempObjectValues[j] = new Array(2);
-//    }
-//            var triangleIterator = 0;
-//            var temptmin = Z_MAX;
-
-//            var camN = normalize1DMatrix(
-//                   subtractVectors(light, pointInObject));
-
-//function rayTraceTriangle(triangleVectors) {
-//    var camN = normalize1DMatrix(
-//            subtractVectors(DEFAULT_TRANSFORMATION.camera.position,
-//                    DEFAULT_TRANSFORMATION.camera.lookAt));
-////    var camU = normalize1DMatrix(
-////            crossProduct1D(DEFAULT_TRANSFORMATION.camera.worldUp, camN));
-//    var camU = normalize1DMatrix(DEFAULT_TRANSFORMATION.camera.worldUp);
-//    var camV = crossProduct1D(camN, camU);
-
-// function rayTraceTriangle(triangleVectors, leafNo) {
-//     var camN = normalize1DMatrix(
-//             subtractVectors(light, pointInObject));
-// 
-
-//                        //console.log(imagePlaneS);
-//            while (triangleIterator < triangleVectors.length) {
-//                var Vector0 = triangleVectors[triangleIterator].slice(0, 3);
-//                var Vector1 = triangleVectors[triangleIterator + 1].slice(0, 3);
-//                var Vector2 = triangleVectors[triangleIterator + 2].slice(0, 3);
-//                var normal0 = triangleVectors[triangleIterator].slice(3, 6);
-//                var normal1 = triangleVectors[triangleIterator].slice(3, 6);
-//                var normal2 = triangleVectors[triangleIterator].slice(3, 6);
-//                var uv0 = triangleVectors[triangleIterator].slice(6, 8);
-//                var uv1 = triangleVectors[triangleIterator].slice(6, 8);
-//                var uv2 = triangleVectors[triangleIterator].slice(6, 8);
-
-//                triangleIterator += 3;
-//                var pointNormal = crossProduct1D(
-//                        subtractVectors(Vector1, Vector0),
-//                        subtractVectors(Vector2, Vector0));
-//                var traingleD = getDotProduct(Vector0, pointNormal);
-
-//                var ndotP = getDotProduct(camN,
-//                        pointInObject, "notNormalized");
-
-//                //                console.log(imagePlaneS, imagePlaneS.length);
-//                //                debugger;
-//                var ndotD = getDotProduct(
-//                        camN,
-//                        light,
-//                        "notN");
-//                var t = -(ndotP + traingleD) / ndotD;
-//                //                console.log(t);
-
-//                    if (temptmin > t) {
-//                        var pointInShadow = addVectors(
-//                                pointInObject,
-//                                scalarMultiple(
-//                                       light,
-//                                        t
-//                                        )
-//                                );
-//                    //    if (getDotProduct(pointInShadow,pointNormal) < 0) {
-//                        //if (checkIfInsideTriangle(
-//                        //        pointInObject,
-//                        //        Vector0,
-//                        //        Vector1,
-//                        //        Vector2
-//                        //        ) === 1) {
-
-//                        var ztemp = pointInShadow[2];
-//                    //            //(
-//                    //        //         -(pointNormal[0] * ic)
-//                    //        //         - (pointNormal[1] * jc)
-//                    //        //         - traingleD
-//                    //        //         ) / pointNormal[2];
-//                           temptmin = t;
-//                            tempObjectValues = [ztemp,
-//                                Vector0, Vector1, Vector2,
-//                                normal0, normal1, normal2,
-//                                uv0, uv1, uv2
-//                            ];
-//                    //        //
-//                    //    }
-//                    //}
-//                }
-//            }
-//            if (temptmin > 0 && temptmin != Z_MAX) {
-//               //if (getDotProduct(pointInShadow, pointNormal) < 0) {
-//                debugger
-//                    tempObjectValues = transformAll(tempObjectValues);
-//                    var colors = shadingInterpolation([ic, jc, tempObjectValues[0]],
-//                            [tempObjectValues[1][0], tempObjectValues[1][1], normal0, uv0, tempObjectValues[1][2]],
-//                            [tempObjectValues[2][0], tempObjectValues[2][1], normal1, uv1, tempObjectValues[2][2]],
-//                            [tempObjectValues[3][0], tempObjectValues[3][1], normal2, uv2, tempObjectValues[3][2]],
-//                            SHADING_TYPE,
-//                            1);
-//                    //if (colorShadow != null) {
-//                    CONTEXT_LIST[1][3][ic][jc][0] = 255*(AMBIENT_LIGHT[1][0] + AMBIENT_COEFF[0]);//(colors[0]);
-//                    CONTEXT_LIST[1][3][ic][jc][1] = 255 * AMBIENT_LIGHT[1][1] + AMBIENT_COEFF[1]; //(colors[1]);
-//                    CONTEXT_LIST[1][3][ic][jc][2] = 255 * AMBIENT_LIGHT[1][2] + AMBIENT_COEFF[2];// (colors[2]);
-//                    //CONTEXT_LIST[1][3][ic][jc][3] = ztemp;
-//                    return [CONTEXT_LIST[1][3][ic][jc][0], CONTEXT_LIST[1][3][ic][jc][1], CONTEXT_LIST[1][3][ic][jc][2], CONTEXT_LIST[1][3][ic][jc][3]];
-//                //}
-//                //else
-//                //    return [-1, -1, -1,-1];
-
-//            }
-//            else
-//                return [-1, -1, -1,-1];
-
-//}
-
-//function rayTraceTriangle(triangleVectors) {
-//    var camN = normalize1DMatrix(
-//            subtractVectors(DEFAULT_TRANSFORMATION.camera.position,
-//                    DEFAULT_TRANSFORMATION.camera.lookAt));
-//    var camU = normalize1DMatrix(
-//            crossProduct1D(DEFAULT_TRANSFORMATION.camera.worldUp, camN));
-//    var camV = crossProduct1D(camN, camU);
-
-//    var imgPlaneHeight = 256;
-//    var imgPlaneWidth = 256;
-//    var imgPlaneD = imgPlaneHeight /
-//            (2 * Math.tan(DEFAULT_TRANSFORMATION.FOV * DEGREE2RADIANS / 2));
-//    var imgPlaneC = subtractVectors(DEFAULT_TRANSFORMATION.camera.position,
-//            scalarMultiple(camN, imgPlaneD));
-//    var imgPlaneL = subtractVectors(
-//            subtractVectors(
-//                    imgPlaneC,
-//                    scalarMultiple(camU, imgPlaneWidth / 2)),
-//            scalarMultiple(camV, imgPlaneHeight / 2));
-
-//    for (var ic = 0; ic < 256; ic++) {
-//        for (var jc = 0; jc < 256; jc++) {
-//            console.log(ic);
-//            var imagePlaneS = addVectors(
-//                    addVectors(
-//                            imgPlaneL,
-//                            scalarMultiple(
-//                                    camU,
-//                                    ic)),
-//                    scalarMultiple(
-//                            camV,
-//                            jc)
-//                    );
-
-//            var colorShadow = [0, 0, 0,0];
-//            tminShadowColor = [-1, -1, -1,-1];
-//            var triangleIterator = 0;
-//            tmin = Z_MAX;
-////            console.log(imagePlaneS);
-//            while (triangleIterator < triangleVectors.length) {
-//                var Vector0 = triangleVectors[triangleIterator].slice(0, 3);
-//                var Vector1 = triangleVectors[triangleIterator + 1].slice(0, 3);
-//                var Vector2 = triangleVectors[triangleIterator + 2].slice(0, 3);
-//                var normal0 = triangleVectors[triangleIterator].slice(3, 6);
-//                var normal1 = triangleVectors[triangleIterator].slice(3, 6);
-//                var normal2 = triangleVectors[triangleIterator].slice(3, 6);
-//                var uv0 = triangleVectors[triangleIterator].slice(6, 8);
-//                var uv1 = triangleVectors[triangleIterator].slice(6, 8);
-//                var uv2 = triangleVectors[triangleIterator].slice(6, 8);
-
-//                triangleIterator += 3;
-//                var pointNormal = crossProduct1D(
-//                        subtractVectors(Vector1, Vector0),
-//                        subtractVectors(Vector2, Vector0));
-//                var traingleD = getDotProduct(Vector0, pointNormal);
-
-//                var ndotP = getDotProduct(
-//                    //pointNormal,
-//                    camN,
-//                        DEFAULT_TRANSFORMATION.camera.position, "notNormalized");
-
-////                console.log(imagePlaneS, imagePlaneS.length);
-////                debugger;
-//                var ndotD = getDotProduct(
-//                    //pointNormal,
-//                    camN,
-//                        subtractVectors(imagePlaneS,
-//                                DEFAULT_TRANSFORMATION.camera.position),
-//                        "notN");
-//                var t = -(ndotP + traingleD) / ndotD;
-
-
-////                console.log(t);
-//                if (tmin > t) {
-//                    var pointInObject = addVectors(
-//DEFAULT_TRANSFORMATION.camera.position,
-//scalarMultiple(
-//      subtractVectors(
-//              imagePlaneS,
-//              DEFAULT_TRANSFORMATION.camera.position),
-//      t
-//      )
-//);
-//                    //transform point from object space to screen space 
-//                    //var transformedPoint = transformAllPoint(pointInObject);
-//                    //var transformVector0 = transformAllPoint(Vector0);
-//                    //var transformVector1 = transformAllPoint(Vector1);
-//                    //var transformVector2 = transformAllPoint(Vector2);
-//                    debugger;
-//                    colorShadow = shadowRay(pointInObject, LIGHT[0][1], triangleVectors, camN, ic, jc);
-//                    if (checkIfInsideTriangle(
-//                       // transformedPoint,transformVector0,transformVector1,transformVector2
-//                            pointInObject,
-//                            Vector0,
-//                            Vector1,
-//                            Vector2
-//                            ) === 1) {
-//                        z =  (
-//                                -(pointNormal[0] * ic)
-//                                - (pointNormal[1] * jc)
-//                                - traingleD
-//                                ) / pointNormal[2];
-//                        tmin = t;
-//                        ObjectValues = [z,
-//                            Vector0, Vector1, Vector2,
-//                            normal0, normal1, normal2,
-//                            uv0, uv1, uv2
-//                        ];
-//                        tminShadowColor = colorShadow;
-//                        //new tmin an object values
-
-//                        //Shadow ray Function call and calculations
-
-//                    }
-//                }
-//            }
-
-//            if (tmin > 0 && tmin !== Z_MAX) {
-////                    console.log(t, pointInObject);s
-////                console.log(pointInObject, "yes inside");
-////                CONTEXT_LIST[1][3][ic][jc] = [12, 123, 23, 0];
-//                ObjectValues = transformAll(ObjectValues);
-//                var colors = shadingInterpolation([ic, jc, ObjectValues[0]],
-//                        [ObjectValues[1][0], ObjectValues[1][1], normal0, uv0, ObjectValues[1][2]],
-//                        [ObjectValues[2][0], ObjectValues[2][1], normal1, uv1, ObjectValues[2][2]],
-//                        [ObjectValues[3][0], ObjectValues[3][1], normal2, uv2, ObjectValues[3][2]],
-//                        SHADING_TYPE,
-//                        1);
-//                //if (tminShadowColor[0] != -1 && tminShadowColor[1] != -1 && tminShadowColor[2] != -1 && tminShadowColor[3] != -1) {
-//                //    CONTEXT_LIST[1][3][ic][jc][0] = tminShadowColor[0];
-//                //    CONTEXT_LIST[1][3][ic][jc][1] = tminShadowColor[1];
-//                //    CONTEXT_LIST[1][3][ic][jc][2] = tminShadowColor[2];
-//                //    CONTEXT_LIST[1][3][ic][jc][3] = tminShadowColor[3];
-//                //}
-//                //else {
-//                    CONTEXT_LIST[1][3][ic][jc][0] = Math.abs(colors[0]);
-//                    CONTEXT_LIST[1][3][ic][jc][1] = Math.abs(colors[1]);
-//                    CONTEXT_LIST[1][3][ic][jc][2] = Math.abs(colors[2]);
-//                    CONTEXT_LIST[1][3][ic][jc][3] = z;
-//                //}
-//                console.log(CONTEXT_LIST[1][3][ic][jc][0]);
-//            }
-//        }
-//    }
-//    console.log(camN, camU, camV, imgPlaneD, imgPlaneHeight, imgPlaneWidth, imgPlaneC, imgPlaneL, pointNormal);
-//}
 function getRay(xp, yp, camN, camPos, camU, camV, rayEtoO) {
     var position = subtractVectors(camN, subtractVectors(scalarMultiple(camV, xp), scalarMultiple(camU, yp)));
     position[1] = -position[1];
@@ -680,25 +416,19 @@ function getRay(xp, yp, camN, camPos, camU, camV, rayEtoO) {
 }
 
 function rayTraceTriangle(triangleVectors, camN, camPos, camU, camV, rayEtoO, rayPtoL) {
-    //var camV = crossProduct1D(camN, camU);
 
-    var imgPlaneHeight = 256;
-    var imgPlaneWidth = 256;
+    var imgPlaneHeight = DEFAULT_TRANSFORMATION.sp[0];
+    var imgPlaneWidth = DEFAULT_TRANSFORMATION.sp[1];
     var minPoint;
     for (var ic = 0; ic < imgPlaneHeight; ic++) {
         for (var jc = 0; jc < imgPlaneWidth; jc++) {
-//            console.log(ic);
-            //screen to world ic = height js = width
             var xp = jc * 1 / imgPlaneWidth * 2 - 1;
             var yp = ic * 1 / imgPlaneHeight * 2 - 1;
             //get ray's position and direction;
             getRay(xp, yp, camN, camPos, camU, camV, rayEtoO);
 
             var triangleIterator = 0;
-//            var tmin = Z_MAX;
             var tmin = Z_MAX;
-            //            console.log(imagePlaneS);
-
 
             while (triangleIterator < triangleVectors.length) {
                 var Vector0 = triangleVectors[triangleIterator].slice(0, 3);
@@ -722,12 +452,10 @@ function rayTraceTriangle(triangleVectors, camN, camPos, camU, camV, rayEtoO, ra
                 var pointNormal = triangleNormal;
                 var ndotP = getDotProduct(
                         pointNormal,
-                        //camN,
                         rayEtoO[0], "notNormalized");
 
                 var ndotD = getDotProduct(
                         pointNormal,
-                        //camN,
                         rayEtoO[1],
                         "notN");
                 if (ndotD !== 0) {
@@ -741,17 +469,16 @@ function rayTraceTriangle(triangleVectors, camN, camPos, camU, camV, rayEtoO, ra
                                         )
                                 );
                         //see if point lies in shadow?
-                        colorShadow = shadowRay(pointNormal, rayPtoL, ic, jc, triangleVectors, xp, yp);
+                        shadowRay(rayPtoL, ic, jc, triangleVectors, xp, yp);
                         // debugger;
                         if (checkIfInsideTriangle(
-                                // transformedPoint,transformVector0,transformVector1,transformVector2
                                 pointInObject,
                                 Vector0,
                                 Vector1,
                                 Vector2
                                 ) === 1) {
                             minPoint = pointInObject;
-                            z = (
+                            var z = (
                                     -(pointNormal[0] * ic)
                                     - (pointNormal[1] * jc)
                                     - traingleD
@@ -787,10 +514,9 @@ function rayTraceTriangle(triangleVectors, camN, camPos, camU, camV, rayEtoO, ra
     }
 }
 
-function shadowRay(pointNormal, rayPtoL, ic, jc, triangleVectors, xp, yp)
+function shadowRay(rayPtoL, ic, jc, triangleVectors, xp, yp)
 {
     var screen1 = addVectors(LIGHT[2][0], DEFAULT_TRANSFORMATION.camera.lookAt);
-
     var sObjectValues = new Array(10);
     for (var j = 1; j < sObjectValues.length; j++) {
         if (j < 7)
@@ -799,15 +525,8 @@ function shadowRay(pointNormal, rayPtoL, ic, jc, triangleVectors, xp, yp)
             sObjectValues[j] = new Array(2);
 
     }
-    ;
     var minPoint;
-    var imgPlaneD = 256 /
-            (2 * Math.tan(DEFAULT_TRANSFORMATION.FOV * DEGREE2RADIANS / 2));
-
-//    pointNormal = [ic, jc, imgPlaneD];
-    //for (var i = 0; i < LIGHT.length; i++) {
     var v = normalize1DMatrix(crossProduct1D(DEFAULT_TRANSFORMATION.camera.worldUp, scalarMultiple(DEFAULT_TRANSFORMATION.camera.lookAt, -1)))//normalize1DMatrix(subtractVectors(LIGHT[0][0], pointNormal));
-    //debugger
     rayPtoL[0] = subtractVectors(screen1, subtractVectors(scalarMultiple(v, -1 * xp), scalarMultiple(DEFAULT_TRANSFORMATION.camera.worldUp, -1 * yp)));//pointNormal;
     rayPtoL[0][1] = -1 * rayPtoL[0][1];
     rayPtoL[1] = normalize1DMatrix(subtractVectors(LIGHT[2][0], rayPtoL[0]));
@@ -833,17 +552,14 @@ function shadowRay(pointNormal, rayPtoL, ic, jc, triangleVectors, xp, yp)
 
         var ndotP = getDotProduct(
                 pointNormal1,
-                //camN,
                 rayPtoL[0], "notNormalized");
 
         var ndotD = getDotProduct(
                 pointNormal1,
-                //camN,
                 rayPtoL[1],
                 "notN");
         if (ndotD !== 0) {
             var t = -(ndotP + traingleD) / ndotD;
-            //                console.log(t);
             if (stmin > t) {
                 var pointInObject1 = addVectors(
                         rayPtoL[0],
@@ -851,7 +567,6 @@ function shadowRay(pointNormal, rayPtoL, ic, jc, triangleVectors, xp, yp)
                                 rayPtoL[1], t
                                 ));
                 if (checkIfInsideTriangle(
-                        // transformedPoint,transformVector0,transformVector1,transformVector2
                         pointInObject1,
                         Vector0,
                         Vector1,
@@ -866,22 +581,19 @@ function shadowRay(pointNormal, rayPtoL, ic, jc, triangleVectors, xp, yp)
                         uv0, uv1, uv2
                     ];
                 }
-//                }
             }
         }
     }
     if (stmin > 0 && stmin !== Z_MAX) {
         if (checkIfInsideTriangle(minPoint, sObjectValues[1], sObjectValues[2], sObjectValues[3]) === 1) {
 
-            CONTEXT_LIST[1][3][ic][jc][0] = 0;//255 * (AMBIENT_LIGHT[1][0] + AMBIENT_COEFF[0]);//(colors[0]);
-            CONTEXT_LIST[1][3][ic][jc][1] = 0;//255 * (AMBIENT_LIGHT[1][1] + AMBIENT_COEFF[1]); //(colors[1]);
-            CONTEXT_LIST[1][3][ic][jc][2] = 0;//255 * (AMBIENT_LIGHT[1][2] + AMBIENT_COEFF[2]);// (colors[2]);
+            CONTEXT_LIST[1][3][ic][jc][0] = 255 * (AMBIENT_LIGHT[1][0] + AMBIENT_COEFF[0]);
+            CONTEXT_LIST[1][3][ic][jc][1] = 255 * (AMBIENT_LIGHT[1][1] + AMBIENT_COEFF[1]);
+            CONTEXT_LIST[1][3][ic][jc][2] = 255 * (AMBIENT_LIGHT[1][2] + AMBIENT_COEFF[2]);
         }
     }
-    //}
 }
 
-//Saurabh
 function getTransformedVects(vertex) {
     var TransformedVector = [[0], [0], [0], [0]];
     RESULTANT_MATRIX = IDENTITY_MATRIX;
