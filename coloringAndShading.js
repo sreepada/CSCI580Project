@@ -603,8 +603,16 @@ function getTransformedVects(vertex) {
             DEFAULT_TRANSFORMATION.camera.lookAt,
             DEFAULT_TRANSFORMATION.camera.worldUp));
 
-    var newTranslation = [3.5, 0, 0];
+	var Transforms = Math.floor((Math.random() * 10) + 1);
+
+	var Tx = ((Math.random() * 6.5) + 3.5);
+	var Ty = -((Math.random() * 6.5) + 3.5);
+	var Tz = 0;//((Math.random() * 10) + 1);
+    var newTranslation = [Tx,Ty,Tz];
+// 	var newTranslation = [3.5,-3.5,0];
     SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(newTranslation));
+    
+    
     TransformedVector = multiplyMatrices(SCENE_RESULTANT_MATRIX, vertex);
     normalizeVectsByW(TransformedVector, 1);
     // RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, scaleVector(DEFAULT_TRANSFORMATION.scaling));
