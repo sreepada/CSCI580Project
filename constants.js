@@ -32,7 +32,7 @@ var INTERVAL_COUNT = 0;
 var RENDER_TIMER;
 
 var AMBIENT_LIGHT = [[0, 0, 0], [0.3, 0.3, 0.3]];
-var AMBIENT_COEFF = [0.1, 0.1, 0.1];
+var AMBIENT_COEFF = [0.7, 0.7, 0.7];
 
 var SPECULAR_COEFF = [0.3, 0.3, 0.3];
 var DIFFUSE_COEFF = [0.7, 0.7, 0.7];

@@ -873,9 +873,9 @@ function shadowRay(pointNormal, rayPtoL, ic, jc, triangleVectors, xp, yp)
     if (stmin > 0 && stmin !== Z_MAX) {
         if (checkIfInsideTriangle(minPoint, sObjectValues[1], sObjectValues[2], sObjectValues[3]) === 1) {
 
-            CONTEXT_LIST[1][3][ic][jc][0] = 255 * (AMBIENT_LIGHT[1][0] + AMBIENT_COEFF[0]);//(colors[0]);
-            CONTEXT_LIST[1][3][ic][jc][1] = 255 * (AMBIENT_LIGHT[1][1] + AMBIENT_COEFF[1]); //(colors[1]);
-            CONTEXT_LIST[1][3][ic][jc][2] = 255 * (AMBIENT_LIGHT[1][2] + AMBIENT_COEFF[2]);// (colors[2]);
+            CONTEXT_LIST[1][3][ic][jc][0] = 0;//255 * (AMBIENT_LIGHT[1][0] + AMBIENT_COEFF[0]);//(colors[0]);
+            CONTEXT_LIST[1][3][ic][jc][1] = 0;//255 * (AMBIENT_LIGHT[1][1] + AMBIENT_COEFF[1]); //(colors[1]);
+            CONTEXT_LIST[1][3][ic][jc][2] = 0;//255 * (AMBIENT_LIGHT[1][2] + AMBIENT_COEFF[2]);// (colors[2]);
         }
     }
     //}

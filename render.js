@@ -373,7 +373,7 @@ function renderStep() {
     }
 
 //Saurabh
-debugger
+//debugger
     var leafNo = 0;
     var totalLeaves = 2;
     var Trianglelimit = triangleVector.length;
