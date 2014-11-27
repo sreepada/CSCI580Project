@@ -884,13 +884,14 @@ function shadowRay(pointNormal, rayPtoL, ic, jc, triangleVectors, xp, yp)
 //Saurabh
 function getTransformedVects(vertex) {
     var TransformedVector = [[0], [0], [0], [0]];
-//    RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, spTransfrom(DEFAULT_TRANSFORMATION.sp, DEFAULT_TRANSFORMATION.FOV));
+    RESULTANT_MATRIX = IDENTITY_MATRIX;
+    RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, spTransfrom(DEFAULT_TRANSFORMATION.sp, DEFAULT_TRANSFORMATION.FOV));
     RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, piTransfrom(DEFAULT_TRANSFORMATION.FOV));
     RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, iwTransfrom(DEFAULT_TRANSFORMATION.camera.position,
             DEFAULT_TRANSFORMATION.camera.lookAt,
             DEFAULT_TRANSFORMATION.camera.worldUp));
 
-    var newTranslation = [3, 0, 0];
+    var newTranslation = [3.5, 0, 0];
     SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(newTranslation));
     TransformedVector = multiplyMatrices(SCENE_RESULTANT_MATRIX, vertex);
     normalizeVectsByW(TransformedVector, 1);
