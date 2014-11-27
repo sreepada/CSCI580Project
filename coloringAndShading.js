@@ -679,8 +679,7 @@ function getRay(xp, yp, camN, camPos, camU, camV, rayEtoO) {
     rayEtoO[1] = subtractVectors(position, camPos);
 }
 
-function rayTraceTriangle(triangleVectors, camN, camPos, camU, camV, rayEtoO, rayPtoL, leafNo) {
-
+function rayTraceTriangle(triangleVectors, camN, camPos, camU, camV, rayEtoO, rayPtoL) {
     //var camV = crossProduct1D(camN, camU);
 
     var imgPlaneHeight = 256;
@@ -700,6 +699,7 @@ function rayTraceTriangle(triangleVectors, camN, camPos, camU, camV, rayEtoO, ra
             var tmin = Z_MAX;
             //            console.log(imagePlaneS);
 
+
             while (triangleIterator < triangleVectors.length) {
                 var Vector0 = triangleVectors[triangleIterator].slice(0, 3);
                 var Vector1 = triangleVectors[triangleIterator + 1].slice(0, 3);
@@ -715,6 +715,7 @@ function rayTraceTriangle(triangleVectors, camN, camPos, camU, camV, rayEtoO, ra
                     Vector1 = Vector2;
                     Vector2 = temp;
                 }
+
 
                 //Saurabh
                 if (leafNo === 1) {
@@ -746,8 +747,7 @@ function rayTraceTriangle(triangleVectors, camN, camPos, camU, camV, rayEtoO, ra
                         }
                     }
                 }
-//                if (ic === 0 && jc === 0)
-//                    console.log(leafNo, Vector0, Vector1, Vector2);
+
                 triangleIterator += 3;
                 var triangleNormal = normalize1DMatrix(crossProduct1D(subtractVectors(Vector1, Vector0), subtractVectors(Vector2, Vector0)));
                 var traingleD = getDotProduct(Vector0, triangleNormal);
@@ -849,11 +849,11 @@ function shadowRay(pointNormal, rayPtoL, ic, jc, triangleVectors, camN)
         var Vector1 = triangleVectors[triangleIterator + 1].slice(0, 3);
         var Vector2 = triangleVectors[triangleIterator + 2].slice(0, 3);
         var normal0 = triangleVectors[triangleIterator].slice(3, 6);
-        var normal1 = triangleVectors[triangleIterator].slice(3, 6);
-        var normal2 = triangleVectors[triangleIterator].slice(3, 6);
+        var normal1 = triangleVectors[triangleIterator+1].slice(3, 6);
+        var normal2 = triangleVectors[triangleIterator+2].slice(3, 6);
         var uv0 = triangleVectors[triangleIterator].slice(6, 8);
-        var uv1 = triangleVectors[triangleIterator].slice(6, 8);
-        var uv2 = triangleVectors[triangleIterator].slice(6, 8);
+        var uv1 = triangleVectors[triangleIterator+1].slice(6, 8);
+        var uv2 = triangleVectors[triangleIterator+2].slice(6, 8);
 
         triangleIterator += 3;
         var pointNormal1 = crossProduct1D(
@@ -913,7 +913,7 @@ function shadowRay(pointNormal, rayPtoL, ic, jc, triangleVectors, camN)
 
 //Saurabh
 function getTransformedVects(vertex) {
-    var TransformedVector = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]];
+    var TransformedVector = [[0], [0], [0], [0]];
 //    RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, spTransfrom(DEFAULT_TRANSFORMATION.sp, DEFAULT_TRANSFORMATION.FOV));
     RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, piTransfrom(DEFAULT_TRANSFORMATION.FOV));
     RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, iwTransfrom(DEFAULT_TRANSFORMATION.camera.position,
@@ -939,8 +939,9 @@ function getTransformedVects(vertex) {
 }
 
 function getDeTransformedVects(TransformedVector) {
-    var vertex = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]];
-    var invRESULTANT_MATRIX = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]];
+    var vertex = [[0], [0], [0], [0]];
+    debugger
+    var invRESULTANT_MATRIX = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
     invRESULTANT_MATRIX = invert4DMat(RESULTANT_MATRIX);
 
     vertex = multiplyMatrices(invRESULTANT_MATRIX, TransformedVector);
@@ -970,7 +971,7 @@ function getDeTransformedVects(TransformedVector) {
 function normalizeVectsByW(vertex, Selection) {
 //Transformation
     if (Selection === 1) {
-        for (var i = 0; i < 3; i++) {
+        for (var i = 0; i < 1; i++) {
             for (var j = 0; j < 4; j++) {
                 vertex[j][i] = vertex[j][i] / vertex[3][i];
             }
@@ -978,7 +979,7 @@ function normalizeVectsByW(vertex, Selection) {
     }
 //De-Transformation
     if (Selection === 2) {
-        for (var i = 0; i < 3; i++) {
+        for (var i = 0; i < 1; i++) {
             for (var j = 0; j < 4; j++) {
                 vertex[j][i] = vertex[j][i] / vertex[3][i];
             }

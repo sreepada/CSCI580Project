@@ -149,7 +149,6 @@ function updateResultantMatrix() {
     RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, scaleVector(DEFAULT_TRANSFORMATION.scaling));
     RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, rotateVector(DEFAULT_TRANSFORMATION.rotation));
     RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, NEW_TRANSFROM);
-
     NORMALS_RESULTANT = multiplyMatrices(NORMALS_RESULTANT, iwNTransfrom(DEFAULT_TRANSFORMATION.camera.position,
             DEFAULT_TRANSFORMATION.camera.lookAt,
             DEFAULT_TRANSFORMATION.camera.worldUp));
@@ -204,7 +203,6 @@ function transformAll(ObjectValues) {
     normal0 = multiplyMatrices(NORMALS_RESULTANT, normal0);
     normal1 = multiplyMatrices(NORMALS_RESULTANT, normal1);
     normal2 = multiplyMatrices(NORMALS_RESULTANT, normal2);
-
     Vertex0 = normalizeW(Vertex0);
     Vertex1 = normalizeW(Vertex1);
     Vertex2 = normalizeW(Vertex2);
@@ -374,39 +372,76 @@ function renderStep() {
 //        }
     }
 
-    console.log(triangleVector, triangleVector.length);
+//Saurabh
+    var leafNo = 0;
+    var totalLeaves = 2;
+    var Trianglelimit = triangleVector.length;
+    while (leafNo < totalLeaves) {
+        if (leafNo === 1) {
+            lineCount = lineCount;
+            var triangleIterator = 0;
+            while (triangleIterator < Trianglelimit) {
+                var Vector0 = triangleVector[triangleIterator].slice(0, 3);
+                // var Vector1 = triangleVectors[triangleIterator + 1].slice(0, 3);
+//         	var Vector2 = triangleVectors[triangleIterator + 2].slice(0, 3);
+                var uv0 = triangleVector[triangleIterator].slice(3, 5);
+                // var normal1 = triangleVectors[triangleIterator + 1].slice(3, 6);
+//             var normal2 = triangleVectors[triangleIterator + 2].slice(3, 6);
+                var normal0 = triangleVector[triangleIterator].slice(5, 8);
+//             var uv1 = triangleVectors[triangleIterator + 1].slice(6, 8);
+//             var uv2 = triangleVectors[triangleIterator + 2].slice(6, 8);
 
-    //Saurabh
-    var noOfLeaves = 2;
-    var leafCount = 0;
-    while (leafCount < noOfLeaves) {
-        var tmin = Z_MAX;
-        var ObjectValues = new Array(10);
-        for (var j = 1; j < ObjectValues.length; j++) {
-            if (j < 7)
-                ObjectValues[j] = new Array(3);
-            else
-                ObjectValues[j] = new Array(2);
+                var vertex = [[0], [0], [0], [1]];
+                var TransformedVector = [[0], [0], [0], [0]];
+                for (var i = 0; i < 1; i++) {
+                    for (var j = 0; j < 3; j++) {
+                        if (i === 0)
+                            vertex[j][i] = Vector0[j];
+                    }
+                }
+//         debugger
+                TransformedVector = getTransformedVects(vertex);
+                vertex = [[0], [0], [0], [0]];
+                vertex = getDeTransformedVects(TransformedVector);
+                for (var i = 0; i < 1; i++) {
+                    for (var j = 0; j < 3; j++) {
+                        if (i === 0)
+                            Vector0[j] = parseFloat(vertex[j][i]);
+                    }
+                }
 
+                triangleVector[lineCount] = (Vector0.concat(uv0)).concat(normal0);
+                triangleIterator += 1;
+                lineCount += 1;
+            }
         }
 
-        //screen = position + lookat
-        var camPos = DEFAULT_TRANSFORMATION.camera.position;
-        var camN = //normalize1DMatrix(
-                addVectors(DEFAULT_TRANSFORMATION.camera.position,
-                        DEFAULT_TRANSFORMATION.camera.lookAt);//);
-        var camU = DEFAULT_TRANSFORMATION.camera.worldUp;
-        //v cross product of up and look at 
-        var camV = normalize1DMatrix(
-                crossProduct1D(DEFAULT_TRANSFORMATION.camera.lookAt, DEFAULT_TRANSFORMATION.camera.worldUp));
-        var rayEtoO = [[0, 0, 0], [0, 0, 0]];
-
-        var rayPtoL = [[0, 0, 0], [0, 0, 0]];
-        rayTraceTriangle(triangleVector, camN, camPos, camU, camV, rayEtoO, rayPtoL, leafCount);
-
-//     	rayTraceTriangle(triangleVector, leafCount);
-        leafCount += 1;
-//        break;
+        leafNo += 1;
     }
+
+    console.log(triangleVector, triangleVector.length);
+    //Saurabh// 
+//     var noOfLeaves = 2;
+//     var leafCount = 0;
+//     while(leafCount < noOfLeaves){
+// 
+
+
+//screen = position + lookat
+    var camPos = DEFAULT_TRANSFORMATION.camera.position;
+    var camN = //normalize1DMatrix(
+            addVectors(DEFAULT_TRANSFORMATION.camera.position,
+                    DEFAULT_TRANSFORMATION.camera.lookAt); //);
+    var camU = DEFAULT_TRANSFORMATION.camera.worldUp;
+    //v cross product of up and look at 
+    var camV = normalize1DMatrix(
+            crossProduct1D(DEFAULT_TRANSFORMATION.camera.lookAt, DEFAULT_TRANSFORMATION.camera.worldUp));
+    var rayEtoO = [[0, 0, 0], [0, 0, 0]];
+
+    var rayPtoL = [[0, 0, 0], [0, 0, 0]];
+    rayTraceTriangle(triangleVector, camN, camPos, camU, camV, rayEtoO, rayPtoL);
+//     	rayTraceTriangle(triangleVector, leafCount);
+//     	leafCount += 1;
+//     }
     writeToCanvas();
 }
