@@ -716,38 +716,6 @@ function rayTraceTriangle(triangleVectors, camN, camPos, camU, camV, rayEtoO, ra
                     Vector2 = temp;
                 }
 
-
-                //Saurabh
-                if (leafNo === 1) {
-                    var vertex = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [1, 1, 1]];
-                    var TransformedVector = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]];
-                    for (var i = 0; i < 3; i++) {
-                        for (var j = 0; j < 3; j++) {
-                            if (i === 0)
-                                vertex[j][i] = Vector0[j];
-                            if (i === 1)
-                                vertex[j][i] = Vector1[j];
-                            if (i === 2)
-                                vertex[j][i] = Vector2[j];
-                        }
-                    }
-//                    debugger
-                    TransformedVector = getTransformedVects(vertex);
-                    vertex = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]];
-                    vertex = getDeTransformedVects(TransformedVector);
-
-                    for (var i = 0; i < 3; i++) {
-                        for (var j = 0; j < 3; j++) {
-                            if (i === 0)
-                                Vector0[j] = parseFloat(vertex[j][i]);
-                            if (i === 1)
-                                Vector1[j] = parseFloat(vertex[j][i]);
-                            if (i === 2)
-                                Vector2[j] = parseFloat(vertex[j][i]);
-                        }
-                    }
-                }
-
                 triangleIterator += 3;
                 var triangleNormal = normalize1DMatrix(crossProduct1D(subtractVectors(Vector1, Vector0), subtractVectors(Vector2, Vector0)));
                 var traingleD = getDotProduct(Vector0, triangleNormal);
