@@ -741,7 +741,7 @@ function rayTraceTriangle(triangleVectors, camN, camPos, camU, camV, rayEtoO, ra
                                         )
                                 );
                         //see if point lies in shadow?
-//                        colorShadow = shadowRay(pointNormal, rayPtoL, ic, jc, triangleVectors, camN);
+                        colorShadow = shadowRay(pointNormal, rayPtoL, ic, jc, triangleVectors, xp, yp);
                         // debugger;
                         if (checkIfInsideTriangle(
                                 // transformedPoint,transformVector0,transformVector1,transformVector2
@@ -777,9 +777,9 @@ function rayTraceTriangle(triangleVectors, camN, camPos, camU, camV, rayEtoO, ra
                             SHADING_TYPE,
                             1);
 
-                    CONTEXT_LIST[1][3][ic][jc][0] += Math.abs(colors[0]);
-                    CONTEXT_LIST[1][3][ic][jc][1] += Math.abs(colors[1]);
-                    CONTEXT_LIST[1][3][ic][jc][2] += Math.abs(colors[2]);
+                    CONTEXT_LIST[1][3][ic][jc][0] = Math.abs(colors[0]);
+                    CONTEXT_LIST[1][3][ic][jc][1] = Math.abs(colors[1]);
+                    CONTEXT_LIST[1][3][ic][jc][2] = Math.abs(colors[2]);
                     CONTEXT_LIST[1][3][ic][jc][3] = z;
                 }
             }
@@ -787,8 +787,9 @@ function rayTraceTriangle(triangleVectors, camN, camPos, camU, camV, rayEtoO, ra
     }
 }
 
-function shadowRay(pointNormal, rayPtoL, ic, jc, triangleVectors, camN)
+function shadowRay(pointNormal, rayPtoL, ic, jc, triangleVectors, xp, yp)
 {
+    var screen1 = addVectors(LIGHT[2][0], DEFAULT_TRANSFORMATION.camera.lookAt);
 
     var sObjectValues = new Array(10);
     for (var j = 1; j < sObjectValues.length; j++) {
@@ -805,10 +806,11 @@ function shadowRay(pointNormal, rayPtoL, ic, jc, triangleVectors, camN)
 
 //    pointNormal = [ic, jc, imgPlaneD];
     //for (var i = 0; i < LIGHT.length; i++) {
-    var v = normalize1DMatrix(subtractVectors(LIGHT[0][2], pointNormal));
+    var v = normalize1DMatrix(crossProduct1D(DEFAULT_TRANSFORMATION.camera.worldUp, scalarMultiple(DEFAULT_TRANSFORMATION.camera.lookAt, -1)))//normalize1DMatrix(subtractVectors(LIGHT[0][0], pointNormal));
     //debugger
-    rayPtoL[0] = LIGHT[0][0];//pointNormal;
-    rayPtoL[1] = v;
+    rayPtoL[0] = subtractVectors(screen1, subtractVectors(scalarMultiple(v, -1 * xp), scalarMultiple(DEFAULT_TRANSFORMATION.camera.worldUp, -1 * yp)));//pointNormal;
+    rayPtoL[0][1] = -1 * rayPtoL[0][1];
+    rayPtoL[1] = normalize1DMatrix(subtractVectors(LIGHT[2][0], rayPtoL[0]));
     var triangleIterator = 0;
     var stmin = Z_MAX;
 
@@ -817,11 +819,11 @@ function shadowRay(pointNormal, rayPtoL, ic, jc, triangleVectors, camN)
         var Vector1 = triangleVectors[triangleIterator + 1].slice(0, 3);
         var Vector2 = triangleVectors[triangleIterator + 2].slice(0, 3);
         var normal0 = triangleVectors[triangleIterator].slice(3, 6);
-        var normal1 = triangleVectors[triangleIterator+1].slice(3, 6);
-        var normal2 = triangleVectors[triangleIterator+2].slice(3, 6);
+        var normal1 = triangleVectors[triangleIterator + 1].slice(3, 6);
+        var normal2 = triangleVectors[triangleIterator + 2].slice(3, 6);
         var uv0 = triangleVectors[triangleIterator].slice(6, 8);
-        var uv1 = triangleVectors[triangleIterator+1].slice(6, 8);
-        var uv2 = triangleVectors[triangleIterator+2].slice(6, 8);
+        var uv1 = triangleVectors[triangleIterator + 1].slice(6, 8);
+        var uv2 = triangleVectors[triangleIterator + 2].slice(6, 8);
 
         triangleIterator += 3;
         var pointNormal1 = crossProduct1D(
@@ -871,9 +873,9 @@ function shadowRay(pointNormal, rayPtoL, ic, jc, triangleVectors, camN)
     if (stmin > 0 && stmin !== Z_MAX) {
         if (checkIfInsideTriangle(minPoint, sObjectValues[1], sObjectValues[2], sObjectValues[3]) === 1) {
 
-            CONTEXT_LIST[1][3][ic][jc][0] += 255 * (AMBIENT_LIGHT[1][0] + AMBIENT_COEFF[0]);//(colors[0]);
-            CONTEXT_LIST[1][3][ic][jc][1] += 255 * (AMBIENT_LIGHT[1][1] + AMBIENT_COEFF[1]); //(colors[1]);
-            CONTEXT_LIST[1][3][ic][jc][2] += 255 * (AMBIENT_LIGHT[1][2] + AMBIENT_COEFF[2]);// (colors[2]);
+            CONTEXT_LIST[1][3][ic][jc][0] = 255 * (AMBIENT_LIGHT[1][0] + AMBIENT_COEFF[0]);//(colors[0]);
+            CONTEXT_LIST[1][3][ic][jc][1] = 255 * (AMBIENT_LIGHT[1][1] + AMBIENT_COEFF[1]); //(colors[1]);
+            CONTEXT_LIST[1][3][ic][jc][2] = 255 * (AMBIENT_LIGHT[1][2] + AMBIENT_COEFF[2]);// (colors[2]);
         }
     }
     //}
@@ -888,7 +890,7 @@ function getTransformedVects(vertex) {
             DEFAULT_TRANSFORMATION.camera.lookAt,
             DEFAULT_TRANSFORMATION.camera.worldUp));
 
-    var newTranslation = [0.5, 0.5, 0.5];
+    var newTranslation = [3, 0, 0];
     SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(newTranslation));
     TransformedVector = multiplyMatrices(SCENE_RESULTANT_MATRIX, vertex);
     normalizeVectsByW(TransformedVector, 1);
@@ -908,7 +910,7 @@ function getTransformedVects(vertex) {
 
 function getDeTransformedVects(TransformedVector) {
     var vertex = [[0], [0], [0], [0]];
-    debugger
+//    debugger
     var invRESULTANT_MATRIX = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
     invRESULTANT_MATRIX = invert4DMat(RESULTANT_MATRIX);
 

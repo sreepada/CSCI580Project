@@ -11,7 +11,7 @@ function setup() {
             CONTEXT_LIST[contextIterator][3 + aaIterator][arrayPointer] = new Array(256);
             for (var arrayPointer2 = 0; arrayPointer2 <= 512; arrayPointer2++) {
 //                        CONTEXT_LIST[contextIterator][3 + aaIterator][arrayPointer][arrayPointer2] = [128, 112, 96, 0];
-                CONTEXT_LIST[contextIterator][3 + aaIterator][arrayPointer][arrayPointer2] = [0, 0, 0, 0];
+                CONTEXT_LIST[contextIterator][3 + aaIterator][arrayPointer][arrayPointer2] = [255, 255, 255, 0];
             }
         }
     }
