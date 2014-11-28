@@ -297,14 +297,8 @@ function renderStep() {
         ];
         triangleIterator = lineCount;
               var Vector0 = triangleVector[triangleIterator].slice(0, 3);
-                // var Vector1 = triangleVectors[triangleIterator + 1].slice(0, 3);
-//         	var Vector2 = triangleVectors[triangleIterator + 2].slice(0, 3);
                 var normal0 = triangleVector[triangleIterator].slice(3, 6);
-                // var normal1 = triangleVectors[triangleIterator + 1].slice(3, 6);
-//             var normal2 = triangleVectors[triangleIterator + 2].slice(3, 6);
                 var uv0 = triangleVector[triangleIterator].slice(6, 8);
-//             var uv1 = triangleVectors[triangleIterator + 1].slice(6, 8);
-//             var uv2 = triangleVectors[triangleIterator + 2].slice(6, 8);
 
                 var vertex = [[0], [0], [0], [1]];
                 var TransformedVector = [[0], [0], [0], [0]];
@@ -356,14 +350,8 @@ function renderStep() {
             var triangleIterator = 0;
             while (triangleIterator < NoOfTrianglesInTheObject) {
                 var Vector0 = triangleVector[triangleIterator].slice(0, 3);
-                // var Vector1 = triangleVectors[triangleIterator + 1].slice(0, 3);
-//         	var Vector2 = triangleVectors[triangleIterator + 2].slice(0, 3);
                 var normal0 = triangleVector[triangleIterator].slice(3, 6);
-                // var normal1 = triangleVectors[triangleIterator + 1].slice(3, 6);
-//             var normal2 = triangleVectors[triangleIterator + 2].slice(3, 6);
                 var uv0 = triangleVector[triangleIterator].slice(6, 8);
-//             var uv1 = triangleVectors[triangleIterator + 1].slice(6, 8);
-//             var uv2 = triangleVectors[triangleIterator + 2].slice(6, 8);
 
                 var vertex = [[0], [0], [0], [1]];
                 var TransformedVector = [[0], [0], [0], [0]];
@@ -377,9 +365,8 @@ function renderStep() {
                         normal[j][i] = normal0[j];
                     }
                 }
-//         debugger
-                TransformedVector = getTransformedVects(vertex, 1);
 
+                TransformedVector = getTransformedVects(vertex, 1);
                 TransformedNormal = multiplyMatrices(SCENE_NORMALS_RESULTANT, normal);
                 normalizeVectsByW(TransformedNormal, 1);
 
@@ -423,6 +410,6 @@ function renderStep() {
 
     var rayPtoL = [[0, 0, 0], [0, 0, 0]];
     rayTraceTriangle(triangleVector, camN, camPos, camU, camV, rayEtoO, rayPtoL);
-//    shadowRay(rayPtoL, triangleVector);
+    shadowRay(rayPtoL, triangleVector);
     writeToCanvas();
 }
