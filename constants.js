@@ -123,7 +123,7 @@ DEFAULT_CAMERA_TRANSFORMATION = {
         "lookAt": [
             -0.2,
             0,
-            5
+            2
         ],
         "worldUp": [
             0,
