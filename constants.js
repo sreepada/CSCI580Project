@@ -48,6 +48,7 @@ var COLOR_THRESHOLD = 0;
 var SHADING_TYPE = 2;
 var ROTATE_STEP = {"rotate": [0, 0, 0]};
 var READ_FILE_LINES = "";
+var TREE_FILE_LINES = "";
 var TEXTURE_FILE_DATA = "";
 
 //var AAKERNEL_SIZE = 6;
@@ -117,7 +118,7 @@ DEFAULT_CAMERA_TRANSFORMATION = {
         "position": [
             0,
             0,
-            -35
+            -65
         ],
         "lookAt": [
             -0.2,
@@ -228,5 +229,47 @@ var HW4_CAMERA_TRANSFORMATION = {
         0
     ]
 };
+
+TREE_CAMERA_TRANSFORMATION = {
+    "sp": [
+        512,
+        512
+    ],
+//     default camera postions
+    "FOV": 35,
+    "camera": {
+        "position": [
+            -10,
+            5,
+            -10
+        ],
+        "lookAt": [
+            0,
+            0,
+            0
+        ],
+        "worldUp": [
+            0,
+            1,
+            0
+        ]
+    },
+    "translation": [
+        0,
+        0,
+        0
+    ],
+    "scaling": [
+        1,
+        1,
+        1
+    ],
+    "rotation": [
+        0,
+        0,
+        0
+    ]
+};
+
 
 var DEFAULT_TRANSFORMATION = DEFAULT_CAMERA_TRANSFORMATION;//HW4_CAMERA_TRANSFORMATION;

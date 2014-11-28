@@ -396,7 +396,7 @@ function colorMeATriangle(aaIterator, Vector0, Vector1, Vector2, normal0, normal
                             [x1, y1, normal1, uvList1, z1],
                             [x2, y2, normal2, uvList2, z2],
                             SHADING_TYPE,
-                            mappingType);
+                            2);
                     CONTEXT_LIST[mappingType][3 + aaIterator][ic][jc][0] = colors[0];
                     CONTEXT_LIST[mappingType][3 + aaIterator][ic][jc][1] = colors[1];
                     CONTEXT_LIST[mappingType][3 + aaIterator][ic][jc][2] = colors[2];
@@ -526,7 +526,7 @@ function shadowRay(rayPtoL, ic, jc, triangleVectors, xp, yp)
 
     }
     var minPoint;
-    var v = normalize1DMatrix(crossProduct1D(DEFAULT_TRANSFORMATION.camera.worldUp, scalarMultiple(DEFAULT_TRANSFORMATION.camera.lookAt, -1)))//normalize1DMatrix(subtractVectors(LIGHT[0][0], pointNormal));
+    var v = normalize1DMatrix(crossProduct1D(DEFAULT_TRANSFORMATION.camera.worldUp, scalarMultiple(DEFAULT_TRANSFORMATION.camera.lookAt, -1)));//normalize1DMatrix(subtractVectors(LIGHT[0][0], pointNormal));
     rayPtoL[0] = subtractVectors(screen1, subtractVectors(scalarMultiple(v, -1 * xp), scalarMultiple(DEFAULT_TRANSFORMATION.camera.worldUp, -1 * yp)));//pointNormal;
     rayPtoL[0][1] = -1 * rayPtoL[0][1];
     rayPtoL[1] = normalize1DMatrix(subtractVectors(LIGHT[2][0], rayPtoL[0]));
@@ -587,9 +587,9 @@ function shadowRay(rayPtoL, ic, jc, triangleVectors, xp, yp)
     if (stmin > 0 && stmin !== Z_MAX) {
         if (checkIfInsideTriangle(minPoint, sObjectValues[1], sObjectValues[2], sObjectValues[3]) === 1) {
 
-            CONTEXT_LIST[1][3][ic][jc][0] = 255 * (AMBIENT_LIGHT[1][0] + AMBIENT_COEFF[0]);
-            CONTEXT_LIST[1][3][ic][jc][1] = 255 * (AMBIENT_LIGHT[1][1] + AMBIENT_COEFF[1]);
-            CONTEXT_LIST[1][3][ic][jc][2] = 255 * (AMBIENT_LIGHT[1][2] + AMBIENT_COEFF[2]);
+            CONTEXT_LIST[1][3][ic][jc][0] = CONTEXT_LIST[1][3][ic][jc][0] / 1.2;// 255 * (AMBIENT_LIGHT[1][0] + AMBIENT_COEFF[0]);
+            CONTEXT_LIST[1][3][ic][jc][1] = CONTEXT_LIST[1][3][ic][jc][1] / 1.2;//255 * (AMBIENT_LIGHT[1][1] + AMBIENT_COEFF[1]);
+            CONTEXT_LIST[1][3][ic][jc][2] = CONTEXT_LIST[1][3][ic][jc][2] / 1.2;//255 * (AMBIENT_LIGHT[1][2] + AMBIENT_COEFF[2]);
         }
     }
 }

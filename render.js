@@ -140,7 +140,7 @@ function cleanUp() {
 }
 
 function updateResultantMatrix() {
-//    RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, spTransfrom(DEFAULT_TRANSFORMATION.sp, DEFAULT_TRANSFORMATION.FOV));
+    RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, spTransfrom(DEFAULT_TRANSFORMATION.sp, DEFAULT_TRANSFORMATION.FOV));
     RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, piTransfrom(DEFAULT_TRANSFORMATION.FOV));
     RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, iwTransfrom(DEFAULT_TRANSFORMATION.camera.position,
             DEFAULT_TRANSFORMATION.camera.lookAt,
@@ -224,8 +224,63 @@ function transformAll(ObjectValues) {
 }
 
 function renderStep() {
-//     updateResultantMatrix();
+    DEFAULT_TRANSFORMATION = TREE_CAMERA_TRANSFORMATION;
+    updateResultantMatrix();
 
+    var lineCount = 0;
+    while (lineCount < TREE_FILE_LINES.length && TREE_FILE_LINES !== "") {
+        //lee scan part starts
+        var firstLineSplit = TREE_FILE_LINES[lineCount].split(/[\s]+/);
+        var secondLineSplit = TREE_FILE_LINES[lineCount + 1].split(/[\s]+/);
+        var thirdLineSplit = TREE_FILE_LINES[lineCount + 2].split(/[\s]+/);
+        var Vertex0 = [[parseFloat(firstLineSplit[0])], [parseFloat(firstLineSplit[1])], [parseFloat(firstLineSplit[2])], [1]];
+        var Vertex1 = [[parseFloat(secondLineSplit[0])], [parseFloat(secondLineSplit[1])], [parseFloat(secondLineSplit[2])], [1]];
+        var Vertex2 = [[parseFloat(thirdLineSplit[0])], [parseFloat(thirdLineSplit[1])], [parseFloat(thirdLineSplit[2])], [1]];
+        var normal0 = [[parseFloat(firstLineSplit[3])], [parseFloat(firstLineSplit[4])], [parseFloat(firstLineSplit[5])], [1]];
+        var normal1 = [[parseFloat(secondLineSplit[3])], [parseFloat(secondLineSplit[4])], [parseFloat(secondLineSplit[5])], [1]];
+        var normal2 = [[parseFloat(thirdLineSplit[3])], [parseFloat(thirdLineSplit[4])], [parseFloat(thirdLineSplit[5])], [1]];
+        var uvList0 = [parseFloat(firstLineSplit[6]), parseFloat(firstLineSplit[7])];
+        var uvList1 = [parseFloat(secondLineSplit[6]), parseFloat(secondLineSplit[7])];
+        var uvList2 = [parseFloat(thirdLineSplit[6]), parseFloat(thirdLineSplit[7])];
+
+        Vertex0 = multiplyMatrices(RESULTANT_MATRIX, Vertex0);
+        Vertex1 = multiplyMatrices(RESULTANT_MATRIX, Vertex1);
+        Vertex2 = multiplyMatrices(RESULTANT_MATRIX, Vertex2);
+        normal0 = multiplyMatrices(NORMALS_RESULTANT, normal0);
+        normal1 = multiplyMatrices(NORMALS_RESULTANT, normal1);
+        normal2 = multiplyMatrices(NORMALS_RESULTANT, normal2);
+
+        Vertex0 = normalizeW(Vertex0);
+        Vertex1 = normalizeW(Vertex1);
+        Vertex2 = normalizeW(Vertex2);
+        normal0 = normalizeW(normal0);
+        normal1 = normalizeW(normal1);
+        normal2 = normalizeW(normal2);
+
+        //Aliasing part
+        for (var aaIterator = 0; aaIterator < AAKERNEL_SIZE; aaIterator++) {
+            var loopVertex0 = Vertex0;
+            var loopVertex1 = Vertex1;
+            var loopVertex2 = Vertex2;
+            Vertex0[0][0] = Vertex0[0][0] + parseFloat(AA_FILTER[aaIterator][0]);
+            Vertex0[1][0] = Vertex0[1][0] + parseFloat(AA_FILTER[aaIterator][1]);
+            Vertex1[0][0] = Vertex1[0][0] + parseFloat(AA_FILTER[aaIterator][0]);
+            Vertex1[1][0] = Vertex1[1][0] + parseFloat(AA_FILTER[aaIterator][1]);
+            Vertex2[0][0] = Vertex2[0][0] + parseFloat(AA_FILTER[aaIterator][0]);
+            Vertex2[1][0] = Vertex2[1][0] + parseFloat(AA_FILTER[aaIterator][1]);
+
+            colorMeATriangle(aaIterator, Vertex0, Vertex1, Vertex2, normal0, normal1, normal2, uvList0, uvList1, uvList2);
+            Vertex0 = loopVertex0;
+            Vertex1 = loopVertex1;
+            Vertex2 = loopVertex2;
+        }
+        lineCount = lineCount + 3;
+        //lee scan part ends
+    }
+
+    writeToCanvas();
+//    return;
+    DEFAULT_TRANSFORMATION = DEFAULT_CAMERA_TRANSFORMATION;
     var lineCount = 0;
     var triangleVector = new Array(3);
     while (lineCount < READ_FILE_LINES.length) {
@@ -294,53 +349,53 @@ function renderStep() {
 
 //Saurabh
 //debugger
-    var leafNo = 0;
-    var totalLeaves = 2;
-    var Trianglelimit = triangleVector.length;
-    while (leafNo < totalLeaves) {
-        if (leafNo === 1) {
-            lineCount = lineCount;
-            var triangleIterator = 0;
-            while (triangleIterator < Trianglelimit) {
-                var Vector0 = triangleVector[triangleIterator].slice(0, 3);
-                // var Vector1 = triangleVectors[triangleIterator + 1].slice(0, 3);
-//         	var Vector2 = triangleVectors[triangleIterator + 2].slice(0, 3);
-                var normal0 = triangleVector[triangleIterator].slice(3, 6);
-                // var normal1 = triangleVectors[triangleIterator + 1].slice(3, 6);
-//             var normal2 = triangleVectors[triangleIterator + 2].slice(3, 6);
-                var uv0 = triangleVector[triangleIterator].slice(6, 8);
-//             var uv1 = triangleVectors[triangleIterator + 1].slice(6, 8);
-//             var uv2 = triangleVectors[triangleIterator + 2].slice(6, 8);
-
-                var vertex = [[0], [0], [0], [1]];
-                var TransformedVector = [[0], [0], [0], [0]];
-                for (var i = 0; i < 1; i++) {
-                    for (var j = 0; j < 3; j++) {
-                        if (i === 0)
-                            vertex[j][i] = Vector0[j];
-                    }
-                }
-//         debugger
-                TransformedVector = getTransformedVects(vertex);
-                vertex = [[0], [0], [0], [0]];
-                vertex = getDeTransformedVects(TransformedVector);
-                for (var i = 0; i < 1; i++) {
-                    for (var j = 0; j < 3; j++) {
-                        if (i === 0)
-                            Vector0[j] = parseFloat(vertex[j][i]);
-                    }
-                }
-
-                triangleVector[lineCount] = (Vector0.concat(normal0)).concat(uv0);
-                triangleIterator += 1;
-                lineCount += 1;
-            }
-        }
-
-        leafNo += 1;
-    }
-
-    console.log(triangleVector, triangleVector.length);
+//    var leafNo = 0;
+//    var totalLeaves = 2;
+//    var Trianglelimit = triangleVector.length;
+//    while (leafNo < totalLeaves) {
+//        if (leafNo === 1) {
+//            lineCount = lineCount;
+//            var triangleIterator = 0;
+//            while (triangleIterator < Trianglelimit) {
+//                var Vector0 = triangleVector[triangleIterator].slice(0, 3);
+//                // var Vector1 = triangleVectors[triangleIterator + 1].slice(0, 3);
+////         	var Vector2 = triangleVectors[triangleIterator + 2].slice(0, 3);
+//                var normal0 = triangleVector[triangleIterator].slice(3, 6);
+//                // var normal1 = triangleVectors[triangleIterator + 1].slice(3, 6);
+////             var normal2 = triangleVectors[triangleIterator + 2].slice(3, 6);
+//                var uv0 = triangleVector[triangleIterator].slice(6, 8);
+////             var uv1 = triangleVectors[triangleIterator + 1].slice(6, 8);
+////             var uv2 = triangleVectors[triangleIterator + 2].slice(6, 8);
+//
+//                var vertex = [[0], [0], [0], [1]];
+//                var TransformedVector = [[0], [0], [0], [0]];
+//                for (var i = 0; i < 1; i++) {
+//                    for (var j = 0; j < 3; j++) {
+//                        if (i === 0)
+//                            vertex[j][i] = Vector0[j];
+//                    }
+//                }
+////         debugger
+//                TransformedVector = getTransformedVects(vertex);
+//                vertex = [[0], [0], [0], [0]];
+//                vertex = getDeTransformedVects(TransformedVector);
+//                for (var i = 0; i < 1; i++) {
+//                    for (var j = 0; j < 3; j++) {
+//                        if (i === 0)
+//                            Vector0[j] = parseFloat(vertex[j][i]);
+//                    }
+//                }
+//
+//                triangleVector[lineCount] = (Vector0.concat(normal0)).concat(uv0);
+//                triangleIterator += 1;
+//                lineCount += 1;
+//            }
+//        }
+//
+//        leafNo += 1;
+//    }
+//
+//    console.log(triangleVector, triangleVector.length);
     //Saurabh// 
 //     var noOfLeaves = 2;
 //     var leafCount = 0;

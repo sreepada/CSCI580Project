@@ -31,7 +31,10 @@ and open the template in the editor.
         <div id="container">
             <div id="hoverOverCanvas">
                 <menu id="fileInputMenu">
-                    <input type="file" id="fileinput" />
+                    Select leaf obj file:
+                    <input type="file" id="fileInput" name="leaf obj input"/>
+                    Select tree obj file:
+                    <input type="file" id="treeInput" />
                     <input type="file" id="textureInput" />
                     <input type="button" id="rendererAll" value="Render" onclick="cleanUp()" />
                 </menu>
@@ -56,16 +59,17 @@ and open the template in the editor.
                 console.log(document.body.offsetWidth, document.body.offsetHeight);
                 mainCanvas.width = document.body.offsetWidth;
                 mainCanvas.height = document.body.offsetHeight;
-                if (document.body.offsetWidth < document.body.offsetHeight) {
-                    DEFAULT_TRANSFORMATION.sp[0] = document.body.offsetWidth;
-                    DEFAULT_TRANSFORMATION.sp[1] = document.body.offsetWidth;
-                }
-                else {
-                    DEFAULT_TRANSFORMATION.sp[0] = document.body.offsetHeight;
-                    DEFAULT_TRANSFORMATION.sp[1] = document.body.offsetHeight;
-                }
+//                if (document.body.offsetWidth < document.body.offsetHeight) {
+//                    DEFAULT_TRANSFORMATION.sp[0] = document.body.offsetWidth;
+//                    DEFAULT_TRANSFORMATION.sp[1] = document.body.offsetWidth;
+//                }
+//                else {
+//                    DEFAULT_TRANSFORMATION.sp[0] = document.body.offsetHeight;
+//                    DEFAULT_TRANSFORMATION.sp[1] = document.body.offsetHeight;
+//                }
             }
-            document.getElementById('fileinput').addEventListener('change', readInputFile, false);
+            document.getElementById('fileInput').addEventListener('change', readInputFile, false);
+            document.getElementById('treeInput').addEventListener('change', readTreeInputFile, false);
             document.getElementById('textureInput').addEventListener('change', readTextureFile, false);
         </script>
     </body>
