@@ -510,7 +510,7 @@ function shadowRay(rayPtoL, triangleVectors)
     var imgPlaneWidth = DEFAULT_TRANSFORMATION.sp[1];
     var startI = 0;
     var startJ = 0;
-    while (startI < 22) {
+    while (startI < 10) {
         FLAG = 0;
         var v = normalize1DMatrix(
                 crossProduct1D(
@@ -533,7 +533,7 @@ function shadowRay(rayPtoL, triangleVectors)
                                         DEFAULT_TRANSFORMATION.camera.worldUp,
                                         -1 * yp)
                                 )
-                        ); //pointNormal;
+                        );
                 rayPtoL[0][1] = -1 * rayPtoL[0][1];
                 rayPtoL[1] = normalize1DMatrix(
                         subtractVectors(
@@ -541,12 +541,14 @@ function shadowRay(rayPtoL, triangleVectors)
                                 rayPtoL[0]
                                 )
                         );
-                rayPtoL[0] = addVectors(
+                var newrayPtoL = addVectors(
                         rayPtoL[0],
                         scalarMultiple(
                                 rayPtoL[1], startI
                                 )
                         );
+                rayPtoL[0] = newrayPtoL;
+
                 var triangleIterator = 0;
                 var stmin = Z_MAX;
                 while (triangleIterator < triangleVectors.length) {
@@ -586,10 +588,10 @@ function shadowRay(rayPtoL, triangleVectors)
                                     Vector2
                                     ) === 1) {
                                 minPoint = pointInObject1;
-                                if (FLAG === 0) {
-                                    console.log(startI, t, rayPtoL[1]);
-                                    FLAG++;
-                                }
+//                                if (FLAG === 0) {
+//                                    console.log(startI, t, rayPtoL[1]);
+//                                    FLAG++;
+//                                }
                                 stmin = t;
                                 sObjectValues = [40,
                                     Vector0, Vector1, Vector2,
@@ -608,17 +610,33 @@ function shadowRay(rayPtoL, triangleVectors)
 //                        CONTEXT_LIST[1][3][ic][jc][2] = CONTEXT_LIST[1][3][ic][jc][2] * 0.9;
 //                    }
 //                    else {
-                    
+
+                    var tempi = ic;
+                    var tempj = jc;
+                    var u = DEFAULT_TRANSFORMATION.camera.worldUp;
+//                    xp = (u[0] * screen1[1]) - (u[1] * screen1[0])
+//                            + (rayPtoL[0][0] * u[1]) - (rayPtoL[0][1] * u[0])
+//                    xp = xp / ((v[0] * u[1]) - (v[1] * u[0]));
+//                    yp = screen1[0] - rayPtoL[0][0] + (xp * v[0]);
+//                    if (u[0] !== 0)
+//                        yp = yp / u[0];
+                    jc = Math.round((-1 * xp * startI + 1) * imgPlaneWidth / 2);
+                    ic = Math.round((-1 * yp * startI + 1) * imgPlaneHeight / 2);
+                    ic = Math.abs(Math.min(ic, 511));
+                    jc = Math.abs(Math.min(jc, 511));
+//                    console.log(xp, yp, ic, jc);
                     CONTEXT_LIST[1][3][ic][jc][0] = CONTEXT_LIST[1][3][ic][jc][0] / 1.2;
                     CONTEXT_LIST[1][3][ic][jc][1] = CONTEXT_LIST[1][3][ic][jc][1] / 1.2;
                     CONTEXT_LIST[1][3][ic][jc][2] = CONTEXT_LIST[1][3][ic][jc][2] / 1.2;
 //                        CONTEXT_LIST[1][3][ic][jc][3] = "shadow";
 //                    }
 //                    }
+                    ic = tempi;
+                    jc = tempj;
                 }
             }
         }
-        startI += 2;
+        startI += 0.1;
         startJ += 2;
     }
 }
@@ -630,67 +648,67 @@ function getTransformedVects(vertex) {
     RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, piTransfrom(DEFAULT_TRANSFORMATION.FOV));
     RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, iwTransfrom(DEFAULT_TRANSFORMATION.camera.position,
             DEFAULT_TRANSFORMATION.camera.lookAt,
-            DEFAULT_TRANSFORMATION.camera.worldUp));	
-	
-	NORMALS_RESULTANT = multiplyMatrices(NORMALS_RESULTANT, iwNTransfrom(DEFAULT_TRANSFORMATION.camera.position,
+            DEFAULT_TRANSFORMATION.camera.worldUp));
+
+    NORMALS_RESULTANT = multiplyMatrices(NORMALS_RESULTANT, iwNTransfrom(DEFAULT_TRANSFORMATION.camera.position,
             DEFAULT_TRANSFORMATION.camera.lookAt,
             DEFAULT_TRANSFORMATION.camera.worldUp));
 
-	
-	var Transforms = Math.floor((Math.random() * 10) + 1);
-	if (Transforms >= 0 && Transforms < 3.333){
-		if(Obj_tri_counter === 0){
-			var Tx = ((Math.random() * 6.5) + 3.5);
-			var Ty = -((Math.random() * 6.5) + 3.5);
-			var Tz = 0;//((Math.random() * 10) + 1);
-    		SCENE_Translation = [Tx,Ty,Tz];
-    		SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(SCENE_Translation));
-    	}
+
+    var Transforms = Math.floor((Math.random() * 10) + 1);
+    if (Transforms >= 0 && Transforms < 3.333) {
+        if (Obj_tri_counter === 0) {
+            var Tx = ((Math.random() * 6.5) + 3.5);
+            var Ty = -((Math.random() * 6.5) + 3.5);
+            var Tz = 0;//((Math.random() * 10) + 1);
+            SCENE_Translation = [Tx, Ty, Tz];
+            SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(SCENE_Translation));
+        }
     }
-    if (Transforms >= 3.333 && Transforms < 6.666){
-		if(Obj_tri_counter === 0){
-			var Tx = ((Math.random() * 9.5) + 5.5);
-			var Ty = -((Math.random() * 9.5) + 5.5);
-			var Tz = ((Math.random() * 10) + 1);
-    		SCENE_Translation = [Tx,Ty,Tz];
-    		SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(SCENE_Translation));
-    		
-			var Sx = ((Math.random() * 2.4) + 0.1);
-			var Sy = ((Math.random() * 2.4) + 0.1);
-			var Sz = ((Math.random() * 10) + 1);
-    		SCENE_Scaling = [Sx,Sy,Sz];
-    		SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, scaleVector(SCENE_Scaling));
-    	}
+    if (Transforms >= 3.333 && Transforms < 6.666) {
+        if (Obj_tri_counter === 0) {
+            var Tx = ((Math.random() * 9.5) + 5.5);
+            var Ty = -((Math.random() * 9.5) + 5.5);
+            var Tz = ((Math.random() * 10) + 1);
+            SCENE_Translation = [Tx, Ty, Tz];
+            SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(SCENE_Translation));
+
+            var Sx = ((Math.random() * 2.4) + 0.1);
+            var Sy = ((Math.random() * 2.4) + 0.1);
+            var Sz = ((Math.random() * 10) + 1);
+            SCENE_Scaling = [Sx, Sy, Sz];
+            SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, scaleVector(SCENE_Scaling));
+        }
     }
-    if (Transforms >= 6.666 && Transforms < 10){
-		if(Obj_tri_counter === 0){
-			var Tx = ((Math.random() * 9.5) + 5.5);
-			var Ty = -((Math.random() * 9.5) + 5.5);
-			var Tz = ((Math.random() * 10) + 1);
-    		SCENE_Translation = [Tx,Ty,Tz];		
-			SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(SCENE_Translation));
-		
-			var Rx = ((Math.random() * 50) + 1);
-			var Ry = ((Math.random() * 50) + 1);
-			var Rz = ((Math.random() * 50) + 1);
-    		SCENE_Rotation = [Rx,Ry,Rz];
-    		SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, rotateVector(SCENE_Rotation));
-    		
-    		SCENE_NORMALS_RESULTANT = multiplyMatrices(NORMALS_RESULTANT, rotateVector(SCENE_Rotation));
-    	}
+    if (Transforms >= 6.666 && Transforms < 10) {
+        if (Obj_tri_counter === 0) {
+            var Tx = ((Math.random() * 9.5) + 5.5);
+            var Ty = -((Math.random() * 9.5) + 5.5);
+            var Tz = ((Math.random() * 10) + 1);
+            SCENE_Translation = [Tx, Ty, Tz];
+            SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(SCENE_Translation));
+
+            var Rx = ((Math.random() * 50) + 1);
+            var Ry = ((Math.random() * 50) + 1);
+            var Rz = ((Math.random() * 50) + 1);
+            SCENE_Rotation = [Rx, Ry, Rz];
+            SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, rotateVector(SCENE_Rotation));
+
+            SCENE_NORMALS_RESULTANT = multiplyMatrices(NORMALS_RESULTANT, rotateVector(SCENE_Rotation));
+        }
     }
 
     // SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(SCENE_Translation));
     TransformedVector = multiplyMatrices(SCENE_RESULTANT_MATRIX, vertex);
     normalizeVectsByW(TransformedVector, 1);
-    
+
     SCENE_NORMALS_RESULTANT = multiplyMatrices(SCENE_NORMALS_RESULTANT, NEW_N_TRANSFROM);
     SCENE_NORMALS_RESULTANT = normalizeMatrix(SCENE_NORMALS_RESULTANT);
 
-	Obj_tri_counter += 1;
-	if(Obj_tri_counter === NoOfTrianglesInTheObject)
-		Obj_tri_counter = 0;
-		
+    Obj_tri_counter += 1;
+    if (Obj_tri_counter === NoOfTrianglesInTheObject)
+        Obj_tri_counter = 0;
+
     return TransformedVector;
 }
 
@@ -701,7 +719,7 @@ function getDeTransformedVects(TransformedVector) {
     invRESULTANT_MATRIX = invert4DMat(RESULTANT_MATRIX);
     vertex = multiplyMatrices(invRESULTANT_MATRIX, TransformedVector);
     normalizeVectsByW(vertex, 2);
-	invNORMALS_RESULTANT = invert4DMat(NORMALS_RESULTANT);
+    invNORMALS_RESULTANT = invert4DMat(NORMALS_RESULTANT);
 
     return vertex;
 }

@@ -300,7 +300,7 @@ function renderStep() {
 
 //Saurabh
     var leafNo = 0;
-    var totalLeaves = 10;
+    var totalLeaves = 1;
     NoOfTrianglesInTheObject = triangleVector.length;
     while (leafNo < totalLeaves) {
         if (leafNo > 0) {
@@ -374,7 +374,7 @@ function renderStep() {
     var rayEtoO = [[0, 0, 0], [0, 0, 0]];
 
     var rayPtoL = [[0, 0, 0], [0, 0, 0]];
-    rayTraceTriangle(triangleVector, camN, camPos, camU, camV, rayEtoO, rayPtoL);
+//    rayTraceTriangle(triangleVector, camN, camPos, camU, camV, rayEtoO, rayPtoL);
     shadowRay(rayPtoL, triangleVector);
 //     	rayTraceTriangle(triangleVector, leafCount);
 //     	leafCount += 1;
