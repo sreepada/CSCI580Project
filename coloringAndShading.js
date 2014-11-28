@@ -630,27 +630,67 @@ function getTransformedVects(vertex) {
     RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, piTransfrom(DEFAULT_TRANSFORMATION.FOV));
     RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, iwTransfrom(DEFAULT_TRANSFORMATION.camera.position,
             DEFAULT_TRANSFORMATION.camera.lookAt,
+            DEFAULT_TRANSFORMATION.camera.worldUp));	
+	
+	NORMALS_RESULTANT = multiplyMatrices(NORMALS_RESULTANT, iwNTransfrom(DEFAULT_TRANSFORMATION.camera.position,
+            DEFAULT_TRANSFORMATION.camera.lookAt,
             DEFAULT_TRANSFORMATION.camera.worldUp));
-    var Transforms = Math.floor((Math.random() * 10) + 1);
-    var Tx = ((Math.random() * 6.5) + 3.5);
-    var Ty = -((Math.random() * 6.5) + 3.5);
-    var Tz = 0; //((Math.random() * 10) + 1);
-    var newTranslation = [Tx, Ty, Tz];
-// 	var newTranslation = [3.5,-3.5,0];
-    SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(newTranslation));
+
+	
+	var Transforms = Math.floor((Math.random() * 10) + 1);
+	if (Transforms >= 0 && Transforms < 3.333){
+		if(Obj_tri_counter === 0){
+			var Tx = ((Math.random() * 6.5) + 3.5);
+			var Ty = -((Math.random() * 6.5) + 3.5);
+			var Tz = 0;//((Math.random() * 10) + 1);
+    		SCENE_Translation = [Tx,Ty,Tz];
+    		SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(SCENE_Translation));
+    	}
+    }
+    if (Transforms >= 3.333 && Transforms < 6.666){
+		if(Obj_tri_counter === 0){
+			var Tx = ((Math.random() * 9.5) + 5.5);
+			var Ty = -((Math.random() * 9.5) + 5.5);
+			var Tz = ((Math.random() * 10) + 1);
+    		SCENE_Translation = [Tx,Ty,Tz];
+    		SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(SCENE_Translation));
+    		
+			var Sx = ((Math.random() * 2.4) + 0.1);
+			var Sy = ((Math.random() * 2.4) + 0.1);
+			var Sz = ((Math.random() * 10) + 1);
+    		SCENE_Scaling = [Sx,Sy,Sz];
+    		SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, scaleVector(SCENE_Scaling));
+    	}
+    }
+    if (Transforms >= 6.666 && Transforms < 10){
+		if(Obj_tri_counter === 0){
+			var Tx = ((Math.random() * 9.5) + 5.5);
+			var Ty = -((Math.random() * 9.5) + 5.5);
+			var Tz = ((Math.random() * 10) + 1);
+    		SCENE_Translation = [Tx,Ty,Tz];		
+			SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(SCENE_Translation));
+		
+			var Rx = ((Math.random() * 50) + 1);
+			var Ry = ((Math.random() * 50) + 1);
+			var Rz = ((Math.random() * 50) + 1);
+    		SCENE_Rotation = [Rx,Ry,Rz];
+    		SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, rotateVector(SCENE_Rotation));
+    		
+    		SCENE_NORMALS_RESULTANT = multiplyMatrices(NORMALS_RESULTANT, rotateVector(SCENE_Rotation));
+    	}
+    }
+
+    // SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(SCENE_Translation));
     TransformedVector = multiplyMatrices(SCENE_RESULTANT_MATRIX, vertex);
     normalizeVectsByW(TransformedVector, 1);
-    // RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, scaleVector(DEFAULT_TRANSFORMATION.scaling));
-//     RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, rotateVector(DEFAULT_TRANSFORMATION.rotation));
-//     RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, NEW_TRANSFROM);
+    
+    SCENE_NORMALS_RESULTANT = multiplyMatrices(SCENE_NORMALS_RESULTANT, NEW_N_TRANSFROM);
+    SCENE_NORMALS_RESULTANT = normalizeMatrix(SCENE_NORMALS_RESULTANT);
 
-    // NORMALS_RESULTANT = multiplyMatrices(NORMALS_RESULTANT, iwNTransfrom(DEFAULT_TRANSFORMATION.camera.position,
-//             DEFAULT_TRANSFORMATION.camera.lookAt,
-//             DEFAULT_TRANSFORMATION.camera.worldUp));
-//     NORMALS_RESULTANT = multiplyMatrices(NORMALS_RESULTANT, rotateVector(DEFAULT_TRANSFORMATION.rotation));
-//     NORMALS_RESULTANT = multiplyMatrices(NORMALS_RESULTANT, NEW_N_TRANSFROM);
-//     NORMALS_RESULTANT = normalizeMatrix(NORMALS_RESULTANT);
-
+	Obj_tri_counter += 1;
+	if(Obj_tri_counter === NoOfTrianglesInTheObject)
+		Obj_tri_counter = 0;
+		
     return TransformedVector;
 }
 
@@ -661,24 +701,8 @@ function getDeTransformedVects(TransformedVector) {
     invRESULTANT_MATRIX = invert4DMat(RESULTANT_MATRIX);
     vertex = multiplyMatrices(invRESULTANT_MATRIX, TransformedVector);
     normalizeVectsByW(vertex, 2);
-//    RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, spTransfrom(DEFAULT_TRANSFORMATION.sp, DEFAULT_TRANSFORMATION.FOV));
+	invNORMALS_RESULTANT = invert4DMat(NORMALS_RESULTANT);
 
-//     RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, piTransfrom(DEFAULT_TRANSFORMATION.FOV));
-//     RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, iwTransfrom(DEFAULT_TRANSFORMATION.camera.position,
-//             DEFAULT_TRANSFORMATION.camera.lookAt,
-//             DEFAULT_TRANSFORMATION.camera.worldUp));
-//     RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(DEFAULT_TRANSFORMATION.translation));
-
-//     RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, scaleVector(DEFAULT_TRANSFORMATION.scaling));
-//     RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, rotateVector(DEFAULT_TRANSFORMATION.rotation));
-//     RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, NEW_TRANSFROM);
-
-//     NORMALS_RESULTANT = multiplyMatrices(NORMALS_RESULTANT, iwNTransfrom(DEFAULT_TRANSFORMATION.camera.position,
-//             DEFAULT_TRANSFORMATION.camera.lookAt,
-//             DEFAULT_TRANSFORMATION.camera.worldUp));
-//     NORMALS_RESULTANT = multiplyMatrices(NORMALS_RESULTANT, rotateVector(DEFAULT_TRANSFORMATION.rotation));
-//     NORMALS_RESULTANT = multiplyMatrices(NORMALS_RESULTANT, NEW_N_TRANSFROM);
-//     NORMALS_RESULTANT = normalizeMatrix(NORMALS_RESULTANT);
     return vertex;
 }
 
