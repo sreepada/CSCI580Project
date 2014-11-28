@@ -15,6 +15,8 @@ var TEXTURE_DATA = TEXTURE_CONTEXT.createImageData(1, 1);
 var MAIN_CANVAS = document.getElementById("mainCanvas");
 var MAIN_CONTEXT = MAIN_CANVAS.getContext("2d");
 var MAIN_DATA = MAIN_CONTEXT.createImageData(1, 1);
+var Obj_tri_counter = 0;
+var NoOfTrianglesInTheObject = 0;
 
 var CONTEXT_LIST = [[TEXTURE_CANVAS, TEXTURE_CONTEXT, TEXTURE_DATA],
     [MAIN_CANVAS, MAIN_CONTEXT, MAIN_DATA]];
@@ -43,6 +45,14 @@ var LIGHT = [[[-0.7071, -0.7071, 0], [0.9, 0.2, 0.9]],
 [[0.7071, 0.0, 20], [0.2, 0.7, 0.3]]
 ];
 //var LIGHT = [[0.7071, 0.7071, 0.7071], [1, 1, 1], [-1, 0.33, -1]];
+
+var SCENE_Translation = [0,0,0];
+var SCENE_Scaling = [0,0,0];
+var SCENE_RotationX = [0,0,0];
+var SCENE_RotationY = [0,0,0];
+var SCENE_RotationZ = [0,0,0];
+var invNORMALS_RESULTANT = IDENTITY_MATRIX;
+var SCENE_NORMALS_RESULTANT = IDENTITY_MATRIX;
 
 var COLOR_THRESHOLD = 0;
 var SHADING_TYPE = 2;
@@ -118,7 +128,7 @@ DEFAULT_CAMERA_TRANSFORMATION = {
         "position": [
             0,
             0,
-            -65
+            -100
         ],
         "lookAt": [
             -0.2,

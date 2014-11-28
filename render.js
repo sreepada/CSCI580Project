@@ -396,12 +396,69 @@ function renderStep() {
 //    }
 //
 //    console.log(triangleVector, triangleVector.length);
-    //Saurabh// 
-//     var noOfLeaves = 2;
-//     var leafCount = 0;
-//     while(leafCount < noOfLeaves){
-// 
 
+    var leafNo = 0;
+    var totalLeaves = 10;
+    NoOfTrianglesInTheObject = triangleVector.length;
+    while (leafNo < totalLeaves) {
+        if (leafNo > 0) {
+            lineCount = lineCount;
+            var triangleIterator = 0;
+            while (triangleIterator < NoOfTrianglesInTheObject) {
+                var Vector0 = triangleVector[triangleIterator].slice(0, 3);
+                // var Vector1 = triangleVectors[triangleIterator + 1].slice(0, 3);
+//         	var Vector2 = triangleVectors[triangleIterator + 2].slice(0, 3);
+                var normal0 = triangleVector[triangleIterator].slice(3, 6);
+                // var normal1 = triangleVectors[triangleIterator + 1].slice(3, 6);
+//             var normal2 = triangleVectors[triangleIterator + 2].slice(3, 6);
+                var uv0 = triangleVector[triangleIterator].slice(6, 8);
+//             var uv1 = triangleVectors[triangleIterator + 1].slice(6, 8);
+//             var uv2 = triangleVectors[triangleIterator + 2].slice(6, 8);
+
+                var vertex = [[0], [0], [0], [1]];
+                var TransformedVector = [[0], [0], [0], [0]];
+                
+                var normal = [[0], [0], [0], [1]];
+                var TransformedNormal = [[0], [0], [0], [0]];
+                for (var i = 0; i < 1; i++) {
+                    for (var j = 0; j < 3; j++) {
+                        if (i === 0)
+                            vertex[j][i] = Vector0[j];
+                            normal[j][i] = normal0[j];
+                    }
+                }
+//         debugger
+                TransformedVector = getTransformedVects(vertex);
+                
+                TransformedNormal = multiplyMatrices(SCENE_NORMALS_RESULTANT, normal);
+			    normalizeVectsByW(TransformedNormal, 1);
+                
+                
+                vertex = [[0], [0], [0], [0]];
+                normal = [[0], [0], [0], [0]];
+                
+                vertex = getDeTransformedVects(TransformedVector);
+                normal = multiplyMatrices(invNORMALS_RESULTANT, TransformedNormal);
+			    normalizeVectsByW(normal, 2);
+                
+                for (var i = 0; i < 1; i++) {
+                    for (var j = 0; j < 3; j++) {
+                        if (i === 0)
+                            Vector0[j] = parseFloat(vertex[j][i]);
+                            normal0[j] = parseFloat(normal[j][i]);
+                    }
+                }
+
+                triangleVector[lineCount] = (Vector0.concat(normal0)).concat(uv0);
+                triangleIterator += 1;
+                lineCount += 1;
+            }
+        }
+
+        leafNo += 1;
+    }
+
+    console.log(triangleVector, triangleVector.length);
 
 //screen = position + lookat
     var camPos = DEFAULT_TRANSFORMATION.camera.position;
@@ -416,8 +473,5 @@ function renderStep() {
 
     var rayPtoL = [[0, 0, 0], [0, 0, 0]];
     rayTraceTriangle(triangleVector, camN, camPos, camU, camV, rayEtoO, rayPtoL);
-//     	rayTraceTriangle(triangleVector, leafCount);
-//     	leafCount += 1;
-//     }
     writeToCanvas();
 }
