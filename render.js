@@ -295,6 +295,9 @@ function renderStep() {
             parseFloat(firstLineSplit[6]),
             parseFloat(firstLineSplit[7])
         ];
+        
+        var translateFirst = 1;
+        if(translateFirst === 1){
         triangleIterator = lineCount;
               var Vector0 = triangleVector[triangleIterator].slice(0, 3);
                 var normal0 = triangleVector[triangleIterator].slice(3, 6);
@@ -335,7 +338,7 @@ function renderStep() {
                 }
 
                 triangleVector[lineCount] = (Vector0.concat(normal0)).concat(uv0);
-          
+          }
         
         lineCount = lineCount + 1;
     }
