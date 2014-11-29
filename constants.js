@@ -128,7 +128,7 @@ DEFAULT_CAMERA_TRANSFORMATION = {
         "position": [
             0,
             0,
-            -200
+            -65
         ],
         "lookAt": [
             -0.2,

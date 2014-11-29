@@ -410,6 +410,6 @@ function renderStep() {
 
     var rayPtoL = [[0, 0, 0], [0, 0, 0]];
     rayTraceTriangle(triangleVector, camN, camPos, camU, camV, rayEtoO, rayPtoL);
-    shadowRay(rayPtoL, triangleVector);
+//    shadowRay(rayPtoL, triangleVector);
     writeToCanvas();
 }

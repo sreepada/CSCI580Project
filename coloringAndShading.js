@@ -436,17 +436,12 @@ function rayTraceTriangle(triangleVectors, camN, camPos, camU, camV, rayEtoO, ra
                 if (ndotD !== 0) {
                     var t = -(ndotP + traingleD) / ndotD;
                     if (tmin > t) {
-//any point that intersect with triangle plane
                         var pointInObject = addVectors(
                                 rayEtoO[0],
                                 scalarMultiple(
                                         rayEtoO[1], t
                                         )
                                 );
-                        //see if point lies in shadow?
-//                        shadowRay(rayPtoL, triangleVectors, ic, jc);
-                        // debugger;
-//                        arr.push([ic, jc]);
                         if (checkIfInsideTriangle(
                                 pointInObject,
                                 Vector0,
