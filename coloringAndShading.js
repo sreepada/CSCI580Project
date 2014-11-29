@@ -766,12 +766,8 @@ function getTransformedVects(vertex, instance) {
             DEFAULT_TRANSFORMATION.camera.worldUp));
 
 
-<<<<<<< HEAD
-    if(instance === 0){
-=======
     if (instance === 0) {
 //     debugger
->>>>>>> FETCH_HEAD
         var Tx = -70;
         var Ty = 60;
         var Tz = 0;//((Math.random() * 10) + 1);
@@ -780,8 +776,6 @@ function getTransformedVects(vertex, instance) {
 
         NORMALS_RESULTANT = IDENTITY_MATRIX;
         SCENE_NORMALS_RESULTANT = IDENTITY_MATRIX;
-<<<<<<< HEAD
-    
     }
     else{
     if(RANDOM === 0){//Y is X and X is Y
@@ -870,24 +864,7 @@ function getTransformedVects(vertex, instance) {
   			NORMALS_RESULTANT = IDENTITY_MATRIX;
             SCENE_NORMALS_RESULTANT = IDENTITY_MATRIX;
         }
-=======
-
->>>>>>> FETCH_HEAD
     }
-    else {
-        var Transforms = Math.floor((Math.random() * 10) + 1);
-        if (Transforms >= 0 && Transforms < 3.333) {
-            if (Obj_tri_counter === 0) {
-                var Tx = ((Math.random() * 6.5) + 3.5);
-                var Ty = -((Math.random() * 6.5) + 3.5);
-                var Tz = 0;//((Math.random() * 10) + 1);
-                SCENE_Translation = [Tx, Ty, Tz];
-                SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(SCENE_Translation));
-
-                NORMALS_RESULTANT = IDENTITY_MATRIX;
-                SCENE_NORMALS_RESULTANT = IDENTITY_MATRIX;
-            }
-        }
         if (Transforms >= 3.333 && Transforms < 6.666) {
             if (Obj_tri_counter === 0) {
                 var Tx = ((Math.random() * 9.5) + 5.5);
@@ -927,12 +904,8 @@ function getTransformedVects(vertex, instance) {
             }
         }
     }
-<<<<<<< HEAD
     }
-    }
-=======
->>>>>>> FETCH_HEAD
-    // SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(SCENE_Translation));
+
     TransformedVector = multiplyMatrices(SCENE_RESULTANT_MATRIX, vertex);
     normalizeVectsByW(TransformedVector, 1);
 

@@ -377,7 +377,7 @@ function renderStep() {
             parseFloat(firstLineSplit[7])
         ];
         
-        var translateFirst = 0;
+        var translateFirst = 1;
         if(translateFirst === 1){
         triangleIterator = lineCount;
               var Vector0 = triangleVector[triangleIterator].slice(0, 3);
@@ -494,7 +494,7 @@ function renderStep() {
 
     var rayPtoL = [[0, 0, 0], [0, 0, 0]];
 
-//    rayTraceTriangle(triangleVector, camN, camPos, camU, camV, rayEtoO, rayPtoL);
-    shadowRay(rayPtoL, triangleVector);
+   rayTraceTriangle(triangleVector, camN, camPos, camU, camV, rayEtoO, rayPtoL);
+//     shadowRay(rayPtoL, triangleVector);
     writeToCanvas();
 }
