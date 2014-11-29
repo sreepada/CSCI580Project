@@ -290,7 +290,7 @@ function shadingInterpolation(point, vertex0, vertex1, vertex2, shadingType, map
         }
         normalForCurrPoint[3] = new Array(1);
         normalForCurrPoint[3][0] = 1;
-        debugger
+//        debugger
         var colorsCoeff = (TEXTURE_FILE_DATA === "" && mappingType !== 3) ? -1 : getTextureColorCoeff(point,
                 mappingType,
                 [w0, vertex0[3], vertex0[4]],
@@ -398,7 +398,7 @@ function colorMeATriangle(aaIterator, Vector0, Vector1, Vector2, normal0, normal
     }
 }
 //sun procedural
-function colorMeATriangle(aaIterator, Vector0, Vector1, Vector2, normal0, normal1, normal2, uvList0, uvList1, uvList2,mappingType) {
+function colorMeATriangle(aaIterator, Vector0, Vector1, Vector2, normal0, normal1, normal2, uvList0, uvList1, uvList2, mappingType) {
     var x0 = Math.round(Vector0[0][0]);
     var y0 = Math.round(Vector0[1][0]);
     var z0 = Math.round(Vector0[2][0]);
@@ -467,7 +467,7 @@ function colorMeATriangle(aaIterator, Vector0, Vector1, Vector2, normal0, normal
             }
             if (Boolean(render)) {
                 z = (-(vectorC[0] * ic) - (vectorC[1] * jc) - D) / vectorC[2];
-               // var mappingType = 1;
+                // var mappingType = 1;
                 if (!isNaN(z) && (CONTEXT_LIST[1][3 + aaIterator][ic][jc][3] === 0 || CONTEXT_LIST[1][3 + aaIterator][ic][jc][3] > z)) {
                     var colors = shadingInterpolation([ic, jc, z],
                             [x0, y0, normal0, uvList0, z0],
@@ -475,7 +475,7 @@ function colorMeATriangle(aaIterator, Vector0, Vector1, Vector2, normal0, normal
                             [x2, y2, normal2, uvList2, z2],
                             SHADING_TYPE,
                             mappingType);
-                    debugger
+//                    debugger
                     CONTEXT_LIST[1][3 + aaIterator][ic][jc][0] = colors[0];
                     CONTEXT_LIST[1][3 + aaIterator][ic][jc][1] = colors[1];
                     CONTEXT_LIST[1][3 + aaIterator][ic][jc][2] = colors[2];
@@ -506,7 +506,7 @@ function rayTraceTriangle(triangleVectors, camN, camPos, camU, camV, rayEtoO, ra
             var yp = ic * 1 / imgPlaneHeight * 2 - 1;
             //get ray's position and direction;
             getRay(xp, yp, camN, camPos, camU, camV, rayEtoO);
-            console.log(ic +" "+ jc);
+//            console.log(ic +" "+ jc);
             var triangleIterator = 0;
             var tmin = Z_MAX;
             while (triangleIterator < triangleVectors.length) {
@@ -673,12 +673,17 @@ function shadowRay(rayPtoL, triangleVectors)
                             "notN");
                     if (ndotD !== 0) {
                         var t = -(ndotP + traingleD) / ndotD;
+//                        if (ic <= 50 && jc <= 50)
+//                            console.log(t, rayPtoL);
                         if (stmin > t) {
                             var pointInObject1 = addVectors(
                                     rayPtoL[0],
                                     scalarMultiple(
                                             rayPtoL[1], t
                                             ));
+//                            if (ic === 100 && jc === 100) {
+//                                console.log(pointInObject1);
+//                            }
                             if (checkIfInsideTriangle(
                                     pointInObject1,
                                     Vector0,
@@ -720,9 +725,13 @@ function shadowRay(rayPtoL, triangleVectors)
 //                        yp = yp / u[0];
                     jc = Math.round((-1 * xp * startI + 1) * imgPlaneWidth / 2);
                     ic = Math.round((-1 * yp * startI + 1) * imgPlaneHeight / 2);
-                    ic = Math.abs(Math.min(ic, 511));
-                    jc = Math.abs(Math.min(jc, 511));
-//                    console.log(xp, yp, ic, jc);
+                    ic = Math.min(
+                            Math.max(0, Math.abs(ic)),
+                            DEFAULT_TRANSFORMATION.sp[0] - 1);
+                    jc = Math.min(
+                            Math.max(0, Math.abs(jc)),
+                            DEFAULT_TRANSFORMATION.sp[1] - 1);
+//                    console.log(ic, jc);
                     CONTEXT_LIST[1][3][ic][jc][0] = CONTEXT_LIST[1][3][ic][jc][0] / 1.2;
                     CONTEXT_LIST[1][3][ic][jc][1] = CONTEXT_LIST[1][3][ic][jc][1] / 1.2;
                     CONTEXT_LIST[1][3][ic][jc][2] = CONTEXT_LIST[1][3][ic][jc][2] / 1.2;
