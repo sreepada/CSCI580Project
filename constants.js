@@ -45,7 +45,7 @@ var SPEC_POWER = 32;
 // [[0.7071, 0.0, 20], [0.2, 0.7, 0.3]]
 // ];
 // var LIGHT = [[[0.7071, 0.0, 20], [0.2, 0.7, 0.3]]];
-var LIGHT = [[[-50, -50, 50], [0.2, 0.7, 0.3]]];
+var LIGHT = [[[-1.57,-0.15,20], [0.2, 0.7, 0.3]]];
 
 
 var SCENE_Translation = [0,0,0];
@@ -55,6 +55,7 @@ var SCENE_RotationY = [0,0,0];
 var SCENE_RotationZ = [0,0,0];
 var invNORMALS_RESULTANT = IDENTITY_MATRIX;
 var SCENE_NORMALS_RESULTANT = IDENTITY_MATRIX;
+var RANDOM = 0; 
 
 var COLOR_THRESHOLD = 0;
 var SHADING_TYPE = 2;
@@ -130,7 +131,7 @@ DEFAULT_CAMERA_TRANSFORMATION = {
         "position": [
             0,
             0,
-            -65
+            -100
         ],
         "lookAt": [
             -0.2,

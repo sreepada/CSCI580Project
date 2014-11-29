@@ -637,19 +637,22 @@ function shadowRay(rayPtoL, triangleVectors)
 function getTransformedVects(vertex, instance) {
     var TransformedVector = [[0], [0], [0], [0]];
     RESULTANT_MATRIX = IDENTITY_MATRIX;
+    SCENE_RESULTANT_MATRIX = IDENTITY_MATRIX;
     RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, spTransfrom(DEFAULT_TRANSFORMATION.sp, DEFAULT_TRANSFORMATION.FOV));
     RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, piTransfrom(DEFAULT_TRANSFORMATION.FOV));
     RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, iwTransfrom(DEFAULT_TRANSFORMATION.camera.position,
             DEFAULT_TRANSFORMATION.camera.lookAt,
             DEFAULT_TRANSFORMATION.camera.worldUp));
 
+
+	NORMALS_RESULTANT = IDENTITY_MATRIX;
+	SCENE_NORMALS_RESULTANT = IDENTITY_MATRIX;
     NORMALS_RESULTANT = multiplyMatrices(NORMALS_RESULTANT, iwNTransfrom(DEFAULT_TRANSFORMATION.camera.position,
             DEFAULT_TRANSFORMATION.camera.lookAt,
             DEFAULT_TRANSFORMATION.camera.worldUp));
 
 
     if(instance === 0){
-//     debugger
         var Tx = -70;
         var Ty = 60;
         var Tz = 0;//((Math.random() * 10) + 1);
@@ -659,6 +662,80 @@ function getTransformedVects(vertex, instance) {
   		NORMALS_RESULTANT = IDENTITY_MATRIX;
         SCENE_NORMALS_RESULTANT = IDENTITY_MATRIX;
     
+    }
+    else{
+    if(RANDOM === 0){//Y is X and X is Y
+    	switch(instance){
+    		case 1:
+    		    console.log(instance);
+    			SCENE_Translation = [15,-15,3];
+        	    SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(SCENE_Translation));
+  			
+  				NORMALS_RESULTANT = IDENTITY_MATRIX;
+	            SCENE_NORMALS_RESULTANT = IDENTITY_MATRIX;
+    		break;
+    		case 2:
+  		    	console.log(instance);
+    	        SCENE_Scaling = [1.5,1.5,0];
+        	    SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, scaleVector(SCENE_Scaling));
+
+    			SCENE_Translation = [0,5,-2];
+	            SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, translateVector(SCENE_Translation));
+            
+            	NORMALS_RESULTANT = IDENTITY_MATRIX;
+            	SCENE_NORMALS_RESULTANT = IDENTITY_MATRIX;
+    		break;
+    		case 3:
+    			console.log(instance);
+    			SCENE_Rotation = [20,0,0];
+	            SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, rotateVector(SCENE_Rotation));
+    			
+    			SCENE_Translation = [10,-20,1];
+	            SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, translateVector(SCENE_Translation));
+
+
+    	        SCENE_NORMALS_RESULTANT = multiplyMatrices(NORMALS_RESULTANT, rotateVector(SCENE_Rotation));
+        	    SCENE_NORMALS_RESULTANT = multiplyMatrices(SCENE_NORMALS_RESULTANT, NEW_N_TRANSFROM);
+            	SCENE_NORMALS_RESULTANT = normalizeMatrix(SCENE_NORMALS_RESULTANT);
+    		break;
+    		case 4:
+    		
+    		break;
+    		case 5:
+    		
+    		break;
+    		case 6:
+    		
+    		break;
+    		case 7:
+    		
+    		break;
+    		case 8:
+    		
+    		break;
+    		case 9:
+    		
+    		break;
+    		case 10:
+    		
+    		break;
+    		case 11:
+    		
+    		break;
+    		case 12:
+    		
+    		break;
+    		case 13:
+    		
+    		break;
+    		case 14:
+    		
+    		break;
+    		case 15:
+    		
+    		break;
+    		
+    	}
     }
     else{
     var Transforms = Math.floor((Math.random() * 10) + 1);
@@ -711,6 +788,7 @@ function getTransformedVects(vertex, instance) {
             SCENE_NORMALS_RESULTANT = normalizeMatrix(SCENE_NORMALS_RESULTANT);
 
         }
+    }
     }
     }
     // SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(SCENE_Translation));

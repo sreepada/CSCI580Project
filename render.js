@@ -318,7 +318,7 @@ function renderStep() {
                 }
 //         debugger
                 TransformedVector = getTransformedVects(vertex,0);
-
+// 				console.log(TransformedVector[0][0],TransformedVector[1][0],TransformedVector[2][0],TransformedVector[3][0]);
                 TransformedNormal = multiplyMatrices(SCENE_NORMALS_RESULTANT, normal);
                 normalizeVectsByW(TransformedNormal, 1);
 
@@ -346,7 +346,7 @@ function renderStep() {
 
 //Saurabh
     var leafNo = 0;
-    var totalLeaves = 1;
+    var totalLeaves = 4;
     NoOfTrianglesInTheObject = triangleVector.length;
     while (leafNo < totalLeaves) {
         if (leafNo > 0) {
@@ -370,7 +370,7 @@ function renderStep() {
                     }
                 }
 
-                TransformedVector = getTransformedVects(vertex, 1);
+                TransformedVector = getTransformedVects(vertex, leafNo);
                 TransformedNormal = multiplyMatrices(SCENE_NORMALS_RESULTANT, normal);
                 normalizeVectsByW(TransformedNormal, 1);
 
