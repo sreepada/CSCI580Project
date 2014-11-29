@@ -270,7 +270,7 @@ function renderStep() {
             Vertex2[0][0] = Vertex2[0][0] + parseFloat(AA_FILTER[aaIterator][0]);
             Vertex2[1][0] = Vertex2[1][0] + parseFloat(AA_FILTER[aaIterator][1]);
 
-            colorMeATriangle(aaIterator, Vertex0, Vertex1, Vertex2, normal0, normal1, normal2, uvList0, uvList1, uvList2);
+            colorMeATriangle(aaIterator, Vertex0, Vertex1, Vertex2, normal0, normal1, normal2, uvList0, uvList1, uvList2, 1);
             Vertex0 = loopVertex0;
             Vertex1 = loopVertex1;
             Vertex2 = loopVertex2;
@@ -413,7 +413,7 @@ function renderStep() {
     var rayEtoO = [[0, 0, 0], [0, 0, 0]];
 
     var rayPtoL = [[0, 0, 0], [0, 0, 0]];
-    rayTraceTriangle(triangleVector, camN, camPos, camU, camV, rayEtoO, rayPtoL);
-//    shadowRay(rayPtoL, triangleVector);
+//    rayTraceTriangle(triangleVector, camN, camPos, camU, camV, rayEtoO, rayPtoL);
+    shadowRay(rayPtoL, triangleVector);
     writeToCanvas();
 }
