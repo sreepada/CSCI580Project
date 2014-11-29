@@ -139,6 +139,7 @@ function readTreeInputFile(evt, contents) {
                     TREE_FILE_LINES[lineCount] = vArray[parseInt(vertex1[0]) - 1] + " "
                             + vnArray[parseInt(vertex1[2]) - 1] + " "
                             + vtArray[parseInt(vertex1[1]) - 1];
+                    debugger
                     lineCount += 1;
                     TREE_FILE_LINES[lineCount] = vArray[parseInt(vertex2[0]) - 1] + " "
                             + vnArray[parseInt(vertex2[2]) - 1] + " "

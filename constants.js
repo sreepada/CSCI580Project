@@ -47,7 +47,6 @@ var SPEC_POWER = 32;
 var LIGHT = [[[-1.5071, -0.15, 10], [0.2, 0.7, 0.3]]];
 //var LIGHT = [[[0.1, 0.2, 30], [0.2, 0.7, 0.3]]];
 
-
 var SCENE_Translation = [0,0,0];
 var SCENE_Scaling = [0,0,0];
 var SCENE_RotationX = [0,0,0];
@@ -251,8 +250,8 @@ TREE_CAMERA_TRANSFORMATION = {
     "FOV": 35,
     "camera": {
         "position": [
-            -10,
-            5,
+            -40,
+            -15,
             -10
         ],
         "lookAt": [
