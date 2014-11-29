@@ -190,24 +190,37 @@ function getColorFromProcTex(u, v) {
 }
 
 function getTextureColorCoeff(point, mappingType, vertex0, vertex1, vertex2, isItProcedural) {
+    if (TEXTURE_FILE_DATA === "") {
+        var width = DEFAULT_TRANSFORMATION.sp[0];
+        var height = DEFAULT_TRANSFORMATION.sp[1];
+    }
+    else {
+        var width = parseInt(TEXTURE_FILE_DATA[1]);
+        var height = parseInt(TEXTURE_FILE_DATA[2]);
+    }
     vertex0[1] = warp([vertex0[1][0], vertex0[1][1]], vertex0[2]);
     vertex1[1] = warp([vertex1[1][0], vertex1[1][1]], vertex1[2]);
     vertex2[1] = warp([vertex2[1][0], vertex2[1][1]], vertex2[2]);
     var smallU = vertex0[0] * vertex0[1][0] + vertex1[0] * vertex1[1][0] + vertex2[0] * vertex2[1][0];
     var smallV = vertex0[0] * vertex0[1][1] + vertex1[0] * vertex1[1][1] + vertex2[0] * vertex2[1][1];
-    var pX = unwarp(smallV, point[2]) * (parseInt(TEXTURE_FILE_DATA[1]) - 1);
-    var pY = unwarp(smallU, point[2]) * (parseInt(TEXTURE_FILE_DATA[2]) - 1);
+    var pX = unwarp(smallV, point[2]) * (width - 1);
+    var pY = unwarp(smallU, point[2]) * (height - 1);
     pX = pX < 0 ? pX * -1 : pX;
     pY = pY < 0 ? pY * -1 : pY;
-    var floorBigU = Math.min(parseInt(TEXTURE_FILE_DATA[1]) - 1, Math.floor(pY));
-    var floorBigV = Math.min(parseInt(TEXTURE_FILE_DATA[2]) - 1, Math.floor(pX));
-    var ceilBigU = Math.min(parseInt(TEXTURE_FILE_DATA[1]) - 1, Math.ceil(pY));
-    var ceilBigV = Math.min(parseInt(TEXTURE_FILE_DATA[2]) - 1, Math.ceil(pX));
+
+    var floorBigU = Math.min(width, Math.floor(pY));
+    var floorBigV = Math.min(height, Math.floor(pX));
+    var ceilBigU = Math.min(width, Math.ceil(pY));
+    var ceilBigV = Math.min(height, Math.ceil(pX));
     var t = pY - floorBigU;
     var s = pX - floorBigV;
     var coeff = new Array(3);
+
     if (isItProcedural === 3) {
-        coeff = getColorFromProcTex(pY / (CONTEXT_LIST[4][0].width - 1), pX / (CONTEXT_LIST[4][0].height - 1));
+
+        coeff = getColorFromProcTex(
+                pY / (DEFAULT_TRANSFORMATION.sp[0] - 1),
+                pX / (DEFAULT_TRANSFORMATION.sp[1] - 1));
     }
     else {
         coeff[0] = (s * t * TEXTURE_FILE_DATA[4][ceilBigV][ceilBigU].r) +
@@ -277,6 +290,7 @@ function shadingInterpolation(point, vertex0, vertex1, vertex2, shadingType, map
         }
         normalForCurrPoint[3] = new Array(1);
         normalForCurrPoint[3][0] = 1;
+//        debugger
         var colorsCoeff = (TEXTURE_FILE_DATA === "" && mappingType !== 3) ? -1 : getTextureColorCoeff(point,
                 mappingType,
                 [w0, vertex0[3], vertex0[4]],
@@ -297,7 +311,7 @@ function checkIfClockwise(Vector0, Vector1, Vector2) {
     return false;
 }
 
-function colorMeATriangle(aaIterator, Vector0, Vector1, Vector2, normal0, normal1, normal2, uvList0, uvList1, uvList2) {
+function colorMeATriangle(aaIterator, Vector0, Vector1, Vector2, normal0, normal1, normal2, uvList0, uvList1, uvList2, mappingType) {
     var x0 = Math.round(Vector0[0][0]);
     var y0 = Math.round(Vector0[1][0]);
     var z0 = Math.round(Vector0[2][0]);
@@ -366,18 +380,106 @@ function colorMeATriangle(aaIterator, Vector0, Vector1, Vector2, normal0, normal
             }
             if (Boolean(render)) {
                 z = (-(vectorC[0] * ic) - (vectorC[1] * jc) - D) / vectorC[2];
-                var mappingType = 1;
                 if (!isNaN(z) && (CONTEXT_LIST[1][3 + aaIterator][ic][jc][3] === 0 || CONTEXT_LIST[1][3 + aaIterator][ic][jc][3] > z)) {
                     var colors = shadingInterpolation([ic, jc, z],
                             [x0, y0, normal0, uvList0, z0],
                             [x1, y1, normal1, uvList1, z1],
                             [x2, y2, normal2, uvList2, z2],
                             SHADING_TYPE,
-                            2);
-                    CONTEXT_LIST[mappingType][3 + aaIterator][ic][jc][0] = colors[0];
-                    CONTEXT_LIST[mappingType][3 + aaIterator][ic][jc][1] = colors[1];
-                    CONTEXT_LIST[mappingType][3 + aaIterator][ic][jc][2] = colors[2];
-                    CONTEXT_LIST[mappingType][3 + aaIterator][ic][jc][3] = z;
+                            mappingType);
+                    CONTEXT_LIST[1][3 + aaIterator][ic][jc][0] = colors[0];
+                    CONTEXT_LIST[1][3 + aaIterator][ic][jc][1] = colors[1];
+                    CONTEXT_LIST[1][3 + aaIterator][ic][jc][2] = colors[2];
+                    CONTEXT_LIST[1][3 + aaIterator][ic][jc][3] = z;
+//                    console.log(colors);
+                }
+            }
+        }
+    }
+}
+//sun procedural
+function colorMeATriangle(aaIterator, Vector0, Vector1, Vector2, normal0, normal1, normal2, uvList0, uvList1, uvList2, mappingType) {
+    var x0 = Math.round(Vector0[0][0]);
+    var y0 = Math.round(Vector0[1][0]);
+    var z0 = Math.round(Vector0[2][0]);
+    var x1 = Math.round(Vector1[0][0]);
+    var y1 = Math.round(Vector1[1][0]);
+    var z1 = Math.round(Vector1[2][0]);
+    var x2 = Math.round(Vector2[0][0]);
+    var y2 = Math.round(Vector2[1][0]);
+    var z2 = Math.round(Vector2[2][0]);
+    //Calculate A,B and C values for the line equation Ax + By + Cz + D= 0
+    var A0 = y1 - y0;
+    var B0 = -(x1 - x0);
+    var C0 = (x1 - x0) * y0 - (y1 - y0) * x0;
+    var A1 = y2 - y1;
+    var B1 = -(x2 - x1);
+    var C1 = (x2 - x1) * y1 - (y2 - y1) * x1;
+    var A2 = y0 - y2;
+    var B2 = -(x0 - x2);
+    var C2 = (x0 - x2) * y2 - (y0 - y2) * x2;
+    var lowestX = Math.min(x0, Math.min(x1, x2));
+    var lowestY = Math.min(y0, Math.min(y1, y2));
+    var highestX = Math.max(x0, Math.max(x1, x2));
+    var highestY = Math.max(y0, Math.max(y1, y2));
+    var lowestX = Math.max(0, lowestX);
+    var lowestY = Math.max(0, lowestY);
+    var highestX = Math.min(DEFAULT_TRANSFORMATION.sp[0], highestX);
+    var highestY = Math.min(DEFAULT_TRANSFORMATION.sp[1], highestY);
+    var vectorA = [[x1 - x0],
+        [y1 - y0],
+        [z1 - z0]];
+    var vectorB = [[x2 - x0],
+        [y2 - y0],
+        [z2 - z0]];
+    var vectorC = [[vectorA[1] * vectorB[2] - vectorA[2] * vectorB[1]],
+        [vectorA[2] * vectorB[0] - vectorA[0] * vectorB[2]],
+        [vectorA[0] * vectorB[1] - vectorA[1] * vectorB[0]]];
+    var cMax;
+    if (vectorC[0] > vectorC[1] && vectorC[0] > vectorC[2]) {
+        cMax = vectorC[0];
+    }
+    if (vectorC[1] > vectorC[0] && vectorC[1] > vectorC[2]) {
+        cMax = vectorC[0];
+    }
+    if (vectorC[2] > vectorC[1] && vectorC[2] > vectorC[0]) {
+        cMax = vectorC[0];
+    }
+    vectorC = [vectorC[0] / cMax, vectorC[1] / cMax, vectorC[2] / cMax];
+    var D = -(vectorC[0] * x0) - (vectorC[1] * y0) - (vectorC[2] * z0);
+    var itIsClockwise = checkIfClockwise(Vector0, Vector1, Vector2);
+    for (var jc = lowestY; jc <= highestY; jc++) {
+        for (var ic = lowestX; ic <= highestX; ic++) {
+            var value0 = A0 * ic + B0 * jc + C0;
+            var value1 = A1 * ic + B1 * jc + C1;
+            var value2 = A2 * ic + B2 * jc + C2;
+            var z;
+            var render = false;
+            if (!itIsClockwise) {
+                if (value0 <= 0 && value1 <= 0 && value2 <= 0) {
+                    render = true;
+                }
+            }
+            else if (itIsClockwise) {
+                if (value0 >= 0 && value1 >= 0 && value2 >= 0) {
+                    render = true;
+                }
+            }
+            if (Boolean(render)) {
+                z = (-(vectorC[0] * ic) - (vectorC[1] * jc) - D) / vectorC[2];
+                // var mappingType = 1;
+                if (!isNaN(z) && (CONTEXT_LIST[1][3 + aaIterator][ic][jc][3] === 0 || CONTEXT_LIST[1][3 + aaIterator][ic][jc][3] > z)) {
+                    var colors = shadingInterpolation([ic, jc, z],
+                            [x0, y0, normal0, uvList0, z0],
+                            [x1, y1, normal1, uvList1, z1],
+                            [x2, y2, normal2, uvList2, z2],
+                            SHADING_TYPE,
+                            mappingType);
+//                    debugger
+                    CONTEXT_LIST[1][3 + aaIterator][ic][jc][0] = colors[0];
+                    CONTEXT_LIST[1][3 + aaIterator][ic][jc][1] = colors[1];
+                    CONTEXT_LIST[1][3 + aaIterator][ic][jc][2] = colors[2];
+                    CONTEXT_LIST[1][3 + aaIterator][ic][jc][3] = z;
                     //console.log(colors);
                 }
             }
@@ -404,6 +506,7 @@ function rayTraceTriangle(triangleVectors, camN, camPos, camU, camV, rayEtoO, ra
             var yp = ic * 1 / imgPlaneHeight * 2 - 1;
             //get ray's position and direction;
             getRay(xp, yp, camN, camPos, camU, camV, rayEtoO);
+//            console.log(ic +" "+ jc);
             var triangleIterator = 0;
             var tmin = Z_MAX;
             while (triangleIterator < triangleVectors.length) {
@@ -504,7 +607,8 @@ function shadowRay(rayPtoL, triangleVectors)
     var imgPlaneHeight = DEFAULT_TRANSFORMATION.sp[0];
     var imgPlaneWidth = DEFAULT_TRANSFORMATION.sp[1];
     var startI = 0;
-    while (startI < document.getElementById("shadowDepth").value) {
+    console.log(document.getElementById("shadowDepth").value, document.getElementById("shadowStep").value);
+    while (startI < parseFloat(document.getElementById("shadowDepth").value)) {
         FLAG = 0;
         var v = normalize1DMatrix(
                 crossProduct1D(
@@ -569,12 +673,17 @@ function shadowRay(rayPtoL, triangleVectors)
                             "notN");
                     if (ndotD !== 0) {
                         var t = -(ndotP + traingleD) / ndotD;
+//                        if (ic <= 50 && jc <= 50)
+//                            console.log(t, rayPtoL);
                         if (stmin > t) {
                             var pointInObject1 = addVectors(
                                     rayPtoL[0],
                                     scalarMultiple(
                                             rayPtoL[1], t
                                             ));
+//                            if (ic === 100 && jc === 100) {
+//                                console.log(pointInObject1);
+//                            }
                             if (checkIfInsideTriangle(
                                     pointInObject1,
                                     Vector0,
@@ -616,9 +725,13 @@ function shadowRay(rayPtoL, triangleVectors)
 //                        yp = yp / u[0];
                     jc = Math.round((-1 * xp * startI + 1) * imgPlaneWidth / 2);
                     ic = Math.round((-1 * yp * startI + 1) * imgPlaneHeight / 2);
-                    ic = Math.abs(Math.min(ic, 511));
-                    jc = Math.abs(Math.min(jc, 511));
-//                    console.log(xp, yp, ic, jc);
+                    ic = Math.min(
+                            Math.max(0, Math.abs(ic)),
+                            DEFAULT_TRANSFORMATION.sp[0] - 1);
+                    jc = Math.min(
+                            Math.max(0, Math.abs(jc)),
+                            DEFAULT_TRANSFORMATION.sp[1] - 1);
+//                    console.log(ic, jc);
                     CONTEXT_LIST[1][3][ic][jc][0] = CONTEXT_LIST[1][3][ic][jc][0] / 1.2;
                     CONTEXT_LIST[1][3][ic][jc][1] = CONTEXT_LIST[1][3][ic][jc][1] / 1.2;
                     CONTEXT_LIST[1][3][ic][jc][2] = CONTEXT_LIST[1][3][ic][jc][2] / 1.2;
@@ -630,7 +743,8 @@ function shadowRay(rayPtoL, triangleVectors)
                 }
             }
         }
-        startI += document.getElementById("shadowStep").value;
+        startI = startI + parseFloat(document.getElementById("shadowStep").value);
+        console.log(startI);
     }
 }
 
@@ -652,15 +766,21 @@ function getTransformedVects(vertex, instance) {
             DEFAULT_TRANSFORMATION.camera.worldUp));
 
 
+<<<<<<< HEAD
     if(instance === 0){
+=======
+    if (instance === 0) {
+//     debugger
+>>>>>>> FETCH_HEAD
         var Tx = -70;
         var Ty = 60;
         var Tz = 0;//((Math.random() * 10) + 1);
         SCENE_Translation = [Tx, Ty, Tz];
         SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(SCENE_Translation));
-  
-  		NORMALS_RESULTANT = IDENTITY_MATRIX;
+
+        NORMALS_RESULTANT = IDENTITY_MATRIX;
         SCENE_NORMALS_RESULTANT = IDENTITY_MATRIX;
+<<<<<<< HEAD
     
     }
     else{
@@ -750,52 +870,73 @@ function getTransformedVects(vertex, instance) {
   			NORMALS_RESULTANT = IDENTITY_MATRIX;
             SCENE_NORMALS_RESULTANT = IDENTITY_MATRIX;
         }
-    }
-    if (Transforms >= 3.333 && Transforms < 6.666) {
-        if (Obj_tri_counter === 0) {
-            var Tx = ((Math.random() * 9.5) + 5.5);
-            var Ty = -((Math.random() * 9.5) + 5.5);
-            var Tz = ((Math.random() * 10) + 1);
-            SCENE_Translation = [Tx, Ty, Tz];
-            SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(SCENE_Translation));
+=======
 
-            var Sx = ((Math.random() * 2.4) + 0.1);
-            var Sy = ((Math.random() * 2.4) + 0.1);
-            var Sz = ((Math.random() * 10) + 1);
-            SCENE_Scaling = [Sx, Sy, Sz];
-            SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, scaleVector(SCENE_Scaling));
-            
-            NORMALS_RESULTANT = IDENTITY_MATRIX;
-            SCENE_NORMALS_RESULTANT = IDENTITY_MATRIX;
+>>>>>>> FETCH_HEAD
+    }
+    else {
+        var Transforms = Math.floor((Math.random() * 10) + 1);
+        if (Transforms >= 0 && Transforms < 3.333) {
+            if (Obj_tri_counter === 0) {
+                var Tx = ((Math.random() * 6.5) + 3.5);
+                var Ty = -((Math.random() * 6.5) + 3.5);
+                var Tz = 0;//((Math.random() * 10) + 1);
+                SCENE_Translation = [Tx, Ty, Tz];
+                SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(SCENE_Translation));
+
+                NORMALS_RESULTANT = IDENTITY_MATRIX;
+                SCENE_NORMALS_RESULTANT = IDENTITY_MATRIX;
+            }
+        }
+        if (Transforms >= 3.333 && Transforms < 6.666) {
+            if (Obj_tri_counter === 0) {
+                var Tx = ((Math.random() * 9.5) + 5.5);
+                var Ty = -((Math.random() * 9.5) + 5.5);
+                var Tz = ((Math.random() * 10) + 1);
+                SCENE_Translation = [Tx, Ty, Tz];
+                SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(SCENE_Translation));
+
+                var Sx = ((Math.random() * 2.4) + 0.1);
+                var Sy = ((Math.random() * 2.4) + 0.1);
+                var Sz = ((Math.random() * 10) + 1);
+                SCENE_Scaling = [Sx, Sy, Sz];
+                SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, scaleVector(SCENE_Scaling));
+
+                NORMALS_RESULTANT = IDENTITY_MATRIX;
+                SCENE_NORMALS_RESULTANT = IDENTITY_MATRIX;
+            }
+        }
+        if (Transforms >= 6.666 && Transforms < 10) {
+            if (Obj_tri_counter === 0) {
+                var Tx = ((Math.random() * 9.5) + 5.5);
+                var Ty = -((Math.random() * 9.5) + 5.5);
+                var Tz = ((Math.random() * 10) + 1);
+                SCENE_Translation = [Tx, Ty, Tz];
+                SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(SCENE_Translation));
+
+                var Rx = ((Math.random() * 50) + 1);
+                var Ry = ((Math.random() * 50) + 1);
+                var Rz = ((Math.random() * 50) + 1);
+                SCENE_Rotation = [Rx, Ry, Rz];
+                SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, rotateVector(SCENE_Rotation));
+
+                SCENE_NORMALS_RESULTANT = multiplyMatrices(NORMALS_RESULTANT, rotateVector(SCENE_Rotation));
+                SCENE_NORMALS_RESULTANT = multiplyMatrices(SCENE_NORMALS_RESULTANT, NEW_N_TRANSFROM);
+                SCENE_NORMALS_RESULTANT = normalizeMatrix(SCENE_NORMALS_RESULTANT);
+
+            }
         }
     }
-    if (Transforms >= 6.666 && Transforms < 10) {
-        if (Obj_tri_counter === 0) {
-            var Tx = ((Math.random() * 9.5) + 5.5);
-            var Ty = -((Math.random() * 9.5) + 5.5);
-            var Tz = ((Math.random() * 10) + 1);
-            SCENE_Translation = [Tx, Ty, Tz];
-            SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(SCENE_Translation));
-
-            var Rx = ((Math.random() * 50) + 1);
-            var Ry = ((Math.random() * 50) + 1);
-            var Rz = ((Math.random() * 50) + 1);
-            SCENE_Rotation = [Rx, Ry, Rz];
-            SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, rotateVector(SCENE_Rotation));
-
-            SCENE_NORMALS_RESULTANT = multiplyMatrices(NORMALS_RESULTANT, rotateVector(SCENE_Rotation));
-            SCENE_NORMALS_RESULTANT = multiplyMatrices(SCENE_NORMALS_RESULTANT, NEW_N_TRANSFROM);
-            SCENE_NORMALS_RESULTANT = normalizeMatrix(SCENE_NORMALS_RESULTANT);
-
-        }
+<<<<<<< HEAD
     }
     }
-    }
+=======
+>>>>>>> FETCH_HEAD
     // SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(SCENE_Translation));
     TransformedVector = multiplyMatrices(SCENE_RESULTANT_MATRIX, vertex);
     normalizeVectsByW(TransformedVector, 1);
 
-    
+
     Obj_tri_counter += 1;
     if (Obj_tri_counter === NoOfTrianglesInTheObject)
         Obj_tri_counter = 0;
@@ -810,7 +951,7 @@ function getDeTransformedVects(TransformedVector) {
     invRESULTANT_MATRIX = invert4DMat(RESULTANT_MATRIX);
     vertex = multiplyMatrices(invRESULTANT_MATRIX, TransformedVector);
     normalizeVectsByW(vertex, 2);
-    
+
     invNORMALS_RESULTANT = invert4DMat(NORMALS_RESULTANT);
 
     return vertex;
