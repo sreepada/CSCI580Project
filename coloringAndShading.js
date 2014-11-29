@@ -515,7 +515,8 @@ function shadowRay(rayPtoL, triangleVectors)
     var imgPlaneHeight = DEFAULT_TRANSFORMATION.sp[0];
     var imgPlaneWidth = DEFAULT_TRANSFORMATION.sp[1];
     var startI = 0;
-    while (startI < document.getElementById("shadowDepth").value) {
+    console.log(document.getElementById("shadowDepth").value, document.getElementById("shadowStep").value);
+    while (startI < parseFloat(document.getElementById("shadowDepth").value)) {
         FLAG = 0;
         var v = normalize1DMatrix(
                 crossProduct1D(
@@ -641,7 +642,8 @@ function shadowRay(rayPtoL, triangleVectors)
                 }
             }
         }
-        startI += document.getElementById("shadowStep").value;
+        startI = startI + parseFloat(document.getElementById("shadowStep").value);
+        console.log(startI);
     }
 }
 
