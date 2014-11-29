@@ -21,30 +21,40 @@ and open the template in the editor.
                 text-align: right;
             }
             #hoverOverCanvas {
-                top: 0;
+                right: 0;
                 position: absolute;
-                width: 100%;
+                width: 32%;
+                float: left;
+            }
+            #mainCanvas {
+                float: left;
+                border: 1px solid;
             }
         </style>
     </head>
     <body onresize="resizeCanvas()" onload="resizeCanvas()">
         <div id="container">
+            <canvas id="mainCanvas">
+                Your Browser does not support the HTML5 canvas tag.
+            </canvas>
             <div id="hoverOverCanvas">
                 <menu id="fileInputMenu">
                     Select leaf obj file:
-                    <input type="file" id="fileInput" name="leaf obj input"/>
+                    <input type="file" id="fileInput" name="leaf obj input"/> <br />
                     Select tree obj file:
-                    <input type="file" id="treeInput" />
-                    <input type="file" id="textureInput" />
-                    <input type="button" id="rendererAll" value="Render" onclick="cleanUp()" />
+                    <input type="file" id="treeInput" /> <br />
+                    Select texture ppm file:
+                    <input type="file" id="textureInput" /> <br />
+                    Select shadow volume depth:
+                    <input type="text" id="shadowDepth" value="10"/> <br />
+                    Select shadow volume step:
+                    <input type="text" id="shadowStep" value="0.1"/> <br />
+                    <input type="button" id="renderAll" value="Render" onclick="cleanUp()" />
                 </menu>
                 <canvas id="texture" style="border: 1px solid">
                     Your Browser does not support the HTML5 canvas tag.
                 </canvas>
             </div>
-            <canvas id="mainCanvas">
-                Your Browser does not support the HTML5 canvas tag.
-            </canvas>
         </div>
         <script src="arrayAndMatrixFunctions.js" ></script>
         <script src="coloringAndShading.js" ></script>
