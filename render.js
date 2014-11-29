@@ -297,7 +297,7 @@ function renderStep() {
             parseFloat(firstLineSplit[7])
         ];
         
-        var translateFirst = 1;
+        var translateFirst = 0;
         if(translateFirst === 1){
         triangleIterator = lineCount;
               var Vector0 = triangleVector[triangleIterator].slice(0, 3);
