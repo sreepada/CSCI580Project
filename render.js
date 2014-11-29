@@ -127,16 +127,17 @@ function cleanUp() {
         alert("Please upload a object file first!!");
         return;
     }
+    document.getElementById('renderAll').style.background = 'red';
     RESULTANT_MATRIX = [[1, 0, 0, 0],
         [0, 1, 0, 0],
         [0, 0, 1, 0],
         [0, 0, 0, 1]];
 //    updateTransformationValues();
-//    DEFAULT_TRANSFORMATION.sp[0] = CONTEXT_LIST[1][0].height;
-//    DEFAULT_TRANSFORMATION.sp[1] = CONTEXT_LIST[1][0].width;
     CONTEXT_LIST[1][1].clearRect(0, 0, DEFAULT_TRANSFORMATION.sp[0], DEFAULT_TRANSFORMATION.sp[1]);
     setup();
     renderStep();
+    document.getElementById('renderAll').style.background = 'green';
+    document.getElementById('renderAll').style.color = 'yellow';
 }
 
 function updateResultantMatrix() {
