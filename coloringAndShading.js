@@ -13,25 +13,25 @@ function getDotProduct(vector1, vector2, choice) {
 
 function checkIfInsideTriangle(point, vertex0, vertex1, vertex2) {
 //    point[2] = z;
-    var n = crossProduct1D(subtractVectors(vertex1, vertex0), subtractVectors(vertex2, vertex0));
-    var nA = crossProduct1D(subtractVectors(vertex2, vertex1), subtractVectors(point, vertex1));
-    var nB = crossProduct1D(subtractVectors(vertex0, vertex2), subtractVectors(point, vertex2));
-    var nC = crossProduct1D(subtractVectors(vertex1, vertex0), subtractVectors(point, vertex0));
-    var nMod = n[0] * n[0] + n[1] * n[1] + n[2] * n[2];
-    var alpha = Math.abs(getDotProduct(n, nA, "notNormal") / nMod);
-    var beta = Math.abs(getDotProduct(n, nB, "notNormal") / nMod);
-    var gamma = Math.abs(getDotProduct(n, nC, "notNormal") / nMod);
+//    var n = crossProduct1D(subtractVectors(vertex1, vertex0), subtractVectors(vertex2, vertex0));
+//    var nA = crossProduct1D(subtractVectors(vertex2, vertex1), subtractVectors(point, vertex1));
+//    var nB = crossProduct1D(subtractVectors(vertex0, vertex2), subtractVectors(point, vertex2));
+//    var nC = crossProduct1D(subtractVectors(vertex1, vertex0), subtractVectors(point, vertex0));
+//    var nMod = n[0] * n[0] + n[1] * n[1] + n[2] * n[2];
+//    var alpha = Math.abs(getDotProduct(n, nA, "notNormal") / nMod);
+//    var beta = Math.abs(getDotProduct(n, nB, "notNormal") / nMod);
+//    var gamma = Math.abs(getDotProduct(n, nC, "notNormal") / nMod);
 //    debugger;
-//    var areaOfTriangle = Math.abs(vertex0[0] * (vertex2[1] - vertex1[1]) + vertex1[0] * (vertex0[1] - vertex2[1]) + vertex2[0] * (vertex1[1] - vertex0[1]));
-//    var areaWithoutV0 = Math.abs(point[0] * (vertex2[1] - vertex1[1]) + vertex1[0] * (point[1] - vertex2[1]) + vertex2[0] * (vertex1[1] - point[1]));
-//    var areaWithoutV1 = Math.abs(vertex0[0] * (vertex2[1] - point[1]) + point[0] * (vertex0[1] - vertex2[1]) + vertex2[0] * (point[1] - vertex0[1]));
-//    var areaWithtouV2 = Math.abs(vertex0[0] * (point[1] - vertex1[1]) + vertex1[0] * (vertex0[1] - point[1]) + point[0] * (vertex1[1] - vertex0[1]));
-//    var w0 = areaWithoutV0 / areaOfTriangle;
-//    var w1 = areaWithoutV1 / areaOfTriangle;
-//    var w2 = areaWithtouV2 / areaOfTriangle;
-//    if (Math.round(w0 + w1 + w2) === 1) {
+    var areaOfTriangle = Math.abs(vertex0[0] * (vertex2[1] - vertex1[1]) + vertex1[0] * (vertex0[1] - vertex2[1]) + vertex2[0] * (vertex1[1] - vertex0[1]));
+    var areaWithoutV0 = Math.abs(point[0] * (vertex2[1] - vertex1[1]) + vertex1[0] * (point[1] - vertex2[1]) + vertex2[0] * (vertex1[1] - point[1]));
+    var areaWithoutV1 = Math.abs(vertex0[0] * (vertex2[1] - point[1]) + point[0] * (vertex0[1] - vertex2[1]) + vertex2[0] * (point[1] - vertex0[1]));
+    var areaWithtouV2 = Math.abs(vertex0[0] * (point[1] - vertex1[1]) + vertex1[0] * (vertex0[1] - point[1]) + point[0] * (vertex1[1] - vertex0[1]));
+    var w0 = areaWithoutV0 / areaOfTriangle;
+    var w1 = areaWithoutV1 / areaOfTriangle;
+    var w2 = areaWithtouV2 / areaOfTriangle;
+    if (Math.round(w0 + w1 + w2) === 1) {
 //        console.log(w0, w1, w2);
-    if (alpha >= 0 && alpha <= 1 && beta >= 0 && beta <= 1 && gamma >= 0 && gamma <= 1) {
+//    if (alpha >= 0 && alpha <= 1 && beta >= 0 && beta <= 1 && gamma >= 0 && gamma <= 1) {
 //    if (Math.round(alpha + beta + gamma) === 1) {
 //        debugger;
         return 1;
@@ -606,7 +606,7 @@ function shadowRay(rayPtoL, triangleVectors)
     var minPoint;
     var imgPlaneHeight = DEFAULT_TRANSFORMATION.sp[0];
     var imgPlaneWidth = DEFAULT_TRANSFORMATION.sp[1];
-    var startI = 0;
+    var startI = 2;
     console.log(document.getElementById("shadowDepth").value, document.getElementById("shadowStep").value);
     while (startI < parseFloat(document.getElementById("shadowDepth").value)) {
         FLAG = 0;
@@ -621,8 +621,8 @@ function shadowRay(rayPtoL, triangleVectors)
                 );
         for (var ic = 0; ic < imgPlaneHeight; ic++) {
             for (var jc = 0; jc < imgPlaneWidth; jc++) {
-                var xp = jc * 1 / imgPlaneWidth * 2 - 1;
-                var yp = ic * 1 / imgPlaneHeight * 2 - 1;
+                var xp = (jc) * 1 / imgPlaneWidth * 2 - 1;
+                var yp = (ic) * 1 / imgPlaneHeight * 2 - 1;
                 rayPtoL[0] = subtractVectors(
                         screen1,
                         subtractVectors(
@@ -726,17 +726,18 @@ function shadowRay(rayPtoL, triangleVectors)
                     jc = Math.round((-1 * xp * startI + 1) * imgPlaneWidth / 2);
                     ic = Math.round((-1 * yp * startI + 1) * imgPlaneHeight / 2);
                     ic = Math.min(
-                            Math.max(0, Math.abs(ic)),
+                            Math.max(0, Math.abs(ic) - 256),
                             DEFAULT_TRANSFORMATION.sp[0] - 1);
                     jc = Math.min(
-                            Math.max(0, Math.abs(jc)),
+                            Math.max(0, Math.abs(jc) - 256),
                             DEFAULT_TRANSFORMATION.sp[1] - 1);
 //                    console.log(ic, jc);
-                    CONTEXT_LIST[1][3][ic][jc][0] = CONTEXT_LIST[1][3][ic][jc][0] / 1.2;
-                    CONTEXT_LIST[1][3][ic][jc][1] = CONTEXT_LIST[1][3][ic][jc][1] / 1.2;
-                    CONTEXT_LIST[1][3][ic][jc][2] = CONTEXT_LIST[1][3][ic][jc][2] / 1.2;
+                    if (ic !== (DEFAULT_TRANSFORMATION.sp[0] - 1) || jc !== (DEFAULT_TRANSFORMATION.sp[1] - 1)) {
+                        CONTEXT_LIST[1][3][ic][jc][0] = CONTEXT_LIST[1][3][ic][jc][0] / 1.2;
+                        CONTEXT_LIST[1][3][ic][jc][1] = CONTEXT_LIST[1][3][ic][jc][1] / 1.2;
+                        CONTEXT_LIST[1][3][ic][jc][2] = CONTEXT_LIST[1][3][ic][jc][2] / 1.2;
 //                        CONTEXT_LIST[1][3][ic][jc][3] = "shadow";
-//                    }
+                    }
 //                    }
                     ic = tempi;
                     jc = tempj;
