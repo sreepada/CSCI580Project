@@ -768,8 +768,8 @@ function getTransformedVects(vertex, instance) {
 
     if (instance === 0) {
 //     debugger
-        var Tx = -70;
-        var Ty = 60;
+        var Tx = -15;
+        var Ty = 35;
         var Tz = 0;//((Math.random() * 10) + 1);
         SCENE_Translation = [Tx, Ty, Tz];
         SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(SCENE_Translation));
@@ -782,53 +782,140 @@ function getTransformedVects(vertex, instance) {
     	switch(instance){
     		case 1:
     		    console.log(instance);
-    			SCENE_Translation = [15,-15,3];
-        	    SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(SCENE_Translation));
+    			SCENE_Translation = [-15,15,3];
+    			SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX,IDENTITY_MATRIX);
+        	    SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, translateVector(SCENE_Translation));
   			
   				NORMALS_RESULTANT = IDENTITY_MATRIX;
 	            SCENE_NORMALS_RESULTANT = IDENTITY_MATRIX;
     		break;
     		case 2:
   		    	console.log(instance);
-    	        SCENE_Scaling = [1.5,1.5,0];
-        	    SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, scaleVector(SCENE_Scaling));
-
-    			SCENE_Translation = [0,5,-2];
+    	        SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX,IDENTITY_MATRIX);
+        		
+        		SCENE_Translation = [40,-10,-2];
 	            SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, translateVector(SCENE_Translation));
-            
+        		
+        		SCENE_Scaling = [1.5,1.5,0];
+        	    SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, scaleVector(SCENE_Scaling));
+        	    
             	NORMALS_RESULTANT = IDENTITY_MATRIX;
             	SCENE_NORMALS_RESULTANT = IDENTITY_MATRIX;
     		break;
     		case 3:
     			console.log(instance);
-    			SCENE_Rotation = [20,0,0];
-	            SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, rotateVector(SCENE_Rotation));
+    			SCENE_Rotation = [25,0,0];
+    			SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX,IDENTITY_MATRIX);
+	            SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, rotateVector(SCENE_Rotation));
     			
     			SCENE_Translation = [10,-20,1];
 	            SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, translateVector(SCENE_Translation));
-
 
     	        SCENE_NORMALS_RESULTANT = multiplyMatrices(NORMALS_RESULTANT, rotateVector(SCENE_Rotation));
         	    SCENE_NORMALS_RESULTANT = multiplyMatrices(SCENE_NORMALS_RESULTANT, NEW_N_TRANSFROM);
             	SCENE_NORMALS_RESULTANT = normalizeMatrix(SCENE_NORMALS_RESULTANT);
     		break;
     		case 4:
-    		
+    			console.log(instance);
+    			SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX,IDENTITY_MATRIX);
+    			
+    			SCENE_Translation = [40,0,5];
+	            SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, translateVector(SCENE_Translation));
+
+    			SCENE_Rotation = [0,25,30];
+	            SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, rotateVector(SCENE_Rotation));
+    			
+    	        SCENE_NORMALS_RESULTANT = multiplyMatrices(NORMALS_RESULTANT, rotateVector(SCENE_Rotation));
+        	    SCENE_NORMALS_RESULTANT = multiplyMatrices(SCENE_NORMALS_RESULTANT, NEW_N_TRANSFROM);
+            	SCENE_NORMALS_RESULTANT = normalizeMatrix(SCENE_NORMALS_RESULTANT);
     		break;
     		case 5:
+    			console.log(instance);
+    			SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX,IDENTITY_MATRIX);
+    			
+    			SCENE_Translation = [40,-60,-7];
+	            SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, translateVector(SCENE_Translation));
+
+    			SCENE_Rotation = [0,25,30];
+	            SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, rotateVector(SCENE_Rotation));
+
+    			SCENE_Scaling = [1.5,1.5,0];
+        	    SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, scaleVector(SCENE_Scaling));
+    			
+    	        SCENE_NORMALS_RESULTANT = multiplyMatrices(NORMALS_RESULTANT, rotateVector(SCENE_Rotation));
+        	    SCENE_NORMALS_RESULTANT = multiplyMatrices(SCENE_NORMALS_RESULTANT, NEW_N_TRANSFROM);
+            	SCENE_NORMALS_RESULTANT = normalizeMatrix(SCENE_NORMALS_RESULTANT);    		
     		
     		break;
     		case 6:
+    			console.log(instance);
+    			SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX,IDENTITY_MATRIX);
+    			
+    			SCENE_Translation = [40,-60,-6];
+	            SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, translateVector(SCENE_Translation));
+
+    			SCENE_Rotation = [0,125,30];
+	            SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, rotateVector(SCENE_Rotation));
+
+    			SCENE_Scaling = [2,1.5,0];
+        	    SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, scaleVector(SCENE_Scaling));
+    			
+    	        SCENE_NORMALS_RESULTANT = multiplyMatrices(NORMALS_RESULTANT, rotateVector(SCENE_Rotation));
+        	    SCENE_NORMALS_RESULTANT = multiplyMatrices(SCENE_NORMALS_RESULTANT, NEW_N_TRANSFROM);
+            	SCENE_NORMALS_RESULTANT = normalizeMatrix(SCENE_NORMALS_RESULTANT);
     		
     		break;
     		case 7:
-    		
+     			console.log(instance);
+    			SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX,IDENTITY_MATRIX);
+    			
+    			SCENE_Translation = [40,-60,12];
+	            SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, translateVector(SCENE_Translation));
+
+    			SCENE_Rotation = [0,0,60];
+	            SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, rotateVector(SCENE_Rotation));
+
+    			SCENE_Scaling = [1.1,1.1,0];
+        	    SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, scaleVector(SCENE_Scaling));
+    			
+    	        SCENE_NORMALS_RESULTANT = multiplyMatrices(NORMALS_RESULTANT, rotateVector(SCENE_Rotation));
+        	    SCENE_NORMALS_RESULTANT = multiplyMatrices(SCENE_NORMALS_RESULTANT, NEW_N_TRANSFROM);
+            	SCENE_NORMALS_RESULTANT = normalizeMatrix(SCENE_NORMALS_RESULTANT);
+            	   		
     		break;
     		case 8:
-    		
+     			console.log(instance);
+    			SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX,IDENTITY_MATRIX);
+    			
+    			SCENE_Translation = [20,-70,-1];
+	            SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, translateVector(SCENE_Translation));
+
+    			SCENE_Rotation = [-25,0,0];
+	            SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, rotateVector(SCENE_Rotation));
+
+    			SCENE_Scaling = [1.1,1.1,0];
+        	    SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, scaleVector(SCENE_Scaling));
+    			
+    	        SCENE_NORMALS_RESULTANT = multiplyMatrices(NORMALS_RESULTANT, rotateVector(SCENE_Rotation));
+        	    SCENE_NORMALS_RESULTANT = multiplyMatrices(SCENE_NORMALS_RESULTANT, NEW_N_TRANSFROM);
+            	SCENE_NORMALS_RESULTANT = normalizeMatrix(SCENE_NORMALS_RESULTANT);    		
     		break;
     		case 9:
-    		
+     			console.log(instance);
+    			SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX,IDENTITY_MATRIX);
+    			
+    			SCENE_Translation = [25,-10,0];
+	            SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, translateVector(SCENE_Translation));
+
+    			SCENE_Rotation = [0,0,20];
+	            SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, rotateVector(SCENE_Rotation));
+
+    			SCENE_Scaling = [1.1,1.1,0];
+        	    SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, scaleVector(SCENE_Scaling));
+    			
+    	        SCENE_NORMALS_RESULTANT = multiplyMatrices(NORMALS_RESULTANT, rotateVector(SCENE_Rotation));
+        	    SCENE_NORMALS_RESULTANT = multiplyMatrices(SCENE_NORMALS_RESULTANT, NEW_N_TRANSFROM);
+            	SCENE_NORMALS_RESULTANT = normalizeMatrix(SCENE_NORMALS_RESULTANT);
     		break;
     		case 10:
     		
@@ -859,7 +946,8 @@ function getTransformedVects(vertex, instance) {
             var Ty = -((Math.random() * 6.5) + 3.5);
             var Tz = 0;//((Math.random() * 10) + 1);
             SCENE_Translation = [Tx, Ty, Tz];
-            SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(SCENE_Translation));
+            SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX,IDENTITY_MATRIX);
+            SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, translateVector(SCENE_Translation));
   			
   			NORMALS_RESULTANT = IDENTITY_MATRIX;
             SCENE_NORMALS_RESULTANT = IDENTITY_MATRIX;
@@ -871,7 +959,8 @@ function getTransformedVects(vertex, instance) {
                 var Ty = -((Math.random() * 9.5) + 5.5);
                 var Tz = ((Math.random() * 10) + 1);
                 SCENE_Translation = [Tx, Ty, Tz];
-                SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(SCENE_Translation));
+                SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX,IDENTITY_MATRIX);
+                SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, translateVector(SCENE_Translation));
 
                 var Sx = ((Math.random() * 2.4) + 0.1);
                 var Sy = ((Math.random() * 2.4) + 0.1);
@@ -889,7 +978,8 @@ function getTransformedVects(vertex, instance) {
                 var Ty = -((Math.random() * 9.5) + 5.5);
                 var Tz = ((Math.random() * 10) + 1);
                 SCENE_Translation = [Tx, Ty, Tz];
-                SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX, translateVector(SCENE_Translation));
+                SCENE_RESULTANT_MATRIX = multiplyMatrices(RESULTANT_MATRIX,IDENTITY_MATRIX);
+                SCENE_RESULTANT_MATRIX = multiplyMatrices(SCENE_RESULTANT_MATRIX, translateVector(SCENE_Translation));
 
                 var Rx = ((Math.random() * 50) + 1);
                 var Ry = ((Math.random() * 50) + 1);
