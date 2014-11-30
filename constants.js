@@ -46,6 +46,7 @@ var SPEC_POWER = 32;
 // ];
 // var LIGHT = [[[0.7071, 0.0, 20], [0.2, 0.7, 0.3]]];
 var LIGHT = [[[-1.5071, -0.15, 10], [0.2, 0.7, 0.3]]];
+var TREE_LIGHT = [[[-10.5071, 10.15, -10], [0.6, 0.24, 0.25]]];
 //var LIGHT = [[[0.1, 0.2, 30], [0.2, 0.7, 0.3]]];
 
 var SCENE_Translation = [0,0,0];
@@ -268,14 +269,14 @@ TREE_CAMERA_TRANSFORMATION = {
         ]
     },
     "translation": [
-        0,
+        120,
         0,
         0
     ],
     "scaling": [
-        1,
-        1,
-        1
+        8,
+        8,
+        8
     ],
     "rotation": [
         0,

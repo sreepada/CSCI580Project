@@ -13,25 +13,25 @@ function getDotProduct(vector1, vector2, choice) {
 
 function checkIfInsideTriangle(point, vertex0, vertex1, vertex2) {
 //    point[2] = z;
-    var n = crossProduct1D(subtractVectors(vertex1, vertex0), subtractVectors(vertex2, vertex0));
-    var nA = crossProduct1D(subtractVectors(vertex2, vertex1), subtractVectors(point, vertex1));
-    var nB = crossProduct1D(subtractVectors(vertex0, vertex2), subtractVectors(point, vertex2));
-    var nC = crossProduct1D(subtractVectors(vertex1, vertex0), subtractVectors(point, vertex0));
-    var nMod = n[0] * n[0] + n[1] * n[1] + n[2] * n[2];
-    var alpha = Math.abs(getDotProduct(n, nA, "notNormal") / nMod);
-    var beta = Math.abs(getDotProduct(n, nB, "notNormal") / nMod);
-    var gamma = Math.abs(getDotProduct(n, nC, "notNormal") / nMod);
+//    var n = crossProduct1D(subtractVectors(vertex1, vertex0), subtractVectors(vertex2, vertex0));
+//    var nA = crossProduct1D(subtractVectors(vertex2, vertex1), subtractVectors(point, vertex1));
+//    var nB = crossProduct1D(subtractVectors(vertex0, vertex2), subtractVectors(point, vertex2));
+//    var nC = crossProduct1D(subtractVectors(vertex1, vertex0), subtractVectors(point, vertex0));
+//    var nMod = n[0] * n[0] + n[1] * n[1] + n[2] * n[2];
+//    var alpha = Math.abs(getDotProduct(n, nA, "notNormal") / nMod);
+//    var beta = Math.abs(getDotProduct(n, nB, "notNormal") / nMod);
+//    var gamma = Math.abs(getDotProduct(n, nC, "notNormal") / nMod);
 //    debugger;
-//    var areaOfTriangle = Math.abs(vertex0[0] * (vertex2[1] - vertex1[1]) + vertex1[0] * (vertex0[1] - vertex2[1]) + vertex2[0] * (vertex1[1] - vertex0[1]));
-//    var areaWithoutV0 = Math.abs(point[0] * (vertex2[1] - vertex1[1]) + vertex1[0] * (point[1] - vertex2[1]) + vertex2[0] * (vertex1[1] - point[1]));
-//    var areaWithoutV1 = Math.abs(vertex0[0] * (vertex2[1] - point[1]) + point[0] * (vertex0[1] - vertex2[1]) + vertex2[0] * (point[1] - vertex0[1]));
-//    var areaWithtouV2 = Math.abs(vertex0[0] * (point[1] - vertex1[1]) + vertex1[0] * (vertex0[1] - point[1]) + point[0] * (vertex1[1] - vertex0[1]));
-//    var w0 = areaWithoutV0 / areaOfTriangle;
-//    var w1 = areaWithoutV1 / areaOfTriangle;
-//    var w2 = areaWithtouV2 / areaOfTriangle;
-//    if (Math.round(w0 + w1 + w2) === 1) {
+    var areaOfTriangle = Math.abs(vertex0[0] * (vertex2[1] - vertex1[1]) + vertex1[0] * (vertex0[1] - vertex2[1]) + vertex2[0] * (vertex1[1] - vertex0[1]));
+    var areaWithoutV0 = Math.abs(point[0] * (vertex2[1] - vertex1[1]) + vertex1[0] * (point[1] - vertex2[1]) + vertex2[0] * (vertex1[1] - point[1]));
+    var areaWithoutV1 = Math.abs(vertex0[0] * (vertex2[1] - point[1]) + point[0] * (vertex0[1] - vertex2[1]) + vertex2[0] * (point[1] - vertex0[1]));
+    var areaWithtouV2 = Math.abs(vertex0[0] * (point[1] - vertex1[1]) + vertex1[0] * (vertex0[1] - point[1]) + point[0] * (vertex1[1] - vertex0[1]));
+    var w0 = areaWithoutV0 / areaOfTriangle;
+    var w1 = areaWithoutV1 / areaOfTriangle;
+    var w2 = areaWithtouV2 / areaOfTriangle;
+    if (Math.round(w0 + w1 + w2) === 1) {
 //        console.log(w0, w1, w2);
-    if (alpha >= 0 && alpha <= 1 && beta >= 0 && beta <= 1 && gamma >= 0 && gamma <= 1) {
+//    if (alpha >= 0 && alpha <= 1 && beta >= 0 && beta <= 1 && gamma >= 0 && gamma <= 1) {
 //    if (Math.round(alpha + beta + gamma) === 1) {
 //        debugger;
         return 1;
@@ -195,8 +195,8 @@ function getTextureColorCoeff(point, mappingType, vertex0, vertex1, vertex2, isI
         var height = DEFAULT_TRANSFORMATION.sp[1];
     }
     else {
-        var width = parseInt(TEXTURE_FILE_DATA[1]);
-        var height = parseInt(TEXTURE_FILE_DATA[2]);
+        var width = parseInt(TEXTURE_FILE_DATA[1] - 1);
+        var height = parseInt(TEXTURE_FILE_DATA[2] - 1);
     }
     vertex0[1] = warp([vertex0[1][0], vertex0[1][1]], vertex0[2]);
     vertex1[1] = warp([vertex1[1][0], vertex1[1][1]], vertex1[2]);
@@ -208,10 +208,10 @@ function getTextureColorCoeff(point, mappingType, vertex0, vertex1, vertex2, isI
     pX = pX < 0 ? pX * -1 : pX;
     pY = pY < 0 ? pY * -1 : pY;
 
-    var floorBigU = Math.min(width, Math.floor(pY));
-    var floorBigV = Math.min(height, Math.floor(pX));
-    var ceilBigU = Math.min(width, Math.ceil(pY));
-    var ceilBigV = Math.min(height, Math.ceil(pX));
+    var floorBigU = Math.min(width - 1, Math.floor(pY));
+    var floorBigV = Math.min(height - 1, Math.floor(pX));
+    var ceilBigU = Math.min(width - 1, Math.ceil(pY));
+    var ceilBigV = Math.min(height - 1, Math.ceil(pX));
     var t = pY - floorBigU;
     var s = pX - floorBigV;
     var coeff = new Array(3);
@@ -223,6 +223,7 @@ function getTextureColorCoeff(point, mappingType, vertex0, vertex1, vertex2, isI
                 pX / (DEFAULT_TRANSFORMATION.sp[1] - 1));
     }
     else {
+//        console.log(pY, pX, width, height);
         coeff[0] = (s * t * TEXTURE_FILE_DATA[4][ceilBigV][ceilBigU].r) +
                 ((1 - s) * t * TEXTURE_FILE_DATA[4][floorBigV][ceilBigU].r) +
                 (s * (1 - t) * TEXTURE_FILE_DATA[4][ceilBigV][floorBigU].r) +
@@ -476,9 +477,9 @@ function colorMeATriangle(aaIterator, Vector0, Vector1, Vector2, normal0, normal
                             SHADING_TYPE,
                             mappingType);
 //                    debugger
-                    CONTEXT_LIST[1][3 + aaIterator][ic][jc][0] = colors[0];
-                    CONTEXT_LIST[1][3 + aaIterator][ic][jc][1] = colors[1];
-                    CONTEXT_LIST[1][3 + aaIterator][ic][jc][2] = colors[2];
+                    CONTEXT_LIST[1][3 + aaIterator][ic][jc][0] = colors[0] / 2;
+                    CONTEXT_LIST[1][3 + aaIterator][ic][jc][1] = colors[1] / 2;
+                    CONTEXT_LIST[1][3 + aaIterator][ic][jc][2] = colors[2] / 2;
                     CONTEXT_LIST[1][3 + aaIterator][ic][jc][3] = z;
                     //console.log(colors);
                 }
@@ -606,7 +607,7 @@ function shadowRay(rayPtoL, triangleVectors)
     var minPoint;
     var imgPlaneHeight = DEFAULT_TRANSFORMATION.sp[0];
     var imgPlaneWidth = DEFAULT_TRANSFORMATION.sp[1];
-    var startI = 0;
+    var startI = 2;
     console.log(document.getElementById("shadowDepth").value, document.getElementById("shadowStep").value);
     while (startI < parseFloat(document.getElementById("shadowDepth").value)) {
         FLAG = 0;
