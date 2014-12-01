@@ -727,10 +727,10 @@ function shadowRay(rayPtoL, triangleVectors)
                     jc = Math.round((-1 * xp * startI + 1) * imgPlaneWidth / 2);
                     ic = Math.round((-1 * yp * startI + 1) * imgPlaneHeight / 2);
                     ic = Math.min(
-                            Math.max(0, Math.abs(ic)),
+                            Math.max(0, Math.abs(ic) - 256),
                             DEFAULT_TRANSFORMATION.sp[0] - 1);
                     jc = Math.min(
-                            Math.max(0, Math.abs(jc)),
+                            Math.max(0, Math.abs(jc) - 256),
                             DEFAULT_TRANSFORMATION.sp[1] - 1);
 //                    console.log(ic, jc);
                     CONTEXT_LIST[1][3][ic][jc][0] = CONTEXT_LIST[1][3][ic][jc][0] / 1.2;
