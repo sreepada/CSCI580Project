@@ -607,7 +607,7 @@ function shadowRay(rayPtoL, triangleVectors)
     var minPoint;
     var imgPlaneHeight = DEFAULT_TRANSFORMATION.sp[0];
     var imgPlaneWidth = DEFAULT_TRANSFORMATION.sp[1];
-    var startI = 2;
+    var startI = 1.5;
     console.log(document.getElementById("shadowDepth").value, document.getElementById("shadowStep").value);
     while (startI < parseFloat(document.getElementById("shadowDepth").value)) {
         FLAG = 0;

@@ -15,6 +15,7 @@ and open the template in the editor.
                 height: 100%;
                 margin: 0px;
                 overflow: hidden;
+                font-family: Arial;
             }
             #container {
                 position: relative;
@@ -30,6 +31,10 @@ and open the template in the editor.
                 float: left;
                 border: 1px solid;
             }
+            #renderAll {
+                width: 100px;
+                height: 60px;
+            }
         </style>
     </head>
     <body onresize="resizeCanvas()" onload="resizeCanvas()">
@@ -39,21 +44,34 @@ and open the template in the editor.
             </canvas>
             <div id="hoverOverCanvas">
                 <menu id="fileInputMenu">
-                    Select leaf obj file:
-                    <input type="file" id="fileInput" name="leaf obj input"/> <br />
-                    Select tree obj file:
-                    <input type="file" id="treeInput" /> <br />
-                    Select texture ppm file:
-                    <input type="file" id="textureInput" /> <br />
-                    Select shadow volume depth:
-                    <input type="text" id="shadowDepth" value="10"/> <br />
-                    Select shadow volume step:
-                    <input type="text" id="shadowStep" value="0.1"/> <br />
+                    <fieldset>
+                        <legend>Input Options:</legend>
+                        leaf obj file:
+                        <input type="file" id="fileInput" name="leaf obj input"/> <br />
+                        tree obj file:
+                        <input type="file" id="treeInput" /> <br />
+                        texture ppm file:
+                        <input type="file" id="textureInput" /> <br />
+                        <canvas id="texture" style="border: 1px solid">
+                            Your Browser does not support the HTML5 canvas tag.
+                        </canvas>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Volume Shadows:</legend>
+                        depth:
+                        <input type="text" id="shadowDepth" value="10"/> <br />
+                        step:
+                        <input type="text" id="shadowStep" value="0.1"/> <br />
+                    </fieldset>
+                    <fieldset>
+                        <legend>Render Options:</legend>
+                        <div style="text-align: center;">
+                        <input type="checkbox" name="renderOptions" value="Objects" id="objectCheck"/>Objects
+                        <input type="checkbox" name="renderOptions" value="Shadows" id="shadowCheck"/>Shadows
+                        </div>
+                    </fieldset>
                     <input type="button" id="renderAll" value="Render" onclick="cleanUp()" />
                 </menu>
-                <canvas id="texture" style="border: 1px solid">
-                    Your Browser does not support the HTML5 canvas tag.
-                </canvas>
             </div>
         </div>
         <script src="arrayAndMatrixFunctions.js" ></script>
@@ -64,11 +82,11 @@ and open the template in the editor.
         <script src="noise.js"></script>
         <script src="constants.js"></script>
         <script>
-            function resizeCanvas() {
-                var mainCanvas = document.getElementById("mainCanvas");
-                console.log(document.body.offsetWidth, document.body.offsetHeight);
-                mainCanvas.width = document.body.offsetWidth;
-                mainCanvas.height = document.body.offsetHeight;
+                        function resizeCanvas() {
+                            var mainCanvas = document.getElementById("mainCanvas");
+                            console.log(document.body.offsetWidth, document.body.offsetHeight);
+                            mainCanvas.width = document.body.offsetWidth;
+                            mainCanvas.height = document.body.offsetHeight;
 //                if (document.body.offsetWidth < document.body.offsetHeight) {
 //                    DEFAULT_TRANSFORMATION.sp[0] = document.body.offsetWidth;
 //                    DEFAULT_TRANSFORMATION.sp[1] = document.body.offsetWidth;
@@ -77,10 +95,10 @@ and open the template in the editor.
 //                    DEFAULT_TRANSFORMATION.sp[0] = document.body.offsetHeight;
 //                    DEFAULT_TRANSFORMATION.sp[1] = document.body.offsetHeight;
 //                }
-            }
-            document.getElementById('fileInput').addEventListener('change', readInputFile, false);
-            document.getElementById('treeInput').addEventListener('change', readTreeInputFile, false);
-            document.getElementById('textureInput').addEventListener('change', readTextureFile, false);
+                        }
+                        document.getElementById('fileInput').addEventListener('change', readInputFile, false);
+                        document.getElementById('treeInput').addEventListener('change', readTreeInputFile, false);
+                        document.getElementById('textureInput').addEventListener('change', readTextureFile, false);
         </script>
     </body>
 </html>

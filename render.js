@@ -127,6 +127,10 @@ function cleanUp() {
         alert("Please upload a object file first!!");
         return;
     }
+    if (!document.getElementById("objectCheck").checked && !document.getElementById("shadowCheck").checked) {
+        alert("Please select what you want to render in the checkbox!!");
+        return;
+    }
     document.getElementById('renderAll').style.background = 'red';
     RESULTANT_MATRIX = [[1, 0, 0, 0],
         [0, 1, 0, 0],
@@ -417,7 +421,11 @@ function renderStep() {
 
     var rayPtoL = [[0, 0, 0], [0, 0, 0]];
 
-//    rayTraceTriangle(triangleVector, camN, camPos, camU, camV, rayEtoO, rayPtoL);
-     shadowRay(rayPtoL, triangleVector);
+    if (document.getElementById("objectCheck").checked) {
+        rayTraceTriangle(triangleVector, camN, camPos, camU, camV, rayEtoO, rayPtoL);
+    }
+    if (document.getElementById("shadowCheck").checked) {
+        shadowRay(rayPtoL, triangleVector);
+    }
     writeToCanvas();
 }
