@@ -1,11 +1,25 @@
-CSCI580Project
-==============
+#CSCI 580 Project 
+#Team Uncanny Valley
+=======================
+Implemented crepescular rays using the concept of volumetric shadows
 
-code for CSCI 580 project
+## Rendering technique
+* Ray Tracing
 
-reference experiment: http://oos.moxiecode.com/js_webgl/autumn/
+## Browser Recommendation
+* Opera
+* Chrome
 
+##	Team Members and contributions:
 
-js fiddle of raytracing example 1: http://jsfiddle.net/vz5aZ/2/
+The project was a contribution and efforts of all
+the team members with a fun learning experience.
 
-###Someone's ray tracing code: https://github.com/marczych/RayTracer
+* Sanskriti Sanskriti 
+  * Ray tracing
+* Saurabh Mistry
+  * Scene creation
+* Sreepada Rao Singeetham
+  * Volumetric Shadows
+* Tushar Tiwari
+  * Website and reporting
