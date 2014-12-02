@@ -1,4 +1,5 @@
 /* 
+ * CSCI 580 Project Uncanny Valley
  * This is an implementation of Perlin's noise as shown on 
  * http://freespace.virgin.net/hugo.elias/models/m_perlin.htm
  */

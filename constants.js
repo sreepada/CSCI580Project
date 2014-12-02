@@ -1,8 +1,8 @@
 /* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * CSCI 580 Project Uncanny Valley
+ * This file contains constants which will be used by other functions
  */
+
 var FLAG = 0;
 var CONTENTS;
 var TEXTURE_BUFFER, CANVAS_BUFFER;
@@ -39,12 +39,7 @@ var AMBIENT_COEFF = [0.7, 0.7, 0.7];
 var SPECULAR_COEFF = [0.3, 0.3, 0.3];
 var DIFFUSE_COEFF = [0.4, 0.4, 0.4];
 var SPEC_POWER = 32;
-//-1 0.333 -1
-// var LIGHT = [[[-0.7071, -0.7071, 0], [0.9, 0.2, 0.9]],
-// [[0, -0.7071, 0.7071], [0.9, 0.2, 0.3]],
-// [[0.7071, 0.0, 20], [0.2, 0.7, 0.3]]
-// ];
- var LIGHT = [[[0.7071, 0.0, 20], [0.2, 0.7, 0.3]]];
+ var LIGHT = [[[-1.7071, 0, 20], [0.2, 0.7, 0.3]]];
 //var LIGHT = [[[-1.5071, -0.15, 10], [0.2, 0.7, 0.3]]];
 var TREE_LIGHT = [[[-10.5071, 10.15, -10], [0.6, 0.24, 0.25]]];
 //var LIGHT = [[[0.1, 0.2, 30], [0.2, 0.7, 0.3]]];
@@ -65,61 +60,8 @@ var READ_FILE_LINES = "";
 var TREE_FILE_LINES = "";
 var TEXTURE_FILE_DATA = "";
 
-//var AAKERNEL_SIZE = 6;
-//var AA_FILTER = [//[0, 0, 1]];
-//    [-0.52, 0.38, 0.128],
-//    [0.41, 0.56, 0.119],
-//    [0.27, 0.08, 0.294],
-//    [-0.17, -0.29, 0.249],
-//    [0.58, -0.55, 0.104],
-//    [-0.31, -0.71, 0.106],
-//    [0, 0, 1]
-//];
-
 var AAKERNEL_SIZE = 1;
 var AA_FILTER = [[0, 0, 1]];
-
-
-//var DEFAULT_CAMERA_TRANSFORMATION = {
-//    "sp": [
-//        256,
-//        256
-//    ],
-////     default camera postions
-//    "FOV": 50,
-//    "camera": {
-//        "position": [
-//            0,
-//            15,
-//            18
-//        ],
-//        "lookAt": [
-//            0,
-//            0,
-//            0
-//        ],
-//        "worldUp": [
-//            0,
-//            1,
-//            0
-//        ]
-//    },
-//    "translation": [
-//        0,
-//        0,
-//        0
-//    ],
-//    "scaling": [
-//        2,
-//        2,
-//        2
-//    ],
-//    "rotation": [
-//        0,
-//        0,
-//        0
-//    ]
-//};
 
 DEFAULT_CAMERA_TRANSFORMATION = {
     "sp": [
@@ -269,8 +211,8 @@ TREE_CAMERA_TRANSFORMATION = {
         ]
     },
     "translation": [
-        120,
-        0,
+        180,
+        -10,
         0
     ],
     "scaling": [
@@ -285,5 +227,4 @@ TREE_CAMERA_TRANSFORMATION = {
     ]
 };
 
-
-var DEFAULT_TRANSFORMATION = DEFAULT_CAMERA_TRANSFORMATION;//HW4_CAMERA_TRANSFORMATION;
+var DEFAULT_TRANSFORMATION = DEFAULT_CAMERA_TRANSFORMATION;

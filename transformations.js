@@ -1,8 +1,8 @@
 /* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * CSCI 580 Project Uncanny Valley
+ * This file contains world space to screen space transformation functions.
  */
+
 function spTransfrom(spValues, FOV) {
     var Xsp = [[spValues[0] / 2, 0, 0, spValues[0] / 2],
         [0, spValues[1] / -2, 0, spValues[1] / 2],
@@ -131,5 +131,4 @@ function applyScaling(Vector0) {
         [1]
     ])
     return [Vector0[0][0], Vector0[1][0], Vector0[2][0]];
-
 }

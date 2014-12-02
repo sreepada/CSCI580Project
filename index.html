@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
+/* 
+ * CSCI 580 Project Uncanny Valley
+ * This main HTML file
+ */
 -->
 <html>
     <head>
@@ -82,23 +83,15 @@ and open the template in the editor.
         <script src="noise.js"></script>
         <script src="constants.js"></script>
         <script>
-                        function resizeCanvas() {
-                            var mainCanvas = document.getElementById("mainCanvas");
-                            console.log(document.body.offsetWidth, document.body.offsetHeight);
-                            mainCanvas.width = document.body.offsetWidth;
-                            mainCanvas.height = document.body.offsetHeight;
-//                if (document.body.offsetWidth < document.body.offsetHeight) {
-//                    DEFAULT_TRANSFORMATION.sp[0] = document.body.offsetWidth;
-//                    DEFAULT_TRANSFORMATION.sp[1] = document.body.offsetWidth;
-//                }
-//                else {
-//                    DEFAULT_TRANSFORMATION.sp[0] = document.body.offsetHeight;
-//                    DEFAULT_TRANSFORMATION.sp[1] = document.body.offsetHeight;
-//                }
-                        }
-                        document.getElementById('fileInput').addEventListener('change', readInputFile, false);
-                        document.getElementById('treeInput').addEventListener('change', readTreeInputFile, false);
-                        document.getElementById('textureInput').addEventListener('change', readTextureFile, false);
+            function resizeCanvas() {
+                var mainCanvas = document.getElementById("mainCanvas");
+                console.log(document.body.offsetWidth, document.body.offsetHeight);
+                mainCanvas.width = document.body.offsetWidth;
+                mainCanvas.height = document.body.offsetHeight;
+            }
+            document.getElementById('fileInput').addEventListener('change', readInputFile, false);
+            document.getElementById('treeInput').addEventListener('change', readTreeInputFile, false);
+            document.getElementById('textureInput').addEventListener('change', readTextureFile, false);
         </script>
     </body>
 </html>
