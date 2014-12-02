@@ -1,6 +1,5 @@
 #CSCI 580 Project 
 #Team Uncanny Valley
-=======================
 Implemented crepescular rays using the concept of volumetric shadows
 
 ## Rendering technique
