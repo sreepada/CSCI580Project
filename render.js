@@ -1,8 +1,9 @@
 /* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * CSCI 580 Project Uncanny Valley
+ * This file contains canvas buffer setup, flush
+ * and scene rendering functions.
  */
+
 function setup() {
     var contextIterator = 1;
     for (var aaIterator = 0; aaIterator < AAKERNEL_SIZE; aaIterator++) {
@@ -27,9 +28,22 @@ function writeToCanvas() {
             var b = 0;
             for (var aaIterator = 0;
                     aaIterator < AAKERNEL_SIZE; aaIterator++) {
-                r = r + (CONTEXT_LIST[contextIterator][3 + aaIterator][arrayPointer][arrayPointer2][0] * AA_FILTER[aaIterator][2]);
-                g = g + (CONTEXT_LIST[contextIterator][3 + aaIterator][arrayPointer][arrayPointer2][1] * AA_FILTER[aaIterator][2]);
-                b = b + (CONTEXT_LIST[contextIterator][3 + aaIterator][arrayPointer][arrayPointer2][2] * AA_FILTER[aaIterator][2]);
+                if (CONTEXT_LIST[contextIterator][3 + aaIterator][arrayPointer][arrayPointer2][0] === 255
+                        && CONTEXT_LIST[contextIterator][3 + aaIterator][arrayPointer][arrayPointer2][1] === 255
+                        && CONTEXT_LIST[contextIterator][3 + aaIterator][arrayPointer][arrayPointer2][2] === 255
+                        && !document.getElementById("shadowCheck").checked) {
+                    var colors = getColorFromProcTex(
+                            arrayPointer / DEFAULT_TRANSFORMATION.sp[0],
+                            arrayPointer2 / DEFAULT_TRANSFORMATION.sp[1]);
+                    r += colors[0] * 255;
+                    g += colors[1] * 255;
+                    b += colors[2] * 255;
+                }
+                else {
+                    r = r + (CONTEXT_LIST[contextIterator][3 + aaIterator][arrayPointer][arrayPointer2][0] * AA_FILTER[aaIterator][2]);
+                    g = g + (CONTEXT_LIST[contextIterator][3 + aaIterator][arrayPointer][arrayPointer2][1] * AA_FILTER[aaIterator][2]);
+                    b = b + (CONTEXT_LIST[contextIterator][3 + aaIterator][arrayPointer][arrayPointer2][2] * AA_FILTER[aaIterator][2]);
+                }
             }
             d[0] = r;
             d[1] = g;
@@ -234,6 +248,9 @@ function renderStep() {
 //TREE_FILE_LINES
     lineCount = 0;
     var temp_light = LIGHT;
+    
+    var tempText = TEXTURE_FILE_DATA;
+    TEXTURE_FILE_DATA = "";
     LIGHT = TREE_LIGHT;
     while (lineCount < TREE_FILE_LINES.length && TREE_FILE_LINES !== "") {
 //    //lee scan part starts
@@ -287,6 +304,7 @@ function renderStep() {
     }
 
     writeToCanvas();
+    TEXTURE_FILE_DATA = tempText;
     LIGHT = temp_light;
     DEFAULT_TRANSFORMATION = DEFAULT_CAMERA_TRANSFORMATION;
     var lineCount = 0;
@@ -304,7 +322,7 @@ function renderStep() {
             parseFloat(firstLineSplit[7])
         ];
 
-        var translateFirst = 0;
+        var translateFirst = 1;
         if (translateFirst === 1) {
             triangleIterator = lineCount;
             var Vector0 = triangleVector[triangleIterator].slice(0, 3);
