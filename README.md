@@ -22,3 +22,10 @@ the team members with a fun learning experience.
   * Volumetric Shadows
 * Tushar Tiwari
   * Website and reporting
+
+## How to use:
+1. Select leaf and tree(optional) object files.
+2. Select texture map if required.
+3. Select render options:
+ * If Shadow is checked select the shadow depth(how long should be the shadows) and shadow step (how frequent should be the shadows)
+4. Click render.
