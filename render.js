@@ -257,7 +257,6 @@ function renderStep() {
         var firstLineSplit = TREE_FILE_LINES[lineCount].split(/[\s]+/);
         var secondLineSplit = TREE_FILE_LINES[lineCount + 1].split(/[\s]+/);
         var thirdLineSplit = TREE_FILE_LINES[lineCount + 2].split(/[\s]+/);
-//    debugger
         var Vertex0 = [[parseFloat(firstLineSplit[0])], [parseFloat(firstLineSplit[1])], [parseFloat(firstLineSplit[2])], [1]];
         var Vertex1 = [[parseFloat(secondLineSplit[0])], [parseFloat(secondLineSplit[1])], [parseFloat(secondLineSplit[2])], [1]];
         var Vertex2 = [[parseFloat(thirdLineSplit[0])], [parseFloat(thirdLineSplit[1])], [parseFloat(thirdLineSplit[2])], [1]];
@@ -341,7 +340,6 @@ function renderStep() {
                     normal[j][i] = normal0[j];
                 }
             }
-//         debugger
             TransformedVector = getTransformedVects(vertex, 0);
 // 				console.log(TransformedVector[0][0],TransformedVector[1][0],TransformedVector[2][0],TransformedVector[3][0]);
             TransformedNormal = multiplyMatrices(SCENE_NORMALS_RESULTANT, normal);
@@ -368,8 +366,7 @@ function renderStep() {
 
         lineCount = lineCount + 1;
     }
-
-//Saurabh
+    //Leaf transformations
     var leafNo = 0;
     var totalLeaves = 10;
     NoOfTrianglesInTheObject = triangleVector.length;
@@ -426,21 +423,21 @@ function renderStep() {
 
     console.log(triangleVector, triangleVector.length);
 
-//screen = position + lookat
+
     var camPos = DEFAULT_TRANSFORMATION.camera.position;
-    var camN = //normalize1DMatrix(
-            addVectors(DEFAULT_TRANSFORMATION.camera.position,
-                    DEFAULT_TRANSFORMATION.camera.lookAt); //);
-    var camU = DEFAULT_TRANSFORMATION.camera.worldUp;
+    //calculating eye cordinates using camera normals 
+    var eyeN = addVectors(DEFAULT_TRANSFORMATION.camera.position,
+                    DEFAULT_TRANSFORMATION.camera.lookAt); 
+    var eyeU = DEFAULT_TRANSFORMATION.camera.worldUp;
     //v cross product of up and look at 
-    var camV = normalize1DMatrix(
+    var eyeV = normalize1DMatrix(
             crossProduct1D(DEFAULT_TRANSFORMATION.camera.lookAt, DEFAULT_TRANSFORMATION.camera.worldUp));
     var rayEtoO = [[0, 0, 0], [0, 0, 0]];
 
     var rayPtoL = [[0, 0, 0], [0, 0, 0]];
 
     if (document.getElementById("objectCheck").checked) {
-        rayTraceTriangle(triangleVector, camN, camPos, camU, camV, rayEtoO, rayPtoL);
+        rayTraceTriangle(triangleVector, eyeN, camPos, eyeU, eyeV, rayEtoO, rayPtoL);
     }
     if (document.getElementById("shadowCheck").checked) {
         shadowRay(rayPtoL, triangleVector);

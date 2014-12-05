@@ -12,15 +12,15 @@ function getDotProduct(vector1, vector2, choice) {
 }
 
 function checkIfInsideTriangle(point, vertex0, vertex1, vertex2) {
-//    point[2] = z;
-//    var n = crossProduct1D(subtractVectors(vertex1, vertex0), subtractVectors(vertex2, vertex0));
-//    var nA = crossProduct1D(subtractVectors(vertex2, vertex1), subtractVectors(point, vertex1));
-//    var nB = crossProduct1D(subtractVectors(vertex0, vertex2), subtractVectors(point, vertex2));
-//    var nC = crossProduct1D(subtractVectors(vertex1, vertex0), subtractVectors(point, vertex0));
-//    var nMod = n[0] * n[0] + n[1] * n[1] + n[2] * n[2];
-//    var alpha = Math.abs(getDotProduct(n, nA, "notNormal") / nMod);
-//    var beta = Math.abs(getDotProduct(n, nB, "notNormal") / nMod);
-//    var gamma = Math.abs(getDotProduct(n, nC, "notNormal") / nMod);
+    //    point[2] = z;
+    //    var n = crossProduct1D(subtractVectors(vertex1, vertex0), subtractVectors(vertex2, vertex0));
+    //    var nA = crossProduct1D(subtractVectors(vertex2, vertex1), subtractVectors(point, vertex1));
+    //    var nB = crossProduct1D(subtractVectors(vertex0, vertex2), subtractVectors(point, vertex2));
+    //    var nC = crossProduct1D(subtractVectors(vertex1, vertex0), subtractVectors(point, vertex0));
+    //    var nMod = n[0] * n[0] + n[1] * n[1] + n[2] * n[2];
+    //    var alpha = Math.abs(getDotProduct(n, nA, "notNormal") / nMod);
+    //    var beta = Math.abs(getDotProduct(n, nB, "notNormal") / nMod);
+    //    var gamma = Math.abs(getDotProduct(n, nC, "notNormal") / nMod);
     var areaOfTriangle = Math.abs(vertex0[0] * (vertex2[1] - vertex1[1]) + vertex1[0] * (vertex0[1] - vertex2[1]) + vertex2[0] * (vertex1[1] - vertex0[1]));
     var areaWithoutV0 = Math.abs(point[0] * (vertex2[1] - vertex1[1]) + vertex1[0] * (point[1] - vertex2[1]) + vertex2[0] * (vertex1[1] - point[1]));
     var areaWithoutV1 = Math.abs(vertex0[0] * (vertex2[1] - point[1]) + point[0] * (vertex0[1] - vertex2[1]) + vertex2[0] * (point[1] - vertex0[1]));
@@ -29,9 +29,9 @@ function checkIfInsideTriangle(point, vertex0, vertex1, vertex2) {
     var w1 = areaWithoutV1 / areaOfTriangle;
     var w2 = areaWithtouV2 / areaOfTriangle;
     if (Math.round(w0 + w1 + w2) === 1) {
-//        console.log(w0, w1, w2);
-//    if (alpha >= 0 && alpha <= 1 && beta >= 0 && beta <= 1 && gamma >= 0 && gamma <= 1) {
-//    if (Math.round(alpha + beta + gamma) === 1) {
+        //        console.log(w0, w1, w2);
+        //    if (alpha >= 0 && alpha <= 1 && beta >= 0 && beta <= 1 && gamma >= 0 && gamma <= 1) {
+        //    if (Math.round(alpha + beta + gamma) === 1) {
         return 1;
     }
     else
@@ -63,7 +63,7 @@ function getColorfromLight(light, normal, cameraVector, colors, coeff, shadingTy
     }
     else if (getDotProduct(getUnitVector(normal), getUnitVector(light[0]), "notNormalized") > 0
             && getDotProduct(normal, cameraVector, "notNormalized") < 0) {
-//if the signs are negative then the light does not contribute to that color, so, skip it.
+        //if the signs are negative then the light does not contribute to that color, so, skip it.
         return colors;
     }
 
@@ -85,7 +85,7 @@ function getColorForNormal(colNormal, coeff, shadingType) {
     var cameraVector = [-(DEFAULT_TRANSFORMATION.camera.lookAt[0] - DEFAULT_TRANSFORMATION.camera.position[0]),
         -(DEFAULT_TRANSFORMATION.camera.lookAt[1] - DEFAULT_TRANSFORMATION.camera.position[1]),
         -(DEFAULT_TRANSFORMATION.camera.lookAt[2] - DEFAULT_TRANSFORMATION.camera.position[2])];
-//    var cameraVector = [0, 0, -1];
+    //    var cameraVector = [0, 0, -1];
 
     var newKa = (coeff !== -1) ? coeff : AMBIENT_COEFF;
     //adding ambient color to rgb
@@ -159,12 +159,12 @@ function getScalarColor(value) {
 }
 
 function getColorFromProcTex(u, v) {
-//    var Xr = (v - 0.5) * 2;
-//    var Xi = (u - 0.5) * 2;
+    //    var Xr = (v - 0.5) * 2;
+    //    var Xi = (u - 0.5) * 2;
     var Xr = u;
     var Xi = v;
-//    Xr = PerlinNoise_2D(Xr, Xi);
-//    Xi = Xr;
+    //    Xr = PerlinNoise_2D(Xr, Xi);
+    //    Xi = Xr;
     var Cr = -0.012375;
     var Ci = 0.56805;
     var iteration = 0;
@@ -172,7 +172,7 @@ function getColorFromProcTex(u, v) {
     var lenX;
     while (iteration < maxIteration) {
         var real = (Xr * Xr) - (Xi * Xi) + Cr;
-//        var imag = (2 * Xr * Xi) + Ci;
+        //        var imag = (2 * Xr * Xi) + Ci;
         var imag = (2 * Xr * Xi) + Ci;
         Xr = real;
         Xi = imag;
@@ -221,7 +221,7 @@ function getTextureColorCoeff(point, mappingType, vertex0, vertex1, vertex2, isI
                 pX / (DEFAULT_TRANSFORMATION.sp[1] - 1));
     }
     else {
-//        console.log(pY, pX, width, height);
+        //        console.log(pY, pX, width, height);
         coeff[0] = (s * t * TEXTURE_FILE_DATA[4][ceilBigV][ceilBigU].r) +
                 ((1 - s) * t * TEXTURE_FILE_DATA[4][floorBigV][ceilBigU].r) +
                 (s * (1 - t) * TEXTURE_FILE_DATA[4][ceilBigV][floorBigU].r) +
@@ -240,11 +240,11 @@ function getTextureColorCoeff(point, mappingType, vertex0, vertex1, vertex2, isI
 
 function shadingInterpolation(point, vertex0, vertex1, vertex2, shadingType, mappingType) {
     if (shadingType === 0) {
-//FLAT shading
+        //FLAT shading
         return getColorForNormal(vertex0[2], -1, shadingType);
     }
     else if (shadingType === 1) {
-//GOURAUD shading
+        //GOURAUD shading
         var areaOfTriangle = vertex0[0] * (vertex2[1] - vertex1[1]) + vertex1[0] * (vertex0[1] - vertex2[1]) + vertex2[0] * (vertex1[1] - vertex0[1]);
         if (areaOfTriangle === 0)
             return getColorForNormal(vertex0[2], -1, shadingType);
@@ -289,7 +289,6 @@ function shadingInterpolation(point, vertex0, vertex1, vertex2, shadingType, map
         }
         normalForCurrPoint[3] = new Array(1);
         normalForCurrPoint[3][0] = 1;
-//        debugger
         var colorsCoeff = (TEXTURE_FILE_DATA === "" && mappingType !== 3) ? -1 : getTextureColorCoeff(point,
                 mappingType,
                 [w0, vertex0[3], vertex0[4]],
@@ -484,14 +483,16 @@ function colorMeATriangle(aaIterator, Vector0, Vector1, Vector2, normal0, normal
     }
 }
 
-function getRay(xp, yp, camN, camPos, camU, camV, rayEtoO) {
-    var position = subtractVectors(camN, subtractVectors(scalarMultiple(camV, xp), scalarMultiple(camU, yp)));
+function getRay(xp, yp, eyeN, camPos, eyeU, eyeV, rayEtoO) {
+    //calculating ray position in vector space
+    var position = subtractVectors(eyeN, subtractVectors(scalarMultiple(eyeV, xp), scalarMultiple(eyeU, yp)));
     position[1] = -position[1];
     rayEtoO[0] = position;
+    //rays direction in vector space towards the object
     rayEtoO[1] = subtractVectors(position, camPos);
 }
 
-function rayTraceTriangle(triangleVectors, camN, camPos, camU, camV, rayEtoO, rayPtoL) {
+function rayTraceTriangle(triangleVectors, eyeN, camPos, eyeU, eyeV, rayEtoO, rayPtoL) {
 
     var imgPlaneHeight = DEFAULT_TRANSFORMATION.sp[0];
     var imgPlaneWidth = DEFAULT_TRANSFORMATION.sp[1];
@@ -499,11 +500,13 @@ function rayTraceTriangle(triangleVectors, camN, camPos, camU, camV, rayEtoO, ra
     var arr;
     for (var ic = 0; ic < imgPlaneHeight; ic++) {
         for (var jc = 0; jc < imgPlaneWidth; jc++) {
+
             var xp = jc * 1 / imgPlaneWidth * 2 - 1;
             var yp = ic * 1 / imgPlaneHeight * 2 - 1;
+
             //get ray's position and direction;
-            getRay(xp, yp, camN, camPos, camU, camV, rayEtoO);
-//            console.log(ic +" "+ jc);
+            getRay(xp, yp, eyeN, camPos, eyeU, eyeV, rayEtoO);
+            //iterating over all traingles in the mesh 
             var triangleIterator = 0;
             var tmin = Z_MAX;
             while (triangleIterator < triangleVectors.length) {
@@ -584,9 +587,8 @@ function rayTraceTriangle(triangleVectors, camN, camPos, camU, camV, rayEtoO, ra
     }
 }
 
-function shadowRay(rayPtoL, triangleVectors)
-{
-    var screen1 = addVectors(
+function shadowRay(rayPtoL, triangleVectors) {
+    var lightN = addVectors(
             LIGHT[0][0],
             DEFAULT_TRANSFORMATION.camera.lookAt
             );
@@ -617,7 +619,7 @@ function shadowRay(rayPtoL, triangleVectors)
                 var xp = jc * 1 / imgPlaneWidth * 2 - 1;
                 var yp = ic * 1 / imgPlaneHeight * 2 - 1;
                 rayPtoL[0] = subtractVectors(
-                        screen1,
+                        lightN,
                         subtractVectors(
                                 scalarMultiple(v, -1 * xp),
                                 scalarMultiple(
@@ -693,12 +695,12 @@ function shadowRay(rayPtoL, triangleVectors)
                     var tempi = ic;
                     var tempj = jc;
                     var u = DEFAULT_TRANSFORMATION.camera.worldUp;
-//                    xp = (u[0] * screen1[1]) - (u[1] * screen1[0])
-//                            + (rayPtoL[0][0] * u[1]) - (rayPtoL[0][1] * u[0])
-//                    xp = xp / ((v[0] * u[1]) - (v[1] * u[0]));
-//                    yp = screen1[0] - rayPtoL[0][0] + (xp * v[0]);
-//                    if (u[0] !== 0)
-//                        yp = yp / u[0];
+                    //                    xp = (u[0] * screen1[1]) - (u[1] * screen1[0])
+                    //                            + (rayPtoL[0][0] * u[1]) - (rayPtoL[0][1] * u[0])
+                    //                    xp = xp / ((v[0] * u[1]) - (v[1] * u[0]));
+                    //                    yp = screen1[0] - rayPtoL[0][0] + (xp * v[0]);
+                    //                    if (u[0] !== 0)
+                    //                        yp = yp / u[0];
                     jc = Math.round((-1 * xp * startI + 1) * imgPlaneWidth / 2);
                     ic = Math.round((-1 * yp * startI + 1) * imgPlaneHeight / 2);
                     ic = Math.min(
@@ -980,7 +982,6 @@ function getTransformedVects(vertex, instance) {
 
 function getDeTransformedVects(TransformedVector) {
     var vertex = [[0], [0], [0], [0]];
-//    debugger
     var invRESULTANT_MATRIX = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
     invRESULTANT_MATRIX = invert4DMat(RESULTANT_MATRIX);
     vertex = multiplyMatrices(invRESULTANT_MATRIX, TransformedVector);
@@ -992,7 +993,7 @@ function getDeTransformedVects(TransformedVector) {
 }
 
 function normalizeVectsByW(vertex, Selection) {
-//Transformation
+    //Transformation
     if (Selection === 1) {
         for (var i = 0; i < 1; i++) {
             for (var j = 0; j < 4; j++) {
@@ -1000,7 +1001,7 @@ function normalizeVectsByW(vertex, Selection) {
             }
         }
     }
-//De-Transformation
+    //De-Transformation
     if (Selection === 2) {
         for (var i = 0; i < 1; i++) {
             for (var j = 0; j < 4; j++) {
