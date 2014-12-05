@@ -30,10 +30,6 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{url}
-\usepackage{babel}
-\usepackage{biblatex}
-\addbibresource{reference.bib}
-\usepackage{hyperref}
 
 %%% Custom margins
 \usepackage[hscale=0.75,vscale=0.75,vmarginratio={4:5},heightrounded]{geometry}
@@ -64,7 +60,7 @@
 \newcommand{\horrule}[1]{\rule{\linewidth}{#1}} 	% Horizontal rule
 
 \title{
-		\vspace{-1cm}
+		%\vspace{-1in} 	
 		\usefont{OT1}{bch}{b}{n}
 		\normalfont \normalsize \textsc{CSCI 580, Prof. Saty Raghavachary} \\ [25pt]
 		\horrule{0.4pt} \\[0.5cm]
@@ -75,8 +71,6 @@
 }
 \author{
 		\normalfont\normalsize
-		\url{https://sites.google.com/site/uncannyvalley580/}\\[-3pt]\normalfont\normalsize
-		\url{https://github.com/sreepada/CSCI580Project}\\[-3pt]\normalfont\normalsize
         Sanskriti, Saurabh Mistry, Sreepada Rao Singeetham, Tushar Tiwari\\[-3pt]		\normalsize
         \today
 }
@@ -127,7 +121,7 @@ The System Schematic is a flowchart of operations done in different aspects of t
 \vspace{20pt}
 \begin{figure}[h]
 \centering
-\fbox{\includegraphics[width=0.8\textwidth, height=300pt]{RayTracingSchematic}}
+\fbox{\includegraphics[width=0.8\textwidth]{RayTraceSchematic}}
 \caption{System Schematic for Ray Tracing}
 \end{figure}
 \newpage
@@ -179,6 +173,8 @@ To begin with we need to make sure that we get the normal outwards rather than i
 
 Then the dot product of the $\bigtriangleup _{normal}$ and the ray can provide us with information whether the $\bigtriangleup$ is parallel to the ray or not.
 \[ \bigtriangleup _{normal} \cdot \overrightarrow{r_{c}}\ = 0 \implies \bigtriangleup \parallel \overrightarrow{r_{c}}\]
+\[ \bigtriangleup _{normal} \cdot \overrightarrow{r_{c}}\ < 0 \implies \bigtriangleup\ is\ behind\ camera \]
+\[ \bigtriangleup _{normal} \cdot \overrightarrow{r_{c}}\ > 0 \implies \bigtriangleup  \not\parallel \overrightarrow{r_{c}}\]
 
 We are interested in the last condition because this signifies that the camera ray intersects the plane of the $\bigtriangleup$.
 
@@ -187,14 +183,12 @@ To obtain the point of intersection we must first compute the triangle distance:
 \[d(\bigtriangleup) = \bigtriangleup_{normal} \cdot v_{0}\]
 Then, the following equation gives us the distance to the plane:
 \[d(plane) = -1 \times \dfrac{\bigtriangleup_{normal} \cdot (\overrightarrow{r_{c}} + (\bigtriangleup_{normal} \times -d(\bigtriangleup)))}{\bigtriangleup_{normal}\cdot \overrightarrow{r_{c}}}  \]
-\[d(plane) < 0 \implies \bigtriangleup is\ behind\ the\ camera \]
 Next we need to find the point that intersects with the plane.
 This point, say $q$, is found by:
 \[q = d(plane)\cdot\overrightarrow{r_{c}} + r_{p}\]
 Now, that we have the point, we need to verify if this point lies inside the $\bigtriangleup$.
 \[\dfrac{Area(q, v_{1}, v_{2}) + Area(q, v_{0}, v_{2}) + Area(q, v_{0}, v_{1})}{Area(v_{0}, v_{1}, v_{2})} \approx 1\]
 If the above condition holds then our point is inside the $\bigtriangleup$.
-\newpage
 \subsection{Shadows}
 From the point of intersection we need to shoot another ray in the direction of the light and find if it intersects with any of the objects. If it does, then that point is in shadow. But for the purposes of this project where the shadow falls on the image plane, we shoot out a ray from each pixel on the image plane in the direction of the light source (multiple shadows can be cast by shooting rays in the directions of the multiple light sources). This is done by performing the following calculations.
 \[ s = \overrightarrow{l} + \overrightarrow{c_{l}} \]
@@ -212,7 +206,7 @@ The shadow rendered for a small leaf object.
 \vspace{20pt}
 \begin{figure}[h]
 \centering
-\fbox{\includegraphics[width=0.6\textwidth]{single_leaf_single_shadow}}
+\fbox{\includegraphics[width=0.8\textwidth]{single_leaf_single_shadow}}
 \caption{Shadow for a single leaf using ray tracing}
 \end{figure}
 
@@ -239,21 +233,21 @@ The ray from each pixel of the image plane to the light source will have a diffe
 \begin{subfigure}{0.5\textwidth}
 \centering
 \fbox{\includegraphics[width=0.7\textwidth]{object_and_volume_shadow_correct}}
-\caption{A sun fractal acting as light source with a leaf producing volumetric shadows  (Took 28 min)}
+\caption{A sun fractal acting as light source with a leaf producing volumetric shadows.}
 \end{subfigure}%
 \begin{subfigure}{0.5\textwidth}
 \centering
 \fbox{\includegraphics[width=0.7\textwidth]{scene_with_sun_fractal}}
 \caption{Scene with a sun fractal, trees and leaves}
 \end{subfigure}
-\caption{Render of different scenes with a sun fractal}
+\caption{Render of different scenes}
 \end{figure}
 
 \vspace{20pt}
 \begin{figure}[h]
 \centering
-\fbox{\includegraphics[width=0.8\textwidth]{multileaf_shadowVolume}}
-\caption{Render of multiple leaves with increased step size (Took 28 min)}
+\fbox{\includegraphics[width=0.8\textwidth]{all_together}}
+\caption{The combined image with trees, leaves and volumetric shadows}
 \end{figure}
 
 \newpage
@@ -270,7 +264,14 @@ The ray from each pixel of the image plane to the light source will have a diffe
 \par While researching and implementing Ray-Tracing we were exposed to many methods that showed us how to implement photorealistic images. We were also made aware of the enormous computations required in the ray-tracing algorithm. In the process, we also mastered the ray-tracing algorithm and found out various alternatives to perform certain tasks in ray-tracing.
 \par We also investigated into the several ways volumetric shading is done. And since, the shadows fall on the camera, we tweaked the algorithm to produce desired result.
 
-\nocite{*}
-\printbibliography
+\begin{thebibliography}{9}
+\bibitem{lamport94}
+  Leslie Lamport,
+  \emph{\LaTeX: a document preparation system}.
+  Addison Wesley, Massachusetts,
+  2nd edition,
+  1994.
+\end{thebibliography}
+
 %%% End document
 \end{document}
